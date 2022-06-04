@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using ICSharpCode.AvalonEdit.Rendering;
+using RoslynPadTest.Renderer;
 
 namespace RoslynPadTest;
 
@@ -17,6 +18,7 @@ public class Augmentation
     }
 
     private readonly IList<IVisualLineTransformer> transformers = new List<IVisualLineTransformer>();
+    private readonly IList<IBackgroundRenderer> renderers = new List<IBackgroundRenderer>();
 
     internal void AddLineTransformer(IVisualLineTransformer transformer)
     {
@@ -29,6 +31,10 @@ public class Augmentation
         {
             TextView.LineTransformers.Add(visualLineTransformer);
         }
+        foreach (var renderer in renderers)
+        {
+            TextView.BackgroundRenderers.Add(renderer);
+        }
     }
 
     public void Disable()
@@ -37,6 +43,14 @@ public class Augmentation
         {
             TextView.LineTransformers.Remove(visualLineTransformer);
         }
+        foreach (var renderer in renderers)
+        {
+            TextView.BackgroundRenderers.Remove(renderer);
+        }
     }
 
+    public void AddBackgroundRenderer(DecorationRenderer renderer)
+    {
+        renderers.Add(renderer);
+    }
 }
