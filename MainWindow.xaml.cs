@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Media;
 
 namespace RoslynPadTest;
 
@@ -8,27 +9,24 @@ namespace RoslynPadTest;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private readonly TestGenerator testGenerator = new TestGenerator();
-    private readonly WordHighlighter testHighlighter = new WordHighlighter(new Regex(@"\bzonk\b"));
+    private readonly Augmentation plugin;
+
     public MainWindow()
     {
         InitializeComponent();
-        //var testGenerator = new WordHighlighter("bonk");
-        //var testGenerator = new TestGenerator();
-        //Editor.TextArea.TextView.LineTransformers.Add(testGenerator);
-
+        plugin = new Augmentation(Editor.TextArea.TextView);
+        plugin.WithBackground(Brushes.HotPink);
+        //plugin.ForText("bonk");
+        plugin.ForTextMatch(new Regex(@"\bbonk\b"));
     }
 
     private void OnOverlayChecked(object sender, RoutedEventArgs e)
     {
-        Editor.TextArea.TextView.ElementGenerators.Add(testGenerator);
-        Editor.TextArea.TextView.LineTransformers.Add(testHighlighter);
-
+        plugin.Enable();
     }
 
     private void OnOverlayUnchecked(object sender, RoutedEventArgs e)
     {
-        Editor.TextArea.TextView.ElementGenerators.Remove(testGenerator);
-        Editor.TextArea.TextView.LineTransformers.Remove(testHighlighter);
+        plugin.Disable();
     }
 }

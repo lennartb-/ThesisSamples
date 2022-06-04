@@ -23,9 +23,11 @@ public class TestGenerator : VisualLineElementGenerator
         var match = FindMatch(offset);
         if (match.Success && (match.Index == 0))
         {
+            var rect = new Rectangle() { Width = 30, Height = 10, Fill = Brushes.RoyalBlue, Opacity = 125};
+            rect.ToolTip = "Nope";
+            var overlay = new OverlayElement(match.Length, rect);
 
-            return new OverlayElement(match.Length, new Rectangle() { Width = 30, Height = 10, Fill = Brushes.RoyalBlue, Opacity = 125});
-
+            return overlay;
         }
 
         return null;

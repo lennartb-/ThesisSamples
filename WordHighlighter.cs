@@ -30,13 +30,16 @@ public class WordHighlighter : DocumentColorizingTransformer
         int index;
         var matchedText = match.Value;
         while ((index = textOfCurrentLine.IndexOf(matchedText, start, StringComparison.Ordinal)) >= 0)
-        //while ((index = textOfCurrentLine.IndexOf(textToHighlight, start, StringComparison.Ordinal)) >= 0)
         {
             ChangeLinePart(
-                lineStartOffset + index, // startOffset
-                lineStartOffset + index + matchedText.Length, // endOffset
-                element => element.TextRunProperties.SetBackgroundBrush(Brushes.LightSkyBlue));
-            start = index + 1; // search for next occurrence
+                lineStartOffset + index, 
+                lineStartOffset + index + matchedText.Length, 
+                element =>
+                {
+                    element.TextRunProperties.SetBackgroundBrush(Brushes.LightSkyBlue);
+                });
+            
+            start = index + 1; 
         }
 
     }
