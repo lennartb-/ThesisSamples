@@ -2,7 +2,6 @@
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
-using Brushes = System.Windows.Media.Brushes;
 
 namespace RoslynPadTest.Renderer;
 
@@ -17,22 +16,28 @@ public class DecorationRenderer : IBackgroundRenderer
 
     public void Draw(TextView textView, DrawingContext drawingContext)
     {
-        var builder = new BackgroundGeometryBuilder();
-
         var area = DetermineBackgroundArea();
 
         foreach (var (startOffset, endOffset) in area)
         {
-            builder.AddSegment(textView, new TextSegment() { StartOffset = startOffset, EndOffset = endOffset});
-            builder.CloseFigure();
-        }
+            var textSegment = new TextSegment { StartOffset = startOffset, EndOffset = endOffset };
 
-        var geometry = builder.CreateGeometry();
-        if (geometry != null)
-        {
-            drawingContext.DrawGeometry(null, new Pen(Brushes.Purple,1d), geometry);
-        }
+            var rects = BackgroundGeometryBuilder.GetRectsForSegment(parent.TextView, textSegment);
+            var rect = rects.First();
 
+            var underlineGeometry = new StreamGeometry();
+
+            using (var ctx = underlineGeometry.Open())
+            {
+                ctx.BeginFigure(rect.BottomLeft with { Y = rect.BottomLeft.Y - 3 }, false, false);
+                ctx.LineTo(rect.BottomLeft with { Y = rect.BottomLeft.Y  }, true, false);
+                ctx.LineTo(rect.BottomRight with { Y = rect.BottomRight.Y  }, true, false);
+                ctx.LineTo(rect.BottomRight with { Y = rect.BottomRight.Y -3 }, true, false);
+            }
+
+            underlineGeometry.Freeze();
+            drawingContext.DrawGeometry(null, new Pen(Brushes.DarkOrange, 2d), underlineGeometry);
+        }
     }
 
     public KnownLayer Layer { get; } = KnownLayer.Selection;
@@ -41,8 +46,8 @@ public class DecorationRenderer : IBackgroundRenderer
     {
         var visualLines = parent.TextView.VisualLines;
 
-        int viewStart = visualLines.First().FirstDocumentLine.Offset;
-        int viewEnd = visualLines.Last().LastDocumentLine.EndOffset;
+        var viewStart = visualLines.First().FirstDocumentLine.Offset;
+        var viewEnd = visualLines.Last().LastDocumentLine.EndOffset;
 
         if (parent.TextMatchRegex is { } regex)
         {
@@ -88,8 +93,8 @@ public class DecorationRenderer : IBackgroundRenderer
     private Match FindTextRegexMatch(Regex regex)
     {
         var visualLines = parent.TextView.VisualLines;
-        int viewStart = visualLines.First().FirstDocumentLine.Offset;
-        int viewEnd = visualLines.Last().LastDocumentLine.EndOffset;
+        var viewStart = visualLines.First().FirstDocumentLine.Offset;
+        var viewEnd = visualLines.Last().LastDocumentLine.EndOffset;
 
         var startOffset = viewStart;
         var endOffset = viewEnd;
@@ -102,8 +107,8 @@ public class DecorationRenderer : IBackgroundRenderer
     {
         var visualLines = parent.TextView.VisualLines;
 
-        int viewStart = visualLines.First().FirstDocumentLine.Offset;
-        int viewEnd = visualLines.Last().LastDocumentLine.EndOffset;
+        var viewStart = visualLines.First().FirstDocumentLine.Offset;
+        var viewEnd = visualLines.Last().LastDocumentLine.EndOffset;
 
         var startOffset = viewStart;
         var endOffset = viewEnd;

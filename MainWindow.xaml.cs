@@ -14,19 +14,15 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        var plugin = new Augmentation(Editor.TextArea.TextView);
-        plugin.WithBackground(Brushes.HotPink);
-        //plugin.ForText("bonk");
-        plugin.ForTextMatch(new Regex(@"\bsit\b"));
+        var backgroundAugmentation = new Augmentation(Editor.TextArea.TextView);
+        backgroundAugmentation.WithBackground(Brushes.HotPink);
+        backgroundAugmentation.ForTextMatch(new Regex(@"\bsit\b"));
+        plugins.Add(backgroundAugmentation);
 
-        plugins.Add(plugin);
-
-        var plugin2 = new Augmentation(Editor.TextArea.TextView);
-        plugin2.WithDecoration(Brushes.Blue);
-        //plugin.ForText("bonk");
-        plugin2.ForTextMatch(new Regex(@"\but\b"));
-
-        plugins.Add(plugin2);
+        var underlineAugmentation = new Augmentation(Editor.TextArea.TextView);
+        underlineAugmentation.WithDecoration(Brushes.Blue);
+        underlineAugmentation.ForTextMatch(new Regex(@"\btristique\b"));
+        plugins.Add(underlineAugmentation);
     }
 
     private void OnOverlayChecked(object sender, RoutedEventArgs e)
