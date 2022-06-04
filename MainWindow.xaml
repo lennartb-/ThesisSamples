@@ -27,7 +27,9 @@
             Name="Editor"
             Grid.Row="1"
             WordWrap="True">
-            bonk donk honk bonk
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis blandit massa at purus cursus semper. Nunc est erat, malesuada quis neque ut, mollis pharetra dolor. Vivamus suscipit magna at orci egestas volutpat. Mauris augue sem, efficitur ac varius nec, rutrum eu velit. Etiam cursus porttitor scelerisque. Vestibulum cursus ante tristique tincidunt sodales. Vestibulum posuere urna vulputate lectus dapibus, sit amet semper nibh maximus.
+            Aliquam suscipit, mi at sollicitudin egestas, dui lectus lacinia dui, ut sagittis augue augue a risus. Aenean ac ipsum ullamcorper, egestas sapien vitae, maximus risus. Vivamus facilisis lobortis libero quis sodales. Cras eget odio at metus imperdiet accumsan. Morbi ut feugiat odio. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam vel libero id metus ultricies consequat id id massa.
+            Aliquam tristique turpis et justo dignissim, eu elementum tortor porta. Aenean tincidunt dapibus maximus. Curabitur vehicula, mi sed vehicula pulvinar, eros lacus faucibus lorem, vel gravida nisi magna ut tellus. Aliquam venenatis faucibus quam eget efficitur. Fusce eget massa ut odio pellentesque cursus. In posuere velit ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus faucibus ullamcorper dui, at molestie nisi lobortis ac. Cras commodo elit non aliquam congue. Fusce lacinia congue mi in congue. Vivamus vel lectus ac leo varius cursus.
         </editor:CodeTextEditor>
 
     </Grid>
