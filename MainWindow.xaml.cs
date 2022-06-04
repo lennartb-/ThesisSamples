@@ -15,14 +15,19 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         var backgroundAugmentation = new Augmentation(Editor.TextArea.TextView);
-        backgroundAugmentation.WithBackground(Brushes.HotPink);
+        backgroundAugmentation.WithBackground(Brushes.RoyalBlue);
         backgroundAugmentation.ForTextMatch(new Regex(@"\bsit\b"));
         plugins.Add(backgroundAugmentation);
 
         var underlineAugmentation = new Augmentation(Editor.TextArea.TextView);
-        underlineAugmentation.WithDecoration(Brushes.Blue);
+        underlineAugmentation.WithDecoration(Brushes.DarkOrange);
         underlineAugmentation.ForTextMatch(new Regex(@"\btristique\b"));
         plugins.Add(underlineAugmentation);
+
+        var tooltipAugmentation = new Augmentation(Editor.TextArea.TextView);
+        tooltipAugmentation.WithTooltip("Hallo Welt", Brushes.LightGreen);
+        tooltipAugmentation.ForTextMatch(new Regex(@"\bodio\b"));
+        plugins.Add(tooltipAugmentation);
     }
 
     private void OnOverlayChecked(object sender, RoutedEventArgs e)

@@ -6,19 +6,21 @@ namespace RoslynPadTest;
 
 public class Augmentation
 {
-    public Regex? TextMatchRegex { get; set; }
+    private readonly IList<VisualLineElementGenerator> generators = new List<VisualLineElementGenerator>();
+    private readonly IList<IBackgroundRenderer> renderers = new List<IBackgroundRenderer>();
 
-    public string? TextMatch { get; set; }
-
-    public TextView TextView { get; }
+    private readonly IList<IVisualLineTransformer> transformers = new List<IVisualLineTransformer>();
 
     public Augmentation(TextView textView)
     {
         TextView = textView;
     }
 
-    private readonly IList<IVisualLineTransformer> transformers = new List<IVisualLineTransformer>();
-    private readonly IList<IBackgroundRenderer> renderers = new List<IBackgroundRenderer>();
+    public Regex? TextMatchRegex { get; set; }
+
+    public string? TextMatch { get; set; }
+
+    public TextView TextView { get; }
 
     internal void AddLineTransformer(IVisualLineTransformer transformer)
     {
@@ -31,9 +33,15 @@ public class Augmentation
         {
             TextView.LineTransformers.Add(visualLineTransformer);
         }
+
         foreach (var renderer in renderers)
         {
             TextView.BackgroundRenderers.Add(renderer);
+        }
+
+        foreach (var generator in generators)
+        {
+            TextView.ElementGenerators.Add(generator);
         }
     }
 
@@ -43,14 +51,25 @@ public class Augmentation
         {
             TextView.LineTransformers.Remove(visualLineTransformer);
         }
+
         foreach (var renderer in renderers)
         {
             TextView.BackgroundRenderers.Remove(renderer);
+        }
+
+        foreach (var generator in generators)
+        {
+            TextView.ElementGenerators.Remove(generator);
         }
     }
 
     public void AddBackgroundRenderer(DecorationRenderer renderer)
     {
         renderers.Add(renderer);
+    }
+
+    public void AddElementGenerator(VisualLineElementGenerator generator)
+    {
+        generators.Add(generator);
     }
 }

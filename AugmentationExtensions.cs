@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Media;
+using RoslynPadTest.Generators;
 using RoslynPadTest.Renderer;
 using RoslynPadTest.Transformers;
 
@@ -30,10 +31,18 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation WithDecoration(this Augmentation augmentation, Brush background)
+    public static Augmentation WithDecoration(this Augmentation augmentation, Brush decorationColor)
     {
-        var backgroundTransformer = new DecorationRenderer(augmentation);
+        var backgroundTransformer = new DecorationRenderer(augmentation, decorationColor);
         augmentation.AddBackgroundRenderer(backgroundTransformer);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithTooltip(this Augmentation augmentation, string tooltipText, Brush decorationColor)
+    {
+        var toolTipGenerator = new ToolTipGenerator(augmentation, tooltipText, decorationColor);
+        augmentation.AddElementGenerator(toolTipGenerator);
 
         return augmentation;
     }

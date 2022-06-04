@@ -18,7 +18,7 @@ public class OverlayElement : VisualLineElement
     {
         var textRunProperties = new VisualLineElementTextRunProperties(context.GlobalTextRunProperties);
         textRunProperties.SetBaselineAlignment(BaselineAlignment.TextBottom);
-
+        
         return new InlineObjectRun(1, textRunProperties, Element);
     }
 }

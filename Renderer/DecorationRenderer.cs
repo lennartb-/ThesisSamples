@@ -8,10 +8,12 @@ namespace RoslynPadTest.Renderer;
 public class DecorationRenderer : IBackgroundRenderer
 {
     private readonly Augmentation parent;
+    private readonly Brush decorationColor;
 
-    public DecorationRenderer(Augmentation parent)
+    public DecorationRenderer(Augmentation parent, Brush decorationColor)
     {
         this.parent = parent;
+        this.decorationColor = decorationColor;
     }
 
     public void Draw(TextView textView, DrawingContext drawingContext)
@@ -36,11 +38,11 @@ public class DecorationRenderer : IBackgroundRenderer
             }
 
             underlineGeometry.Freeze();
-            drawingContext.DrawGeometry(null, new Pen(Brushes.DarkOrange, 2d), underlineGeometry);
+            drawingContext.DrawGeometry(null, new Pen(decorationColor, 2d), underlineGeometry);
         }
     }
 
-    public KnownLayer Layer { get; } = KnownLayer.Selection;
+    public KnownLayer Layer => KnownLayer.Selection;
 
     private IEnumerable<(int startOffset, int endOffset)> DetermineBackgroundArea()
     {
