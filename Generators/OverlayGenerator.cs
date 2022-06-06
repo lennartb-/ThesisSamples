@@ -10,6 +10,8 @@ namespace AugmentationFramework.Generators;
 public class OverlayGenerator : VisualLineElementGenerator
 {
     private readonly Augmentation parent;
+    public Func<UIElement>? CustomOverlay { get; internal set; }
+    public Func<UIElement>? CustomTooltip { get; internal set; }
     public Brush? TooltipBackground { get; internal set; }
     public string? TooltipText { get; internal set; }
     public string? OverlayText { get; internal set; }
@@ -17,6 +19,12 @@ public class OverlayGenerator : VisualLineElementGenerator
     public OverlayGenerator(Augmentation parent)
     {
         this.parent = parent;
+    }
+
+    public OverlayGenerator(Augmentation parent, Func<UIElement>? customOverlay)
+    {
+        this.parent = parent;
+        CustomOverlay = customOverlay;
     }
 
     public override int GetFirstInterestedOffset(int startOffset)
@@ -37,16 +45,26 @@ public class OverlayGenerator : VisualLineElementGenerator
 
         var length = endOffset - startOffset;
 
-        var tb = new TextBlock
-        {
-            VerticalAlignment = VerticalAlignment.Center,
-            Text = OverlayText,
-            FontSize = new VisualLineElementTextRunProperties(CurrentContext.GlobalTextRunProperties).FontHintingEmSize,
-            ToolTip = TooltipText,
-            Background = TooltipBackground ?? Brushes.Transparent
-        };
+        UIElement element;
+        object? obj = CustomTooltip != null ? CustomTooltip() : TooltipText;
 
-        var overlay = new OverlayElement(length, tb);
+        if (CustomOverlay is not null)
+        {
+            element = CustomOverlay();
+        }
+        else
+        {
+            element = new TextBlock
+            {
+                VerticalAlignment = VerticalAlignment.Center,
+                Text = OverlayText,
+                FontSize = new VisualLineElementTextRunProperties(CurrentContext.GlobalTextRunProperties).FontHintingEmSize,
+                ToolTip = obj,
+                Background = TooltipBackground ?? Brushes.Transparent
+            };
+        }
+
+        var overlay = new OverlayElement(length, element);
 
         return overlay;
     }

@@ -6,9 +6,9 @@ namespace AugmentationFramework.Generators;
 
 public class OverlayElement : VisualLineElement
 {
-    public FrameworkElement Element { get; }
+    public UIElement Element { get; }
 
-    public OverlayElement(int documentLength, FrameworkElement element)
+    public OverlayElement(int documentLength, UIElement element)
         : base(1, documentLength)
     {
         Element = element;

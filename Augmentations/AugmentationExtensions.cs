@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Media;
 using AugmentationFramework.Generators;
 using AugmentationFramework.Renderer;
@@ -60,6 +61,27 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    public static Augmentation WithTooltip(this Augmentation augmentation, Func<UIElement> customTooltip)
+    {
+        if (augmentation.Generators.OfType<OverlayGenerator>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Generators.OfType<OverlayGenerator>())
+            {
+                existingGenerator.CustomTooltip = customTooltip;
+            }
+
+            return augmentation;
+        }
+
+        var toolTipGenerator = new OverlayGenerator(augmentation)
+        {
+            CustomTooltip = customTooltip
+        };
+        augmentation.AddElementGenerator(toolTipGenerator);
+
+        return augmentation;
+    }
+
     public static Augmentation WithOverlay(this Augmentation augmentation, string overlayText)
     {
         if (augmentation.Generators.OfType<OverlayGenerator>().Any())
@@ -76,6 +98,24 @@ public static class AugmentationExtensions
         {
             OverlayText = overlayText
         };
+        augmentation.AddElementGenerator(toolTipGenerator);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithOverlay(this Augmentation augmentation, Func<UIElement> overlay)
+    {
+        if (augmentation.Generators.OfType<OverlayGenerator>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Generators.OfType<OverlayGenerator>())
+            {
+                existingGenerator.CustomOverlay = overlay;
+            }
+
+            return augmentation;
+        }
+
+        var toolTipGenerator = new OverlayGenerator(augmentation, overlay);
         augmentation.AddElementGenerator(toolTipGenerator);
 
         return augmentation;
