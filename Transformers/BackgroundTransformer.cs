@@ -3,6 +3,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
+using RoslynPadTest.Augmentations;
+using RoslynPadTest.Generators;
 
 namespace RoslynPadTest.Transformers;
 

@@ -4,7 +4,7 @@ using RoslynPadTest.Generators;
 using RoslynPadTest.Renderer;
 using RoslynPadTest.Transformers;
 
-namespace RoslynPadTest;
+namespace RoslynPadTest.Augmentations;
 
 public static class AugmentationExtensions
 {

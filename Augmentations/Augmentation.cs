@@ -2,7 +2,7 @@
 using ICSharpCode.AvalonEdit.Rendering;
 using RoslynPadTest.Renderer;
 
-namespace RoslynPadTest;
+namespace RoslynPadTest.Augmentations;
 
 public class Augmentation
 {

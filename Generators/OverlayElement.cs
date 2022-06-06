@@ -2,7 +2,7 @@
 using System.Windows.Media.TextFormatting;
 using ICSharpCode.AvalonEdit.Rendering;
 
-namespace RoslynPadTest;
+namespace RoslynPadTest.Generators;
 
 public class OverlayElement : VisualLineElement
 {

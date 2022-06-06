@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
+using RoslynPadTest.Augmentations;
 
 namespace RoslynPadTest.Renderer;
 
