@@ -1,8 +1,8 @@
 ﻿using System.Text.RegularExpressions;
+using AugmentationFramework.Renderer;
 using ICSharpCode.AvalonEdit.Rendering;
-using RoslynPadTest.Renderer;
 
-namespace RoslynPadTest.Augmentations;
+namespace AugmentationFramework.Augmentations;
 
 public class Augmentation
 {

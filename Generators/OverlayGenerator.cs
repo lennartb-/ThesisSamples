@@ -2,11 +2,10 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
+using AugmentationFramework.Augmentations;
 using ICSharpCode.AvalonEdit.Rendering;
-using RoslynPadTest.Augmentations;
 
-namespace RoslynPadTest.Generators;
+namespace AugmentationFramework.Generators;
 
 public class OverlayGenerator : VisualLineElementGenerator
 {

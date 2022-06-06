@@ -1,6 +1,6 @@
 ﻿using ICSharpCode.AvalonEdit.Rendering;
 
-namespace RoslynPadTest.Augmentations;
+namespace AugmentationFramework.Augmentations;
 
 public class AdvancedAugmentation : Augmentation
 {

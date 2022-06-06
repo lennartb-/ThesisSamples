@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
@@ -12,11 +12,6 @@
     <PackageReference Include="RoslynPad.Editor.Windows" Version="1.2.0" />
     <PackageReference Include="RoslynPad.Roslyn" Version="3.6.0" />
     <PackageReference Include="RoslynPad.Roslyn.Windows" Version="3.6.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Renderer\" />
-    <Folder Include="Transformers\" />
   </ItemGroup>
 
 </Project>

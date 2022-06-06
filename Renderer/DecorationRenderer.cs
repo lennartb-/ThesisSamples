@@ -1,10 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Media;
+using AugmentationFramework.Augmentations;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
-using RoslynPadTest.Augmentations;
 
-namespace RoslynPadTest.Renderer;
+namespace AugmentationFramework.Renderer;
 
 public class DecorationRenderer : IBackgroundRenderer
 {

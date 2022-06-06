@@ -1,12 +1,12 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Controls;
 using System.Windows.Media;
+using AugmentationFramework.Augmentations;
+using AugmentationFramework.Generators;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
-using RoslynPadTest.Augmentations;
-using RoslynPadTest.Generators;
 
-namespace RoslynPadTest.Transformers;
+namespace AugmentationFramework.Transformers;
 
 public class BackgroundTransformer : DocumentColorizingTransformer
 {

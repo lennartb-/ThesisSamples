@@ -1,10 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Media;
-using RoslynPadTest.Generators;
-using RoslynPadTest.Renderer;
-using RoslynPadTest.Transformers;
+using AugmentationFramework.Generators;
+using AugmentationFramework.Renderer;
+using AugmentationFramework.Transformers;
 
-namespace RoslynPadTest.Augmentations;
+namespace AugmentationFramework.Augmentations;
 
 public static class AugmentationExtensions
 {
