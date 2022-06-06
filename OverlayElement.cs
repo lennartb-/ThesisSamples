@@ -6,9 +6,9 @@ namespace RoslynPadTest;
 
 public class OverlayElement : VisualLineElement
 {
-    public UIElement Element { get; }
+    public FrameworkElement Element { get; }
 
-    public OverlayElement(int documentLength, UIElement element)
+    public OverlayElement(int documentLength, FrameworkElement element)
         : base(1, documentLength)
     {
         Element = element;
@@ -18,7 +18,8 @@ public class OverlayElement : VisualLineElement
     {
         var textRunProperties = new VisualLineElementTextRunProperties(context.GlobalTextRunProperties);
         textRunProperties.SetBaselineAlignment(BaselineAlignment.TextBottom);
-        
+
         return new InlineObjectRun(1, textRunProperties, Element);
     }
+
 }

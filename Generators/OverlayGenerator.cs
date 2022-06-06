@@ -7,17 +7,16 @@ using ICSharpCode.AvalonEdit.Rendering;
 
 namespace RoslynPadTest.Generators;
 
-public class ToolTipGenerator : VisualLineElementGenerator
+public class OverlayGenerator : VisualLineElementGenerator
 {
     private readonly Augmentation parent;
-    private readonly Brush tooltipBackground;
-    private readonly string tooltipText;
+    public Brush? TooltipBackground { get; internal set; }
+    public string? TooltipText { get; internal set; }
+    public string? OverlayText { get; internal set; }
 
-    public ToolTipGenerator(Augmentation parent, string tooltipText, Brush tooltipBackground)
+    public OverlayGenerator(Augmentation parent)
     {
         this.parent = parent;
-        this.tooltipText = tooltipText;
-        this.tooltipBackground = tooltipBackground;
     }
 
     public override int GetFirstInterestedOffset(int startOffset)
@@ -38,25 +37,13 @@ public class ToolTipGenerator : VisualLineElementGenerator
 
         var length = endOffset - startOffset;
 
-        var text = "";
-
-        if (parent.TextMatchRegex is { } regex)
-        {
-            text = FindTextRegexMatch(regex, startOffset).Value;
-        }
-
-        if (parent.TextMatch is { } parentText)
-        {
-            text = parentText;
-        }
-
         var tb = new TextBlock
         {
             VerticalAlignment = VerticalAlignment.Center,
-            Text = text,
+            Text = OverlayText,
             FontSize = new VisualLineElementTextRunProperties(CurrentContext.GlobalTextRunProperties).FontHintingEmSize,
-            ToolTip = tooltipText,
-            Background = tooltipBackground
+            ToolTip = TooltipText,
+            Background = TooltipBackground ?? Brushes.Transparent
         };
 
         var overlay = new OverlayElement(length, tb);
@@ -101,7 +88,7 @@ public class ToolTipGenerator : VisualLineElementGenerator
 
         if (match.Success)
         {
-            return (match.Index, match.Index + match.Value.Length);
+            return (match.Index + offset, match.Index + match.Value.Length + offset);
         }
 
         return (0, 0);

@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
@@ -30,7 +31,14 @@ public class BackgroundTransformer : DocumentColorizingTransformer
                 lineStartOffset + endOffset,
                 element =>
                 {
-                    element.TextRunProperties.SetBackgroundBrush(background);
+                    if (element is OverlayElement { Element: TextBlock tb })
+                    {
+                        tb.Background = background;
+                    }
+                    else
+                    {
+                        element.TextRunProperties.SetBackgroundBrush(background);
+                    }
                 });
         }
     }

@@ -25,7 +25,9 @@ public partial class MainWindow : Window
         plugins.Add(underlineAugmentation);
 
         var tooltipAugmentation = new Augmentation(Editor.TextArea.TextView);
-        tooltipAugmentation.WithTooltip("Hallo Welt", Brushes.LightGreen);
+        tooltipAugmentation.WithTooltip("Hallo Welt");
+        tooltipAugmentation.WithOverlay("Replacement!");
+        tooltipAugmentation.WithBackground(Brushes.LightGreen);
         tooltipAugmentation.ForTextMatch(new Regex(@"\bodio\b"));
         plugins.Add(tooltipAugmentation);
     }

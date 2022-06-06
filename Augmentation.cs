@@ -6,7 +6,7 @@ namespace RoslynPadTest;
 
 public class Augmentation
 {
-    private readonly IList<VisualLineElementGenerator> generators = new List<VisualLineElementGenerator>();
+    public IList<VisualLineElementGenerator> Generators { get; } = new List<VisualLineElementGenerator>();
     private readonly IList<IBackgroundRenderer> renderers = new List<IBackgroundRenderer>();
 
     private readonly IList<IVisualLineTransformer> transformers = new List<IVisualLineTransformer>();
@@ -39,7 +39,7 @@ public class Augmentation
             TextView.BackgroundRenderers.Add(renderer);
         }
 
-        foreach (var generator in generators)
+        foreach (var generator in Generators)
         {
             TextView.ElementGenerators.Add(generator);
         }
@@ -57,7 +57,7 @@ public class Augmentation
             TextView.BackgroundRenderers.Remove(renderer);
         }
 
-        foreach (var generator in generators)
+        foreach (var generator in Generators)
         {
             TextView.ElementGenerators.Remove(generator);
         }
@@ -70,6 +70,6 @@ public class Augmentation
 
     public void AddElementGenerator(VisualLineElementGenerator generator)
     {
-        generators.Add(generator);
+        Generators.Add(generator);
     }
 }

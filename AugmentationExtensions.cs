@@ -39,9 +39,43 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation WithTooltip(this Augmentation augmentation, string tooltipText, Brush decorationColor)
+    public static Augmentation WithTooltip(this Augmentation augmentation, string tooltipText)
     {
-        var toolTipGenerator = new ToolTipGenerator(augmentation, tooltipText, decorationColor);
+        if (augmentation.Generators.OfType<OverlayGenerator>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Generators.OfType<OverlayGenerator>())
+            {
+                existingGenerator.TooltipText = tooltipText;
+            }
+
+            return augmentation;
+        }
+
+        var toolTipGenerator = new OverlayGenerator(augmentation)
+        {
+            TooltipText = tooltipText
+        };
+        augmentation.AddElementGenerator(toolTipGenerator);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithOverlay(this Augmentation augmentation, string overlayText)
+    {
+        if (augmentation.Generators.OfType<OverlayGenerator>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Generators.OfType<OverlayGenerator>())
+            {
+                existingGenerator.OverlayText = overlayText;
+            }
+
+            return augmentation;
+        }
+
+        var toolTipGenerator = new OverlayGenerator(augmentation)
+        {
+            OverlayText = overlayText
+        };
         augmentation.AddElementGenerator(toolTipGenerator);
 
         return augmentation;
