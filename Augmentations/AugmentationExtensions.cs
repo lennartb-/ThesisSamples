@@ -18,6 +18,94 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    public static Augmentation WithForeground(this Augmentation augmentation, Brush foreground)
+    {
+        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            {
+                existingGenerator.Foreground = foreground;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new ForegroundTransformer(augmentation)
+        {
+            Foreground = foreground
+        };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithFontSize(this Augmentation augmentation, double fontSize)
+    {
+        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            {
+                existingGenerator.FontSize = fontSize;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new ForegroundTransformer(augmentation)
+        {
+            FontSize = fontSize
+        };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithFontWeight(this Augmentation augmentation, FontWeight fontWeight)
+    {
+        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            {
+                existingGenerator.FontWeight = fontWeight;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new ForegroundTransformer(augmentation)
+        {
+            FontWeight = fontWeight
+        };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithFontFamily(this Augmentation augmentation, FontFamily fontFamily)
+    {
+        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            {
+                existingGenerator.FontFamily = fontFamily;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new ForegroundTransformer(augmentation)
+        {
+            FontFamily = fontFamily
+        };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
     public static Augmentation ForText(this Augmentation augmentation, string text)
     {
         augmentation.TextMatch = text;
@@ -52,10 +140,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var toolTipGenerator = new OverlayGenerator(augmentation)
-        {
-            TooltipText = tooltipText
-        };
+        var toolTipGenerator = new OverlayGenerator(augmentation) { TooltipText = tooltipText };
         augmentation.AddElementGenerator(toolTipGenerator);
 
         return augmentation;
@@ -73,10 +158,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var toolTipGenerator = new OverlayGenerator(augmentation)
-        {
-            CustomTooltip = customTooltip
-        };
+        var toolTipGenerator = new OverlayGenerator(augmentation) { CustomTooltip = customTooltip };
         augmentation.AddElementGenerator(toolTipGenerator);
 
         return augmentation;
@@ -94,10 +176,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var toolTipGenerator = new OverlayGenerator(augmentation)
-        {
-            OverlayText = overlayText
-        };
+        var toolTipGenerator = new OverlayGenerator(augmentation) { OverlayText = overlayText };
         augmentation.AddElementGenerator(toolTipGenerator);
 
         return augmentation;

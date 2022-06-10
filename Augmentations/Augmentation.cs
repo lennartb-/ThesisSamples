@@ -8,7 +8,7 @@ public class Augmentation
 {
     private readonly IList<IBackgroundRenderer> renderers = new List<IBackgroundRenderer>();
 
-    private readonly IList<IVisualLineTransformer> transformers = new List<IVisualLineTransformer>();
+    public IList<IVisualLineTransformer> Transformers { get; } = new List<IVisualLineTransformer>();
 
     public Augmentation(TextView textView)
     {
@@ -25,12 +25,12 @@ public class Augmentation
 
     internal void AddLineTransformer(IVisualLineTransformer transformer)
     {
-        transformers.Add(transformer);
+        Transformers.Add(transformer);
     }
 
     public void Enable()
     {
-        foreach (var visualLineTransformer in transformers)
+        foreach (var visualLineTransformer in Transformers)
         {
             TextView.LineTransformers.Add(visualLineTransformer);
         }
@@ -48,7 +48,7 @@ public class Augmentation
 
     public void Disable()
     {
-        foreach (var visualLineTransformer in transformers)
+        foreach (var visualLineTransformer in Transformers)
         {
             TextView.LineTransformers.Remove(visualLineTransformer);
         }
