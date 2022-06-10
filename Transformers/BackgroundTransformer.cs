@@ -22,7 +22,7 @@ public class BackgroundTransformer : DocumentColorizingTransformer
     {
         var lineStartOffset = line.Offset;
 
-        var area = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.Text);
+        var area = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.GetText(line.Offset, line.Length)).OrderBy(tuple => tuple.startOffset);
 
         foreach (var (startOffset, endOffset) in area)
         {

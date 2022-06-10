@@ -28,9 +28,9 @@ public class ForegroundTransformer : DocumentColorizingTransformer
     protected override void ColorizeLine(DocumentLine line)
     {
         var lineStartOffset = line.Offset;
-
-        var area = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.Text);
-
+        
+        var area = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.GetText(line.Offset,line.Length)).OrderBy(tuple => tuple.startOffset);
+        
         foreach (var (startOffset, endOffset) in area)
         {
             ChangeLinePart(
@@ -50,21 +50,14 @@ public class ForegroundTransformer : DocumentColorizingTransformer
                             tb.Background = Background;
                         }
 
-                        //if (FontSize.HasValue)
-                        //{
-                        //    tb.FontSize = FontSize.Value;
-                        //}
-
                         tb.FontSize.IfNotNull(FontSize);
 
                         if (FontFamily is not null)
                         {
                             tb.FontFamily = FontFamily;
                         }
-                        if (FontWeight.HasValue)
-                        {
-                            tb.FontWeight = FontWeight.Value;
-                        }
+
+                        tb.FontWeight.IfNotNull(FontWeight);
                     }
                     else
                     {
@@ -85,9 +78,7 @@ public class ForegroundTransformer : DocumentColorizingTransformer
 
                         if (FontWeight.HasValue)
                         {
-                            Typeface tf = element.TextRunProperties.Typeface;
-                            // Replace the typeface with a modified version of
-                            // the same typeface
+                            var tf = element.TextRunProperties.Typeface;
                             element.TextRunProperties.SetTypeface(new Typeface(
                                 tf.FontFamily,
                                 tf.Style,

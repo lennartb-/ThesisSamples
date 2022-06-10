@@ -18,8 +18,10 @@ public class Augmentation
     public IList<VisualLineElementGenerator> Generators { get; } = new List<VisualLineElementGenerator>();
 
     public Regex? TextMatchRegex { get; set; }
+    public IEnumerable<Regex>? TextMatchesRegex { get; set; }
 
     public string? TextMatch { get; set; }
+    public IEnumerable<string>? TextMatches { get; set; }
 
     public TextView TextView { get; }
 

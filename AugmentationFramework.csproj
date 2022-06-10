@@ -14,4 +14,8 @@
     <PackageReference Include="RoslynPad.Roslyn.Windows" Version="3.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Augmentations\Premade\" />
+  </ItemGroup>
+
 </Project>

@@ -113,9 +113,23 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation ForTextMatch(this Augmentation augmentation, Regex textMatch)
+    public static Augmentation ForText(this Augmentation augmentation, Regex textMatch)
     {
         augmentation.TextMatchRegex = textMatch;
+
+        return augmentation;
+    }
+
+    public static Augmentation ForText(this Augmentation augmentation, params Regex[] textMatch)
+    {
+        augmentation.TextMatchesRegex = textMatch;
+
+        return augmentation;
+    }
+
+    public static Augmentation ForText(this Augmentation augmentation, params string[] textMatches)
+    {
+        augmentation.TextMatches = textMatches;
 
         return augmentation;
     }
