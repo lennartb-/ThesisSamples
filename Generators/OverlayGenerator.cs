@@ -51,11 +51,15 @@ public class OverlayGenerator : VisualLineElementGenerator
         var length = endOffset - startOffset;
 
         UIElement element;
-        object? obj = CustomTooltip != null ? CustomTooltip() : TooltipText;
+        object? customTooltip = CustomTooltip != null ? CustomTooltip() : TooltipText;
 
         if (CustomOverlay is not null)
         {
             element = CustomOverlay();
+            if (element is FrameworkElement fe)
+            {
+                fe.ToolTip = customTooltip;
+            }
         }
         else
         {
@@ -64,7 +68,7 @@ public class OverlayGenerator : VisualLineElementGenerator
                 VerticalAlignment = VerticalAlignment.Center,
                 Text = OverlayText,
                 FontSize = new VisualLineElementTextRunProperties(CurrentContext.GlobalTextRunProperties).FontHintingEmSize,
-                ToolTip = obj,
+                ToolTip = customTooltip,
                 Background = TooltipBackground ?? Brushes.Transparent
             };
         }
