@@ -7,32 +7,25 @@ namespace AugmentationFramework;
 public class RoiFinder
 {
     private readonly Augmentation parent;
-    private readonly TextView textView;
 
     public RoiFinder(Augmentation parent)
     {
         this.parent = parent;
-        textView = this.parent.TextView;
     }
 
-    public IEnumerable<(int startOffset, int endOffset)> DetermineRangesOfInterest()
+    public IEnumerable<(int startOffset, int endOffset)> DetermineRangesOfInterest(string textRegion)
     {
-        var viewStart = textView.VisualLines.First().FirstDocumentLine.Offset;
-        var viewEnd = textView.VisualLines.Last().LastDocumentLine.EndOffset;
-
-        var relevantText = textView.Document.GetText(viewStart, viewEnd - viewStart);
-
         if (parent.TextMatchRegex is { } regex)
         {
-            return DetermineRegexTextMatches(regex, relevantText);
+            return DetermineRegexTextMatches(regex, textRegion);
         }
 
         if (parent.TextMatch is { } text)
         {
-            return DetermineTextMatches(text, relevantText);
+            return DetermineTextMatches(text, textRegion);
         }
 
-        return new[] { (viewStart, viewEnd) };
+        return Enumerable.Empty<(int, int)>();
     }
 
     private static IEnumerable<(int startOffset, int endOffset)> DetermineTextMatches(string searchText, string textRegion)

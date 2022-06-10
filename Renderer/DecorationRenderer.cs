@@ -21,7 +21,7 @@ public class DecorationRenderer : IBackgroundRenderer
 
     public void Draw(TextView textView, DrawingContext drawingContext)
     {
-        var area = roiFinder.DetermineRangesOfInterest();
+        var area = roiFinder.DetermineRangesOfInterest(textView.Document.Text);
         
         foreach (var (startOffset, endOffset) in area)
         {
