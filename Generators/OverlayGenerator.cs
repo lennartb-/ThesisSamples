@@ -42,7 +42,7 @@ public class OverlayGenerator : VisualLineElementGenerator
     public override VisualLineElement ConstructElement(int offset)
     {
         var (startOffset, endOffset) = DetermineBackgroundArea(offset);
-
+        
         var length = endOffset - startOffset;
 
         UIElement element;
@@ -118,9 +118,8 @@ public class OverlayGenerator : VisualLineElementGenerator
 
         var viewEnd = visualLines.LastDocumentLine.EndOffset;
 
-        var endOffset = viewEnd;
         var document = parent.TextView.Document;
-        var relevantText = document.GetText(offset, endOffset - offset);
+        var relevantText = document.GetText(offset, viewEnd - offset);
         return regex.Match(relevantText);
     }
 
@@ -131,10 +130,8 @@ public class OverlayGenerator : VisualLineElementGenerator
         var viewStart = visualLines.FirstDocumentLine.Offset;
         var viewEnd = visualLines.LastDocumentLine.EndOffset;
 
-        var startOffset = viewStart;
-        var endOffset = viewEnd;
         var document = parent.TextView.Document;
-        var relevantText = document.GetText(startOffset, endOffset - startOffset);
+        var relevantText = document.GetText(viewStart, viewEnd - viewStart);
         return relevantText.IndexOf(text, offset, StringComparison.CurrentCulture);
     }
 }
