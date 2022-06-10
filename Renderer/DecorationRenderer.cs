@@ -1,8 +1,14 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Drawing;
+using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using AugmentationFramework.Augmentations;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
+using Pen = System.Windows.Media.Pen;
 
 namespace AugmentationFramework.Renderer;
 
@@ -39,7 +45,7 @@ public class DecorationRenderer : IBackgroundRenderer
                 ctx.LineTo(rect.BottomRight with { Y = rect.BottomRight.Y  }, true, false);
                 ctx.LineTo(rect.BottomRight with { Y = rect.BottomRight.Y -3 }, true, false);
             }
-
+            
             underlineGeometry.Freeze();
             drawingContext.DrawGeometry(null, new Pen(decorationColor, 2d), underlineGeometry);
         }

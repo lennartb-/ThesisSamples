@@ -66,7 +66,7 @@ public class OverlayGenerator : VisualLineElementGenerator
             element = new TextBlock
             {
                 VerticalAlignment = VerticalAlignment.Center,
-                Text = OverlayText,
+                Text = OverlayText ?? CurrentContext.Document.GetText(offset, length),
                 FontSize = new VisualLineElementTextRunProperties(CurrentContext.GlobalTextRunProperties).FontHintingEmSize,
                 ToolTip = customTooltip,
                 Background = TooltipBackground ?? Brushes.Transparent

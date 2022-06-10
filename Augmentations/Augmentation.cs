@@ -6,7 +6,6 @@ namespace AugmentationFramework.Augmentations;
 
 public class Augmentation
 {
-    public IList<VisualLineElementGenerator> Generators { get; } = new List<VisualLineElementGenerator>();
     private readonly IList<IBackgroundRenderer> renderers = new List<IBackgroundRenderer>();
 
     private readonly IList<IVisualLineTransformer> transformers = new List<IVisualLineTransformer>();
@@ -15,6 +14,8 @@ public class Augmentation
     {
         TextView = textView;
     }
+
+    public IList<VisualLineElementGenerator> Generators { get; } = new List<VisualLineElementGenerator>();
 
     public Regex? TextMatchRegex { get; set; }
 
@@ -63,12 +64,12 @@ public class Augmentation
         }
     }
 
-    public void AddBackgroundRenderer(DecorationRenderer renderer)
+    internal void AddBackgroundRenderer(DecorationRenderer renderer)
     {
         renderers.Add(renderer);
     }
 
-    public void AddElementGenerator(VisualLineElementGenerator generator)
+    internal void AddElementGenerator(VisualLineElementGenerator generator)
     {
         Generators.Add(generator);
     }
