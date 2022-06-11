@@ -6,7 +6,6 @@ using AugmentationFramework.Augmentations;
 using AugmentationFramework.Generators;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace AugmentationFramework.Transformers;
 
@@ -19,6 +18,7 @@ public class ForegroundTransformer : DocumentColorizingTransformer
     public FontFamily? FontFamily { get; set; }
     public double? FontSize { get; set; }
     public FontWeight? FontWeight { get; set; }
+    public FontStyle? FontStyle { get; set; }
 
     public ForegroundTransformer(Augmentation parent)
     {
@@ -28,36 +28,32 @@ public class ForegroundTransformer : DocumentColorizingTransformer
     protected override void ColorizeLine(DocumentLine line)
     {
         var lineStartOffset = line.Offset;
-        
-        var area = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.GetText(line.Offset,line.Length)).OrderBy(tuple => tuple.startOffset);
-        
-        foreach (var (startOffset, endOffset) in area)
+
+        var regions = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.Text).OrderBy(tuple => tuple.startOffset);
+
+        foreach (var (startOffset, endOffset) in regions)
         {
+            // Skip if region doesn't start on this line
+            if (startOffset > line.EndOffset)
+            {
+                continue;
+            }
+
+            var clampedEnd = line.EndOffset < endOffset ? line.EndOffset : Math.Max(lineStartOffset,endOffset);
+            var clampedStart = Math.Max(lineStartOffset, startOffset);
             ChangeLinePart(
-                lineStartOffset + startOffset,
-                lineStartOffset + endOffset,
+                clampedStart,
+                clampedEnd,
                 element =>
                 {
                     if (element is OverlayElement { Element: TextBlock tb })
                     {
-                        if (Foreground is not null)
-                        {
-                            tb.Foreground = Foreground;
-                        }
-
-                        if (Background is not null)
-                        {
-                            tb.Background = Background;
-                        }
-
+                        tb.Background.IfNotNull(Background);
+                        tb.Foreground.IfNotNull(Foreground);
                         tb.FontSize.IfNotNull(FontSize);
-
-                        if (FontFamily is not null)
-                        {
-                            tb.FontFamily = FontFamily;
-                        }
-
+                        tb.FontFamily.IfNotNull(FontFamily);
                         tb.FontWeight.IfNotNull(FontWeight);
+                        tb.FontStyle.IfNotNull(FontStyle);
                     }
                     else
                     {
@@ -76,16 +72,13 @@ public class ForegroundTransformer : DocumentColorizingTransformer
                             element.TextRunProperties.SetFontRenderingEmSize(FontSize.Value);
                         }
 
-                        if (FontWeight.HasValue)
-                        {
-                            var tf = element.TextRunProperties.Typeface;
-                            element.TextRunProperties.SetTypeface(new Typeface(
-                                tf.FontFamily,
-                                tf.Style,
-                                FontWeight.Value,
-                                tf.Stretch
-                            ));
-                        }
+                        var tf = element.TextRunProperties.Typeface;
+                        element.TextRunProperties.SetTypeface(new Typeface(
+                            tf.FontFamily.IfNotNull(FontFamily),
+                            tf.Style.IfNotNull(FontStyle),
+                            tf.Weight.IfNotNull(FontWeight),
+                            tf.Stretch
+                        ));
 
                     }
                 });
@@ -95,7 +88,17 @@ public class ForegroundTransformer : DocumentColorizingTransformer
 
 internal static class Ext
 {
-    public static object IfNotNull(this object obj, object? val)
+    public static T IfNotNull<T>(this T obj, T? val) where T : struct
+    {
+        if (val.HasValue)
+        {
+            obj = val.Value;
+        }
+
+        return obj;
+    }
+
+    public static T IfNotNull<T>(this T obj, T? val) where T : class
     {
         if (val != null)
         {

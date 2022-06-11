@@ -22,13 +22,18 @@ public class BackgroundTransformer : DocumentColorizingTransformer
     {
         var lineStartOffset = line.Offset;
 
-        var area = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.GetText(line.Offset, line.Length)).OrderBy(tuple => tuple.startOffset);
+        var regions = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.Text).OrderBy(tuple => tuple.startOffset);
 
-        foreach (var (startOffset, endOffset) in area)
+        foreach (var (startOffset, endOffset) in regions)
         {
+            // Skip if region doesn't start on this line
+            if (startOffset > line.EndOffset) continue;
+            var clampedEnd = Math.Min(line.EndOffset, endOffset);
+            var clampedStart = Math.Max(lineStartOffset, startOffset);
+
             ChangeLinePart(
-                lineStartOffset + startOffset,
-                lineStartOffset + endOffset,
+                clampedStart,
+                clampedEnd,
                 element =>
                 {
                     if (element is OverlayElement { Element: TextBlock tb })
