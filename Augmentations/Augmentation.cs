@@ -6,7 +6,7 @@ namespace AugmentationFramework.Augmentations;
 
 public class Augmentation
 {
-    private readonly IList<IBackgroundRenderer> renderers = new List<IBackgroundRenderer>();
+    public IList<IBackgroundRenderer> Renderers { get; } = new List<IBackgroundRenderer>();
 
     public IList<IVisualLineTransformer> Transformers { get; } = new List<IVisualLineTransformer>();
 
@@ -37,7 +37,7 @@ public class Augmentation
             TextView.LineTransformers.Add(visualLineTransformer);
         }
 
-        foreach (var renderer in renderers)
+        foreach (var renderer in Renderers)
         {
             TextView.BackgroundRenderers.Add(renderer);
         }
@@ -55,7 +55,7 @@ public class Augmentation
             TextView.LineTransformers.Remove(visualLineTransformer);
         }
 
-        foreach (var renderer in renderers)
+        foreach (var renderer in Renderers)
         {
             TextView.BackgroundRenderers.Remove(renderer);
         }
@@ -68,7 +68,7 @@ public class Augmentation
 
     internal void AddBackgroundRenderer(DecorationRenderer renderer)
     {
-        renderers.Add(renderer);
+        Renderers.Add(renderer);
     }
 
     internal void AddElementGenerator(VisualLineElementGenerator generator)

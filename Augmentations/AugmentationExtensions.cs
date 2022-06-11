@@ -11,9 +11,19 @@ public static class AugmentationExtensions
 {
     public static Augmentation WithBackground(this Augmentation augmentation, Brush background)
     {
-        var backgroundTransformer = new BackgroundTransformer(augmentation, background);
+        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            {
+                existingGenerator.Background = background;
+            }
 
-        augmentation.AddLineTransformer(backgroundTransformer);
+            return augmentation;
+        }
+
+        var foregroundTransformer = new ForegroundTransformer(augmentation) { Background = background };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
 
         return augmentation;
     }
@@ -30,10 +40,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation)
-        {
-            Foreground = foreground
-        };
+        var foregroundTransformer = new ForegroundTransformer(augmentation) { Foreground = foreground };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
@@ -52,10 +59,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation)
-        {
-            FontSize = fontSize
-        };
+        var foregroundTransformer = new ForegroundTransformer(augmentation) { FontSize = fontSize };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
@@ -74,10 +78,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation)
-        {
-            FontWeight = fontWeight
-        };
+        var foregroundTransformer = new ForegroundTransformer(augmentation) { FontWeight = fontWeight };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
@@ -96,10 +97,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation)
-        {
-            FontFamily = fontFamily
-        };
+        var foregroundTransformer = new ForegroundTransformer(augmentation) { FontFamily = fontFamily };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
@@ -118,10 +116,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation)
-        {
-            FontStyle = fontStyle
-        };
+        var foregroundTransformer = new ForegroundTransformer(augmentation) { FontStyle = fontStyle };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
@@ -156,10 +151,20 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation WithDecoration(this Augmentation augmentation, Brush decorationColor)
+    public static Augmentation WithDecorationColor(this Augmentation augmentation, Brush decorationColor)
     {
-        var backgroundTransformer = new DecorationRenderer(augmentation, decorationColor);
-        augmentation.AddBackgroundRenderer(backgroundTransformer);
+        if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Renderers.OfType<DecorationRenderer>())
+            {
+                existingGenerator.DecorationColor = decorationColor;
+            }
+
+            return augmentation;
+        }
+
+        var toolTipGenerator = new DecorationRenderer(augmentation) { DecorationColor = decorationColor };
+        augmentation.AddBackgroundRenderer(toolTipGenerator);
 
         return augmentation;
     }
@@ -178,6 +183,24 @@ public static class AugmentationExtensions
 
         var toolTipGenerator = new OverlayGenerator(augmentation) { TooltipText = tooltipText };
         augmentation.AddElementGenerator(toolTipGenerator);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithDecoration(this Augmentation augmentation, Func<Rect, Geometry> geometry)
+    {
+        if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Renderers.OfType<DecorationRenderer>())
+            {
+                existingGenerator.GeometryDelegate = geometry;
+            }
+
+            return augmentation;
+        }
+
+        var toolTipGenerator = new DecorationRenderer(augmentation) { GeometryDelegate = geometry };
+        augmentation.AddBackgroundRenderer(toolTipGenerator);
 
         return augmentation;
     }

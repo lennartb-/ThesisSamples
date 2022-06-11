@@ -18,9 +18,9 @@ public class SmalltalkHighlighting
         var keywordsRegex = new Regex(@"\b(self|super|true|false|nil)\b");
 
         var comments = new Augmentation(textView)
-                .ForText(commentRegex)
-                .WithForeground(Brushes.LightGreen)
-                .WithFontStyle(FontStyles.Italic);
+            .ForText(commentRegex)
+            .WithForeground(Brushes.LightGreen)
+            .WithFontStyle(FontStyles.Italic);
 
         var keywords = new Augmentation(textView)
             .ForText(keywordsRegex)
@@ -44,12 +44,6 @@ public class SmalltalkHighlighting
             .ForText(parameterRegex)
             .WithFontWeight(FontWeights.Bold);
 
-        return new[] {
-            keywords,
-            messages,
-            numbersAndStrings,
-            symbols,
-            parameters,
-            comments };
+        return new[] { keywords, messages, numbersAndStrings, symbols, parameters, comments };
     }
 }

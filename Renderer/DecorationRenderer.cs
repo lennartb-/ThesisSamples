@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using AugmentationFramework.Augmentations;
+using AugmentationFramework.Renderer.Premade;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
 using Brush = System.Windows.Media.Brush;
@@ -15,13 +16,13 @@ namespace AugmentationFramework.Renderer;
 public class DecorationRenderer : IBackgroundRenderer
 {
     private readonly Augmentation parent;
-    private readonly Brush decorationColor;
+    public Brush DecorationColor { get; set; } = Brushes.Transparent;
     private readonly RoiFinder roiFinder;
+    public Func<Rect, Geometry> GeometryDelegate { get; set; } = UnderlineBracket.Geometry;
 
-    public DecorationRenderer(Augmentation parent, Brush decorationColor)
+    public DecorationRenderer(Augmentation parent)
     {
         this.parent = parent;
-        this.decorationColor = decorationColor;
         roiFinder = new RoiFinder(parent);
     }
 
@@ -36,18 +37,7 @@ public class DecorationRenderer : IBackgroundRenderer
             var rects = BackgroundGeometryBuilder.GetRectsForSegment(parent.TextView, textSegment);
             var rect = rects.First();
 
-            var underlineGeometry = new StreamGeometry();
-
-            using (var ctx = underlineGeometry.Open())
-            {
-                ctx.BeginFigure(rect.BottomLeft with { Y = rect.BottomLeft.Y - 3 }, false, false);
-                ctx.LineTo(rect.BottomLeft with { Y = rect.BottomLeft.Y  }, true, false);
-                ctx.LineTo(rect.BottomRight with { Y = rect.BottomRight.Y  }, true, false);
-                ctx.LineTo(rect.BottomRight with { Y = rect.BottomRight.Y -3 }, true, false);
-            }
-            
-            underlineGeometry.Freeze();
-            drawingContext.DrawGeometry(null, new Pen(decorationColor, 2d), underlineGeometry);
+            drawingContext.DrawGeometry(null, new Pen(DecorationColor, 2d), GeometryDelegate(rect));
         }
     }
 
