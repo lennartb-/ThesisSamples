@@ -7,46 +7,49 @@ namespace AugmentationFramework.Augmentations.Premade;
 
 public class SmalltalkHighlighting
 {
-    private static readonly Regex Keywords = new(@"\b(self|super|true|false|nil)\b");
-
     public static Augmentation[] GetAugmentation(TextView textView)
     {
-
-        var parameters = new Regex(@":\w+");
-        var constants = new Regex(@"[$#]\w+");
-        var numbers = new Regex(@"\b\d+(\.\d+)?\b");
-        var keymes = new Regex(@"\w+:");
-        var comment = new Regex("\"(.*?)\"");
-        var str = new Regex(@"\'(.*?)\'");
+        var parameterRegex = new Regex(@":\w+");
+        var symbolRegex = new Regex(@"[$#]\w+");
+        var numberRegex = new Regex(@"\b\d+(\.\d+)?\b");
+        var messagesRegex = new Regex(@"\w+:");
+        var commentRegex = new Regex("\"(.|\r|\n)*?\"");
+        var stringRegex = new Regex(@"\'((.|\r|\n)*?)\'");
+        var keywordsRegex = new Regex(@"\b(self|super|true|false|nil)\b");
 
         var comments = new Augmentation(textView)
-            .ForText(comment)
-            .WithBackground(Brushes.DarkGreen)
-            .WithForeground(Brushes.White)
-            .WithFontSize(16);
+                .ForText(commentRegex)
+                .WithForeground(Brushes.LightGreen)
+                .WithFontStyle(FontStyles.Italic);
 
         var keywords = new Augmentation(textView)
-            .ForText(Keywords)
+            .ForText(keywordsRegex)
             .WithFontWeight(FontWeights.Bold)
             .WithForeground(Brushes.RoyalBlue);
 
         var messages = new Augmentation(textView)
-            .ForText(keymes)
+            .ForText(messagesRegex)
             .WithForeground(Brushes.Orange);
 
-        var numsAndStrings = new Augmentation(textView)
-            .ForText(numbers, str)
+        var numbersAndStrings = new Augmentation(textView)
+            .ForText(numberRegex, stringRegex)
             .WithForeground(Brushes.MediumAquamarine);
 
-        var consts = new Augmentation(textView)
-            .ForText(constants)
+        var symbols = new Augmentation(textView)
+            .ForText(symbolRegex)
             .WithFontWeight(FontWeights.Bold)
             .WithForeground(Brushes.DarkRed);
 
-        var ps = new Augmentation(textView)
-            .ForText(parameters)
+        var parameters = new Augmentation(textView)
+            .ForText(parameterRegex)
             .WithFontWeight(FontWeights.Bold);
 
-        return new[] { keywords, messages, numsAndStrings, consts, ps, comments };
+        return new[] {
+            keywords,
+            messages,
+            numbersAndStrings,
+            symbols,
+            parameters,
+            comments };
     }
 }

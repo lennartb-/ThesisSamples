@@ -106,6 +106,28 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    public static Augmentation WithFontStyle(this Augmentation augmentation, FontStyle fontStyle)
+    {
+        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            {
+                existingGenerator.FontStyle = fontStyle;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new ForegroundTransformer(augmentation)
+        {
+            FontStyle = fontStyle
+        };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
     public static Augmentation ForText(this Augmentation augmentation, string text)
     {
         augmentation.TextMatch = text;
