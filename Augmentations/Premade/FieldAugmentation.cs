@@ -3,30 +3,32 @@ using ICSharpCode.AvalonEdit.Rendering;
 
 namespace AugmentationFramework.Augmentations.Premade;
 
-public class FieldAugmentation
+public static class FieldAugmentation
 {
     public static IEnumerable<Augmentation> GetAugmentations(TextView textView)
     {
-        return GetFieldNames().Select(
-            fieldMapping => new Augmentation(textView)
-                .ForText(fieldMapping.Key)
+        foreach (var (field, name) in GetFieldMapping())
+        {
+            yield return new Augmentation(textView)
+                .ForText(field)
                 .WithBackground(Brushes.DarkGray)
                 .WithForeground(Brushes.White)
-                .WithOverlay(fieldMapping.Value));
+                .WithOverlay(name);
+        }
     }
 
-    private static IDictionary<string, string> GetFieldNames()
+    private static IEnumerable<(string, string)> GetFieldMapping()
     {
-        return new Dictionary<string, string>
+        return new List<(string, string)>
         {
-            { "T1000.F1000", "Order ID" },
-            { "T1000.F1001", "Products" },
-            { "T1000.F1002", "Amount" },
-            { "T2000.F2000", "Product ID" },
-            { "T2000.F2001", "Categories" },
-            { "T2000.F2002", "Name" },
-            { "T3000.F3000", "Category ID" },
-            { "T3000.F3001", "Name" }
+            ( "T1000.F1000", "Order ID" ),
+            ( "T1000.F1001", "Products" ),
+            ( "T1000.F1002", "Amount" ),
+            ( "T2000.F2000", "Product ID" ),
+            ( "T2000.F2001", "Categories" ),
+            ( "T2000.F2002", "Name" ),
+            ( "T3000.F3000", "Category ID" ),
+            ( "T3000.F3001", "Name" )
         };
     }
 }
