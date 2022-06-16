@@ -1,6 +1,7 @@
 ﻿
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Media;
 using AugmentationFramework.Augmentations;
 using AugmentationFramework.Generators;
@@ -39,7 +40,7 @@ public class ForegroundTransformer : DocumentColorizingTransformer
                 continue;
             }
 
-            var clampedEnd = line.EndOffset < endOffset ? line.EndOffset : Math.Max(lineStartOffset,endOffset);
+            var clampedEnd = line.EndOffset < endOffset ? line.EndOffset : Math.Max(lineStartOffset, endOffset);
             var clampedStart = Math.Max(lineStartOffset, startOffset);
             ChangeLinePart(
                 clampedStart,
@@ -48,12 +49,32 @@ public class ForegroundTransformer : DocumentColorizingTransformer
                 {
                     if (element is OverlayElement { Element: TextBlock tb })
                     {
-                        tb.Background.IfNotNull(Background);
-                        tb.Foreground.IfNotNull(Foreground);
-                        tb.FontSize.IfNotNull(FontSize);
-                        tb.FontFamily.IfNotNull(FontFamily);
-                        tb.FontWeight.IfNotNull(FontWeight);
-                        tb.FontStyle.IfNotNull(FontStyle);
+                        if (Background != null)
+                        {
+                            tb.Background = Background;
+                        }
+
+                        if (Foreground != null)
+                        {
+                            tb.Foreground = Foreground;
+                        }
+
+                        if (FontSize.HasValue)
+                        {
+                            tb.FontSize = FontSize.Value;
+                        }
+                        if (FontFamily != null)
+                        {
+                            tb.FontFamily = FontFamily;
+                        }
+                        if (FontWeight.HasValue)
+                        {
+                            tb.FontWeight = FontWeight.Value;
+                        }
+                        if (FontStyle.HasValue)
+                        {
+                            tb.FontStyle = FontStyle.Value;
+                        }
                     }
                     else
                     {
