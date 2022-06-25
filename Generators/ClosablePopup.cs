@@ -12,5 +12,6 @@ public class ClosablePopup : Popup
     {
         CloseCommand = ReactiveCommand.Create(() => IsOpen = false);
         StaysOpen = true;
+        MouseDown += (s, e) => e.Handled = true;
     }
 }
