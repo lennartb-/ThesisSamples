@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
+using AugmentationFramework.AdviceDisplay;
 using AugmentationFramework.Generators;
 using AugmentationFramework.Renderer;
 using AugmentationFramework.Transformers;
@@ -254,6 +255,24 @@ public static class AugmentationExtensions
         }
 
         var toolTipGenerator = new OverlayGenerator(augmentation, overlay);
+        augmentation.AddElementGenerator(toolTipGenerator);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithAdviceOverlay(this Augmentation augmentation, IAdviceModel model)
+    {
+        if (augmentation.Generators.OfType<OverlayGenerator>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Generators.OfType<OverlayGenerator>())
+            {
+                existingGenerator.AdviceModel = model;
+            }
+
+            return augmentation;
+        }
+
+        var toolTipGenerator = new OverlayGenerator(augmentation) { AdviceModel = model};
         augmentation.AddElementGenerator(toolTipGenerator);
 
         return augmentation;

@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using AugmentationFramework.AdviceDisplay;
 using AugmentationFramework.Augmentations;
 using ICSharpCode.AvalonEdit.Rendering;
 
@@ -10,6 +12,7 @@ public class OverlayGenerator : VisualLineElementGenerator
 {
     public Func<UIElement>? CustomOverlay { get; internal set; }
     public Func<UIElement>? CustomTooltip { get; internal set; }
+    public IAdviceModel? AdviceModel { get; internal set; }
     public Brush? TooltipBackground { get; internal set; }
     public string? TooltipText { get; internal set; }
     public string? OverlayText { get; internal set; }
@@ -71,6 +74,21 @@ public class OverlayGenerator : VisualLineElementGenerator
                 ToolTip = customTooltip,
                 Background = TooltipBackground ?? Brushes.Transparent
             };
+
+            if (AdviceModel is not null)
+            {
+                var popup = new ClosableAdvicePopup(AdviceModel);
+                var sp = new StackPanel();
+                sp.Children.Add(element);
+                sp.Children.Add(popup);
+
+                sp.MouseEnter += (sender, args) =>
+                {
+                    popup.IsOpen = true;
+                };
+
+                element = sp;
+            }
         }
 
         var overlay = new OverlayElement(length, element);
