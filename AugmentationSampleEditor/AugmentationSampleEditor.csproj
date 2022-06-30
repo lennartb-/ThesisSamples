@@ -26,4 +26,8 @@
 	  <Resource Include="Resources\ic_menu_save.png" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Controls\" />
+	</ItemGroup>
+
 </Project>

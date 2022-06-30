@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AugmentationFramework.AdviceDisplay;
@@ -26,7 +27,10 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         ViewModels.Add(new SynonymDisplayVm());
+        ViewModels.Add(new SmalltalkHighlightingVm());
+        ViewModels.Add(new DecorationsVm());
         DataContext = this;
+        
         //var backgroundAugmentation = new Augmentation(Editor.TextArea)
         //    .WithForeground(Brushes.RoyalBlue)
         //    .WithFontWeight(FontWeights.Bold)
@@ -71,9 +75,5 @@ public partial class MainWindow : Window
 
         //plugins.Add(underlineAugmentation);
 
-        //foreach (var augmentation in FieldAugmentation.GetAugmentations(Editor.TextArea.TextView))
-        //{
-        //    plugins.Add(augmentation);
-        //}
     }
 }

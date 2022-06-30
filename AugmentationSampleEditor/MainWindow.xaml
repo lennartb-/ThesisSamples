@@ -2,18 +2,71 @@
     x:Class="AugmentationSampleEditor.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
     xmlns:local="clr-namespace:AugmentationSampleEditor"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:AugmentationSampleEditor.ViewModels"
-    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:global="clr-namespace:AugmentationSampleEditor.Controls"
     Title="MainWindow"
     Width="800"
     Height="800"
     mc:Ignorable="d">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type global:CachingTabControl}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TabControl}">
+                            <Grid
+                                Background="{TemplateBinding Background}"
+                                ClipToBounds="True"
+                                KeyboardNavigation.TabNavigation="Local"
+                                SnapsToDevicePixels="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition x:Name="ColumnDefinition0" />
+                                    <ColumnDefinition x:Name="ColumnDefinition1" Width="0" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition x:Name="RowDefinition0" Height="Auto" />
+                                    <RowDefinition x:Name="RowDefinition1" Height="*" />
+                                </Grid.RowDefinitions>
+                                <DockPanel Margin="2,2,0,0" LastChildFill="False">
+                                    <TabPanel
+                                        x:Name="HeaderPanel"
+                                        Margin="0,0,0,-1"
+                                        VerticalAlignment="Bottom"
+                                        Panel.ZIndex="1"
+                                        DockPanel.Dock="Right"
+                                        IsItemsHost="True"
+                                        KeyboardNavigation.TabIndex="1" />
+                                </DockPanel>
+                                <Border
+                                    x:Name="ContentPanel"
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    KeyboardNavigation.DirectionalNavigation="Contained"
+                                    KeyboardNavigation.TabIndex="2"
+                                    KeyboardNavigation.TabNavigation="Local">
+                                    <Grid
+                                        x:Name="PART_ItemsHolder"
+                                        Margin="{TemplateBinding Padding}"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
-    <TabControl ItemsSource="{Binding ViewModels}">
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <global:CachingTabControl ItemsSource="{Binding ViewModels}">
         <TabControl.ItemTemplate>
             <DataTemplate DataType="viewModels:ISampleContent">
                 <TextBlock Text="{Binding Title}" />
@@ -37,58 +90,20 @@
                         WordWrap="True">
                         <b:Interaction.Triggers>
                             <b:EventTrigger SourceName="LoadedEvent">
-                                <b:InvokeCommandAction Command="{Binding EditorLoadedCommand}" CommandParameter="{Binding ElementName=Editor}"/>
+                                <b:InvokeCommandAction Command="{Binding EditorLoadedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=editor:CodeTextEditor}}"/>
                             </b:EventTrigger>
                         </b:Interaction.Triggers>
                     </editor:CodeTextEditor>
                 </Grid>
             </DataTemplate>
         </TabControl.ContentTemplate>
-    </TabControl>
-    <!--<editor:CodeTextEditor
-            Name="Editor"
-            Grid.Row="1"
-            FontSize="24"
-            WordWrap="True">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis blandit massa at purus cursus semper. Nunc est erat, malesuada quis neque ut, mollis pharetra dolor. Vivamus suscipit magna at orci egestas volutpat. Mauris augue sem, efficitur ac varius nec, rutrum eu velit. Etiam cursus porttitor scelerisque. Vestibulum cursus ante tristique tincidunt sodales. Vestibulum posuere urna vulputate lectus dapibus, sit amet semper nibh maximus.
-            Aliquam suscipit, mi at sollicitudin egestas, dui lectus lacinia dui, ut sagittis augue augue a risus. Aenean ac ipsum ullamcorper, egestas sapien vitae, maximus risus. Vivamus facilisis lobortis libero quis sodales. Cras eget odio at metus imperdiet accumsan. Morbi ut feugiat odio. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam vel libero id metus ultricies consequat id id massa.
-            Aliquam tristique turpis et justo dignissim, eu elementum tortor porta. Aenean tincidunt dapibus maximus. Curabitur vehicula, mi sed vehicula pulvinar, eros lacus faucibus lorem, vel gravida nisi magna ut tellus. Aliquam venenatis faucibus quam eget efficitur. Fusce eget massa ut odio pellentesque cursus. In posuere velit ex. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus faucibus ullamcorper dui, at molestie nisi lobortis ac. Cras commodo elit non aliquam congue. Fusce lacinia congue mi in congue. Vivamus vel lectus ac leo varius cursus.
-        </editor:CodeTextEditor>-->
-    <!--<editor:CodeTextEditor
-            Name="Editor"
-            Grid.Row="1"
-            FontSize="24"
-            WordWrap="True">
-            exampleWithNumber: x
-            &quot;A method that illustrates every part of Smalltalk method syntax
-            except primitives. It has unary, binary, and keyboard messages,
-            declares arguments and temporaries, accesses a global variable
-            (but not an instance variable), uses literals (array, character,
-            symbol, string, integer, float), uses the pseudo variables
-            true, false, nil, self, and super, and has sequence, assignment,
-            return and cascade. It has both zero argument and one argument blocks.&quot;
-            | y |
-            true &amp; false not &amp; (nil isNil) ifFalse: [self halt].
-            y := self size + super size.
-            #($a #a &quot;a&quot; 1 1.0)
-            do: [ :each |
-            Transcript show: (each class name);
-            show: ' '].
-            ^x &lt; y
-        </editor:CodeTextEditor>-->
+    </global:CachingTabControl>
     <!--<editor:CodeTextEditor
             Name="Editor"
             Grid.Row="1"
             FontSize="24"
             WordWrap="True">
             var hashedString = HashingAlgorithms.HashWithSha1("Lorem ipsum dolor sit amet");
-        </editor:CodeTextEditor>-->
-    <!--<editor:CodeTextEditor
-            Name="Editor"
-            Grid.Row="1"
-            FontSize="24"
-            WordWrap="True">
-
         </editor:CodeTextEditor>-->
 
 </Window>
