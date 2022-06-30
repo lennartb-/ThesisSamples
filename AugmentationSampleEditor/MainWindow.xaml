@@ -5,10 +5,10 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
+    xmlns:global="clr-namespace:AugmentationSampleEditor.Controls"
     xmlns:local="clr-namespace:AugmentationSampleEditor"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:AugmentationSampleEditor.ViewModels"
-    xmlns:global="clr-namespace:AugmentationSampleEditor.Controls"
     Title="MainWindow"
     Width="800"
     Height="800"
@@ -38,7 +38,7 @@
                                         Margin="0,0,0,-1"
                                         VerticalAlignment="Bottom"
                                         Panel.ZIndex="1"
-                                        DockPanel.Dock="Right"
+                                        DockPanel.Dock="Left"
                                         IsItemsHost="True"
                                         KeyboardNavigation.TabIndex="1" />
                                 </DockPanel>
@@ -90,7 +90,7 @@
                         WordWrap="True">
                         <b:Interaction.Triggers>
                             <b:EventTrigger SourceName="LoadedEvent">
-                                <b:InvokeCommandAction Command="{Binding EditorLoadedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=editor:CodeTextEditor}}"/>
+                                <b:InvokeCommandAction Command="{Binding EditorLoadedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=editor:CodeTextEditor}}" />
                             </b:EventTrigger>
                         </b:Interaction.Triggers>
                     </editor:CodeTextEditor>
@@ -98,12 +98,4 @@
             </DataTemplate>
         </TabControl.ContentTemplate>
     </global:CachingTabControl>
-    <!--<editor:CodeTextEditor
-            Name="Editor"
-            Grid.Row="1"
-            FontSize="24"
-            WordWrap="True">
-            var hashedString = HashingAlgorithms.HashWithSha1("Lorem ipsum dolor sit amet");
-        </editor:CodeTextEditor>-->
-
 </Window>
