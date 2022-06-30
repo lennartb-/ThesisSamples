@@ -145,6 +145,13 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    public static Augmentation ForDelegate(this Augmentation augmentation, Func<Match, bool> regexMatcher)
+    {
+        augmentation.MatchingDelegate = regexMatcher;
+
+        return augmentation;
+    }
+
     public static Augmentation ForText(this Augmentation augmentation, params string[] textMatches)
     {
         augmentation.TextMatches = textMatches;

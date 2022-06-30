@@ -12,8 +12,6 @@ namespace AugmentationSampleEditor;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private readonly IList<Augmentation> plugins = new List<Augmentation>();
-
     public MainWindow()
     {
         InitializeComponent();
@@ -22,6 +20,7 @@ public partial class MainWindow : Window
         ViewModels.Add(new DecorationsVm());
         ViewModels.Add(new HashingVm());
         ViewModels.Add(new AdviceVm());
+        ViewModels.Add(new FieldComparisonVm());
         DataContext = this;
 
         var image = new BitmapImage(

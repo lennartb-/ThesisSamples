@@ -1,6 +1,5 @@
 ﻿using System.Text.RegularExpressions;
 using AugmentationFramework.Augmentations;
-using ICSharpCode.AvalonEdit.Rendering;
 
 namespace AugmentationFramework;
 
@@ -15,6 +14,11 @@ public class RoiFinder
 
     public IEnumerable<(int startOffset, int endOffset)> DetermineRangesOfInterest(string textRegion)
     {
+        if (parent.MatchingDelegate is { } matchingDelegate && parent.TextMatchRegex is { } matchingRegex)
+        {
+            return DetermineDelegateMatches(matchingDelegate, matchingRegex, textRegion);
+        }
+
         if (parent.TextMatchesRegex is { } regexes)
         {
             return DetermineRegexTextMatches(regexes, textRegion);
@@ -46,6 +50,22 @@ public class RoiFinder
             var matchLength = offsetAtMatch + searchText.Length;
             yield return (offsetAtMatch, matchLength);
             offsetAtMatch = FindTextMatch(searchText, matchLength, textRegion);
+        }
+    }
+
+    private static IEnumerable<(int startOffset, int endOffset)> DetermineDelegateMatches(Func<Match,bool> matchingDelegate, Regex regex, string textRegion)
+    {
+        var match = FindTextRegexMatch(regex, textRegion);
+
+        while (match.Success)
+        {
+            if (matchingDelegate(match))
+            {
+                var matchLength = match.Index + match.Value.Length;
+                yield return (match.Index, matchLength);
+            }
+
+            match = match.NextMatch();
         }
     }
 

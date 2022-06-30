@@ -23,6 +23,7 @@ public class Augmentation
     public string? TextMatch { get; set; }
     public IEnumerable<string>? TextMatches { get; set; }
     public Func<IEnumerable<string>>? TextMatchesFunc { get; set; }
+    public Func<Match,bool>? MatchingDelegate { get; set; }
 
     public TextView TextView { get; }
 
