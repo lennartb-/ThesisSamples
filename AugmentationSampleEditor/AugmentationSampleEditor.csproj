@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\ic_menu_save.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+		<PackageReference Include="RoslynPad.Editor.Windows" Version="1.2.0" />
+		<PackageReference Include="RoslynPad.Roslyn" Version="3.6.0" />
+		<PackageReference Include="RoslynPad.Roslyn.Windows" Version="3.6.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\RoslynPadTest\AugmentationFramework.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\ic_menu_save.png" />
+	</ItemGroup>
+
+</Project>
