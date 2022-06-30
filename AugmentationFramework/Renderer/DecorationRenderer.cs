@@ -34,7 +34,9 @@ public class DecorationRenderer : IBackgroundRenderer
         {
             var textSegment = new TextSegment { StartOffset = startOffset, EndOffset = endOffset };
 
-            var rects = BackgroundGeometryBuilder.GetRectsForSegment(parent.TextView, textSegment);
+            var rects = BackgroundGeometryBuilder.GetRectsForSegment(parent.TextView, textSegment).ToList();
+            if (!rects.Any()) continue;
+
             var rect = rects.First();
 
             drawingContext.DrawGeometry(null, new Pen(DecorationColor, 2d), GeometryDelegate(rect));

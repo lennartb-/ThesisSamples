@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Media;
+using AugmentationFramework.AdviceDisplay;
 using AugmentationFramework.Renderer.Premade;
 using ICSharpCode.AvalonEdit.Rendering;
 
@@ -16,7 +17,7 @@ public class TypedFieldAugmentation
             .ForText(new Regex(@"\b(F\d+)[ ]*(?<!=)==(?!=)[ ]*(F\d+)\b"))
             .WithDecoration(UnderlineBracket.Geometry)
             .WithDecorationColor(Brushes.Red)
-            .WithTooltip("Use .Equals()");
+            .WithAdviceOverlay(new StringEqualityAdviceModel());
 
     }
 
