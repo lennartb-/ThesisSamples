@@ -19,7 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\RoslynPadTest\AugmentationFramework.csproj" />
+	  <ProjectReference Include="..\AugmentationFramework\AugmentationFramework.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
