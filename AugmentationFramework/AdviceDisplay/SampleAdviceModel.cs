@@ -8,7 +8,7 @@ public class SampleAdviceModel : IAdviceModel
 
     public string WarningText => "Usage of this API can lead to security issues.";
 
-    public string WarningSource => "";
+    public string WarningSource { get; set; } = string.Empty;
 
     public string WarningRisk => "Potential leak of user data.";
 

@@ -78,11 +78,12 @@ public class OverlayGenerator : VisualLineElementGenerator
             if (AdviceModel is not null)
             {
                 var popup = new ClosableAdvicePopup(AdviceModel);
+                AdviceModel.WarningSource = CurrentContext.Document.GetText(offset, length) + "@ L" + CurrentContext.Document.GetLineByOffset(offset).LineNumber;
                 var sp = new StackPanel();
                 sp.Children.Add(element);
                 sp.Children.Add(popup);
 
-                sp.MouseEnter += (sender, args) =>
+                sp.MouseDown += (sender, args) =>
                 {
                     popup.IsOpen = true;
                 };
