@@ -13,6 +13,7 @@ public class SampleAdviceModel : IAdviceModel
     public string WarningRisk => "Potential leak of user data.";
 
     public string Information => "www.google.de";
+    public Uri InformationLink => new("www.google.de");
 
     public string SecureAdvice => "Use this:";
 
