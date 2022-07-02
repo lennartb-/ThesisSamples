@@ -6,12 +6,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:generators="clr-namespace:AugmentationFramework.Generators"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="600"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    Width="600"
     Background="White"
     BorderBrush="Black"
-    BorderThickness="1"
+    BorderThickness="2"
     mc:Ignorable="d">
 
     <Grid>
@@ -41,65 +41,86 @@
             <RowDefinition x:Name="Close" />
         </Grid.RowDefinitions>
 
-        <TextBlock TextWrapping="Wrap"
-                   Grid.Row="0"
-                   Foreground="Red"
-                   Text="{Binding AdviceModel.WarningTitle}" />
-        <TextBlock TextWrapping="Wrap" 
-                   Grid.Row="1"
-                   Foreground="Red"
-                   Text="{Binding AdviceModel.WarningText}" />
-        <TextBlock TextWrapping="Wrap"
-                   Grid.Row="3"
-                   FontFamily="Consolas"
-                   Text="{Binding AdviceModel.WarningSource}" />
-        <TextBlock Grid.Row="4" Text="{Binding AdviceModel.WarningRisk}" TextWrapping="Wrap" />
-        <Grid
+        <TextBlock
+            Grid.Row="0"
+            Foreground="Red"
+            Text="{Binding AdviceModel.WarningTitle}"
+            TextWrapping="Wrap" />
+        <TextBlock
+            Grid.Row="1"
+            Foreground="Red"
+            Text="{Binding AdviceModel.WarningText}"
+            TextWrapping="Wrap" />
+        <TextBlock
+            Grid.Row="3"
+            FontFamily="Consolas"
+            Text="{Binding AdviceModel.WarningSource}"
+            TextWrapping="Wrap" />
+        <TextBlock
+            Grid.Row="4"
+            Background="LightYellow"
+            Text="{Binding AdviceModel.WarningRisk}"
+            TextWrapping="Wrap" />
+        <Border
             Grid.Row="6"
-            Margin="5,0,0,0"
-            Background="LightGreen">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.ColumnSpan="2" Text="{Binding AdviceModel.SecureAdvice}" TextWrapping="Wrap" />
-            <TextBox
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="10,0,0,0"
-                FontFamily="Consolas"
-                IsReadOnly="True"
-                Text="{Binding AdviceModel.SecureSample, Mode=OneWay}" />
-        </Grid>
-        <Grid
+            Background="LightGreen"
+            BorderBrush="LightGreen"
+            BorderThickness="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Grid.ColumnSpan="2"
+                    Text="{Binding AdviceModel.SecureAdvice}"
+                    TextWrapping="Wrap" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    FontFamily="Consolas"
+                    IsReadOnly="True"
+                    Text="{Binding AdviceModel.SecureSample, Mode=OneWay}"
+                    TextWrapping="Wrap" />
+            </Grid>
+        </Border>
+        <Border
             Grid.Row="8"
-            Margin="5,0,0,0"
-            Background="PaleVioletRed">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.ColumnSpan="2" Text="{Binding AdviceModel.InsecureAdvice}" TextWrapping="Wrap" />
-            <TextBox
-                Grid.Row="1"
-                Grid.Column="1"
-                Margin="10,0,0,0"
-                FontFamily="Consolas"
-                IsReadOnly="True"
-                Text="{Binding AdviceModel.InsecureSample, Mode=OneWay}" />
-        </Grid>
+            Background="PaleVioletRed"
+            BorderBrush="PaleVioletRed"
+            BorderThickness="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Grid.ColumnSpan="2"
+                    Text="{Binding AdviceModel.InsecureAdvice}"
+                    TextWrapping="Wrap" />
+                <TextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    FontFamily="Consolas"
+                    IsReadOnly="True"
+                    Text="{Binding AdviceModel.InsecureSample, Mode=OneWay}"
+                    TextWrapping="Wrap" />
+            </Grid>
+        </Border>
         <TextBlock Grid.Row="10" TextWrapping="Wrap">
             <Hyperlink NavigateUri="{Binding AdviceModel.InformationLink}" RequestNavigate="Hyperlink_RequestNavigate">
                 <Hyperlink.Inlines>
-                    <Run Text="{Binding AdviceModel.Information, Mode=OneWay}"/>
+                    <Run Text="{Binding AdviceModel.Information, Mode=OneWay}" />
                 </Hyperlink.Inlines>
             </Hyperlink>
         </TextBlock>

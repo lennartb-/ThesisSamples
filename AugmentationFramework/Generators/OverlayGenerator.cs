@@ -49,8 +49,9 @@ public class OverlayGenerator : VisualLineElementGenerator
 
     public override VisualLineElement ConstructElement(int offset)
     {
+        
         var (startOffset, endOffset) = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.Text[offset..]).FirstOrDefault();
-
+        
         var length = endOffset - startOffset;
 
         UIElement element;
@@ -79,13 +80,15 @@ public class OverlayGenerator : VisualLineElementGenerator
             {
                 var model = AdviceModel.Clone();
                 var popup = new ClosableAdvicePopup(model);
-                model.WarningSource = CurrentContext.Document.GetText(offset, length) + "@ L" + CurrentContext.Document.GetLineByOffset(offset).LineNumber;
+                model.WarningSource = CurrentContext.Document.GetText(startOffset, CurrentContext.Document.GetLineByOffset(offset).Length-1) + "@ Line " + CurrentContext.Document.GetLineByOffset(offset).LineNumber;
                 var sp = new StackPanel();
                 sp.Children.Add(element);
                 sp.Children.Add(popup);
 
                 sp.MouseDown += (sender, args) =>
                 {
+                    popup.Placement = PlacementMode.Mouse;
+                    popup.PlacementTarget = sp;
                     popup.IsOpen = true;
                 };
 

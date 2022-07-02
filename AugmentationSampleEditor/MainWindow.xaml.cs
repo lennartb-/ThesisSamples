@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using AugmentationFramework.AdviceDisplay;
 using AugmentationFramework.Augmentations;
+using AugmentationFramework.Augmentations.Premade;
 using AugmentationSampleEditor.ViewModels;
 
 namespace AugmentationSampleEditor;
@@ -21,10 +23,11 @@ public partial class MainWindow : Window
         ViewModels.Add(new HashingVm());
         ViewModels.Add(new AdviceVm());
         ViewModels.Add(new FieldComparisonVm());
+        ViewModels.Add(new NewlineVm());
         DataContext = this;
 
-        var image = new BitmapImage(
-            new Uri("pack://application:,,,/Resources/ic_menu_save.png"));
+        //var image = new BitmapImage(
+        //    new Uri("pack://application:,,,/Resources/ic_menu_save.png"));
 
         //var underlineAugmentation = new Augmentation(Editor.TextArea.TextView)
         //.WithImage(image)

@@ -12,5 +12,4 @@ public interface IAdviceModel
     string SecureSample { get; }
     string InsecureAdvice { get; }
     string InsecureSample { get; }
-
 }
