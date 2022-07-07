@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="microsoft.xaml.behaviors.wpf" Version="1.1.39" />
+    <PackageReference Include="roslynpad.editor.windows" Version="1.2.0" />
+    <PackageReference Include="roslynpad.roslyn" Version="3.6.0" />
+    <PackageReference Include="roslynpad.roslyn.windows" Version="3.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WrapperApiSample\WrapperApiSample.csproj" />
+  </ItemGroup>
+
+</Project>
