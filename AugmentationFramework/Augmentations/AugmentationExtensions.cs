@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using AugmentationFramework.AdviceDisplay;
 using AugmentationFramework.Generators;
+using AugmentationFramework.LeftMargins;
 using AugmentationFramework.Renderer;
 using AugmentationFramework.Transformers;
 
@@ -191,6 +192,50 @@ public static class AugmentationExtensions
 
         var toolTipGenerator = new OverlayGenerator(augmentation) { TooltipText = tooltipText };
         augmentation.AddElementGenerator(toolTipGenerator);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithImage(this Augmentation augmentation, ImageSource image)
+    {
+        if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
+        {
+            foreach (var existingRenderer in augmentation.Renderers.OfType<DecorationRenderer>())
+            {
+                existingRenderer.Image = image;
+            }
+
+            return augmentation;
+        }
+
+        var imageRenderer = new DecorationRenderer(augmentation) { Image = image };
+        augmentation.AddBackgroundRenderer(imageRenderer);
+
+        return augmentation;
+    }
+
+    public static Augmentation OnRight(this Augmentation augmentation)
+    {
+        if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
+        {
+            foreach (var existingRenderer in augmentation.Renderers.OfType<DecorationRenderer>())
+            {
+                existingRenderer.OnRight = true;
+            }
+
+            return augmentation;
+        }
+
+        var imageRenderer = new DecorationRenderer(augmentation) { OnRight = true };
+        augmentation.AddBackgroundRenderer(imageRenderer);
+
+        return augmentation;
+    }
+
+    public static Augmentation InLeftMargin(this Augmentation augmentation, ImageSource image)
+    {
+        var marginDecoration = new MarginDecoration(augmentation) { Image = image};
+        augmentation.AddLeftMargin(marginDecoration);
 
         return augmentation;
     }
