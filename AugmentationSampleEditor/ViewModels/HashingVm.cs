@@ -49,7 +49,7 @@ public class HashingVm : ISampleContent
 
     private void OnLoaded(CodeTextEditor editor)
     {
-        var underlineAugmentation = new Augmentation(editor.TextArea.TextView)
+        var underlineAugmentation = new Augmentation(editor.TextArea)
             .WithDecorationColor(Brushes.Red)
             .WithDecoration(UnderlineBracket.Geometry)
             .WithTooltip("SHA1 is cryptographically broken, please use a currently secure function like SHA-512.")

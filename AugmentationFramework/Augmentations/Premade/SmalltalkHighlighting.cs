@@ -1,13 +1,14 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
+using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
 
 namespace AugmentationFramework.Augmentations.Premade;
 
 public class SmalltalkHighlighting
 {
-    public static Augmentation[] GetAugmentation(TextView textView)
+    public static Augmentation[] GetAugmentation(TextArea textArea)
     {
         var parameterRegex = new Regex(@":\w+");
         var symbolRegex = new Regex(@"[$#]\w+");
@@ -17,30 +18,30 @@ public class SmalltalkHighlighting
         var stringRegex = new Regex(@"\'((.|\r|\n)*?)\'");
         var keywordsRegex = new Regex(@"\b(self|super|true|false|nil)\b");
 
-        var comments = new Augmentation(textView)
+        var comments = new Augmentation(textArea)
             .ForText(commentRegex)
             .WithForeground(Brushes.LightGreen)
             .WithFontStyle(FontStyles.Italic);
 
-        var keywords = new Augmentation(textView)
+        var keywords = new Augmentation(textArea)
             .ForText(keywordsRegex)
             .WithFontWeight(FontWeights.Bold)
             .WithForeground(Brushes.RoyalBlue);
 
-        var messages = new Augmentation(textView)
+        var messages = new Augmentation(textArea)
             .ForText(messagesRegex)
             .WithForeground(Brushes.Orange);
 
-        var numbersAndStrings = new Augmentation(textView)
+        var numbersAndStrings = new Augmentation(textArea)
             .ForText(numberRegex, stringRegex)
             .WithForeground(Brushes.MediumAquamarine);
 
-        var symbols = new Augmentation(textView)
+        var symbols = new Augmentation(textArea)
             .ForText(symbolRegex)
             .WithFontWeight(FontWeights.Bold)
             .WithForeground(Brushes.DarkRed);
 
-        var parameters = new Augmentation(textView)
+        var parameters = new Augmentation(textArea)
             .ForText(parameterRegex)
             .WithFontWeight(FontWeights.Bold);
 

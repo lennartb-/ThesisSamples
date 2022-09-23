@@ -1,18 +1,24 @@
 ﻿using System.Text.RegularExpressions;
+using System.Windows;
 using AugmentationFramework.Renderer;
+using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
 
 namespace AugmentationFramework.Augmentations;
 
 public class Augmentation
 {
+    public TextArea TextArea { get; }
     public IList<IBackgroundRenderer> Renderers { get; } = new List<IBackgroundRenderer>();
 
     public IList<IVisualLineTransformer> Transformers { get; } = new List<IVisualLineTransformer>();
+    public IList<AbstractMargin> LeftMargins { get; } = new List<AbstractMargin>();
 
-    public Augmentation(TextView textView)
+    public Augmentation(TextArea textArea)
     {
-        TextView = textView;
+        TextArea = textArea;
+        TextView = textArea.TextView;
     }
 
     public IList<VisualLineElementGenerator> Generators { get; } = new List<VisualLineElementGenerator>();
@@ -48,6 +54,11 @@ public class Augmentation
         {
             TextView.ElementGenerators.Add(generator);
         }
+
+        foreach (var leftMargin in LeftMargins)
+        {
+            TextArea.LeftMargins.Add(leftMargin);
+        }
     }
 
     public void Disable()
@@ -66,6 +77,11 @@ public class Augmentation
         {
             TextView.ElementGenerators.Remove(generator);
         }
+
+        foreach (var leftMargin in LeftMargins)
+        {
+            TextArea.LeftMargins.Remove(leftMargin);
+        }
     }
 
     internal void AddBackgroundRenderer(DecorationRenderer renderer)
@@ -76,5 +92,10 @@ public class Augmentation
     internal void AddElementGenerator(VisualLineElementGenerator generator)
     {
         Generators.Add(generator);
+    }
+
+    internal void AddLeftMargin(AbstractMargin leftMargin)
+    {
+        LeftMargins.Add(leftMargin);
     }
 }

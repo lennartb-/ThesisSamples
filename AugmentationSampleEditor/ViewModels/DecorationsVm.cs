@@ -54,20 +54,20 @@ public class DecorationsVm : ISampleContent
 
     private void OnLoaded(CodeTextEditor editor)
     {
-        var backgroundAugmentation = new Augmentation(editor.TextArea.TextView)
+        var backgroundAugmentation = new Augmentation(editor.TextArea)
             .WithForeground(Brushes.RoyalBlue)
             .WithFontWeight(FontWeights.Bold)
             .WithFontFamily(new FontFamily("Consolas"))
             .ForText(new Regex(@"\bsit\b"));
         augmentations.Add(backgroundAugmentation);
 
-        //var underlineAugmentation = new Augmentation(editor.TextArea.TextView)
+        //var underlineAugmentation = new Augmentation(editor.TextArea)
         //.WithImage(image)
         //.WithImagePosition(ImagePosition.Left)
         //.ForText(new Regex(@"\btristique\b"));
         //plugins.Add(underlineAugmentation);
 
-        var tooltipAugmentation = new Augmentation(editor.TextArea.TextView)
+        var tooltipAugmentation = new Augmentation(editor.TextArea)
         .WithTooltip(() => new Calendar())
         .WithOverlay(
             () => new Button

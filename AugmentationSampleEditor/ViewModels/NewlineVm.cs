@@ -48,7 +48,7 @@ namespace AugmentationSampleEditor.ViewModels
 
         private void OnLoaded(CodeTextEditor editor)
         {
-            augmentations.Add(NewlineAugmentation.GetAugmentation(editor.TextArea.TextView));
+            augmentations.Add(NewlineAugmentation.GetAugmentation(editor.TextArea));
         }
     }
 }

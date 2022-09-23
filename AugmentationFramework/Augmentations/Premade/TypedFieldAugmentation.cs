@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using AugmentationFramework.AdviceDisplay;
 using AugmentationFramework.Renderer.Premade;
+using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
 
 namespace AugmentationFramework.Augmentations.Premade;
@@ -10,9 +11,9 @@ public class TypedFieldAugmentation
 {
     private static readonly IEnumerable<DemoField> Fields = GetFieldMapping();
 
-    public static Augmentation GetAugmentation(TextView textView)
+    public static Augmentation GetAugmentation(TextArea textArea)
     {
-        return new Augmentation(textView)
+        return new Augmentation(textArea)
             .ForDelegate(MatchingDelegate)
             .ForText(new Regex(@"\b(F\d+)[ ]*(?<!=)==(?!=)[ ]*(F\d+)\b"))
             .WithDecoration(UnderlineBracket.Geometry)

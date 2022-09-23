@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using AugmentationFramework.AdviceDisplay;
@@ -24,8 +25,9 @@ public partial class MainWindow : Window
         ViewModels.Add(new AdviceVm());
         ViewModels.Add(new FieldComparisonVm());
         ViewModels.Add(new NewlineVm());
+        ViewModels.Add(new ImageVm());
         DataContext = this;
-
+        
         //var image = new BitmapImage(
         //    new Uri("pack://application:,,,/Resources/ic_menu_save.png"));
 

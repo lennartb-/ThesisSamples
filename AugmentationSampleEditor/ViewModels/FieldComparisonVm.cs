@@ -49,7 +49,7 @@ namespace AugmentationSampleEditor.ViewModels
 
         private void OnLoaded(CodeTextEditor editor)
         {
-            augmentations.Add(TypedFieldAugmentation.GetAugmentation(editor.TextArea.TextView));
+            augmentations.Add(TypedFieldAugmentation.GetAugmentation(editor.TextArea));
         }
     }
 }

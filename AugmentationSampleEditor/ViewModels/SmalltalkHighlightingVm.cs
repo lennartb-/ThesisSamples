@@ -60,7 +60,7 @@ namespace AugmentationSampleEditor.ViewModels
 
         private void OnLoaded(CodeTextEditor editor)
         {
-            foreach (var augmentation in SmalltalkHighlighting.GetAugmentation(editor.TextArea.TextView))
+            foreach (var augmentation in SmalltalkHighlighting.GetAugmentation(editor.TextArea))
             {
                 augmentations.Add(augmentation);
             }

@@ -45,7 +45,7 @@ namespace AugmentationSampleEditor.ViewModels
 
         private void OnLoaded(CodeTextEditor editor)
         {
-            foreach (var augmentation in FieldAugmentation.GetAugmentations(editor.TextArea.TextView)) augmentations.Add(augmentation);
+            foreach (var augmentation in FieldAugmentation.GetAugmentations(editor.TextArea)) augmentations.Add(augmentation);
         }
     }
 }

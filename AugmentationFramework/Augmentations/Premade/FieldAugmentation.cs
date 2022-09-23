@@ -1,15 +1,16 @@
 ﻿using System.Windows.Media;
+using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
 
 namespace AugmentationFramework.Augmentations.Premade;
 
 public static class FieldAugmentation
 {
-    public static IEnumerable<Augmentation> GetAugmentations(TextView textView)
+    public static IEnumerable<Augmentation> GetAugmentations(TextArea textArea)
     {
         foreach (var (field, name) in GetFieldMapping())
         {
-            yield return new Augmentation(textView)
+            yield return new Augmentation(textArea)
                 .ForText(field)
                 .WithBackground(Brushes.DarkGray)
                 .WithForeground(Brushes.White)
