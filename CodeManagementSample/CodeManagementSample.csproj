@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="libgit2sharp" Version="0.26.2" />
     <PackageReference Include="RoslynPad.Editor.Windows" Version="1.2.0" />
   </ItemGroup>
 
