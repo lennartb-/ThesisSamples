@@ -7,4 +7,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="RoslynPad.Editor.Windows" Version="1.2.0" />
+  </ItemGroup>
+
 </Project>
