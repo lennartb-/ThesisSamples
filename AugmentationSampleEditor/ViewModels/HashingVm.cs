@@ -2,9 +2,7 @@
 using System.Reactive;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
-using AugmentationFramework.AdviceDisplay;
 using AugmentationFramework.Augmentations;
-using AugmentationFramework.Augmentations.Premade;
 using AugmentationFramework.Renderer.Premade;
 using ICSharpCode.AvalonEdit.Document;
 using ReactiveUI;

@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace AugmentationFramework.AdviceDisplay;
+﻿namespace AugmentationFramework.AdviceDisplay;
 
 public class SampleAdviceModel : IAdviceModel
 {

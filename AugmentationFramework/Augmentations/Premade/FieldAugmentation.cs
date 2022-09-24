@@ -1,6 +1,5 @@
 ﻿using System.Windows.Media;
 using ICSharpCode.AvalonEdit.Editing;
-using ICSharpCode.AvalonEdit.Rendering;
 
 namespace AugmentationFramework.Augmentations.Premade;
 

@@ -1,7 +1,6 @@
 ﻿
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Media;
 using AugmentationFramework.Augmentations;
 using AugmentationFramework.Generators;

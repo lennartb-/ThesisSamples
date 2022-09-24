@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Media.Imaging;
-using AugmentationFramework.AdviceDisplay;
-using AugmentationFramework.Augmentations;
-using AugmentationFramework.Augmentations.Premade;
 using AugmentationSampleEditor.ViewModels;
 
 namespace AugmentationSampleEditor;

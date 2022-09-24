@@ -1,7 +1,5 @@
 ﻿using System.Text.RegularExpressions;
-using System.Windows;
 using AugmentationFramework.Renderer;
-using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
 

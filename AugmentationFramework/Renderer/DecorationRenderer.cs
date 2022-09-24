@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Media3D;
 using AugmentationFramework.Augmentations;
 using AugmentationFramework.Renderer.Premade;
 using ICSharpCode.AvalonEdit.Document;
@@ -8,7 +7,6 @@ using ICSharpCode.AvalonEdit.Rendering;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Pen = System.Windows.Media.Pen;
-using Point = System.Windows.Point;
 
 namespace AugmentationFramework.Renderer;
 
@@ -44,11 +42,11 @@ public class DecorationRenderer : IBackgroundRenderer
             var rect = rects.First();
 
             drawingContext.DrawGeometry(null, new Pen(DecorationColor, 2d), GeometryDelegate(rect));
-            DrawImage(drawingContext, textView, startOffset, endOffset);
+            DrawImage(drawingContext, startOffset, endOffset);
         }
     }
 
-    private void DrawImage(DrawingContext drawingContext, TextView textView, int startOffset, int endOffset)
+    private void DrawImage(DrawingContext drawingContext, int startOffset, int endOffset)
     {
         if (Image == null || (!OnRight))
         {

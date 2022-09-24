@@ -3,7 +3,6 @@ using System.Windows.Media;
 using AugmentationFramework.AdviceDisplay;
 using AugmentationFramework.Renderer.Premade;
 using ICSharpCode.AvalonEdit.Editing;
-using ICSharpCode.AvalonEdit.Rendering;
 
 namespace AugmentationFramework.Augmentations.Premade;
 

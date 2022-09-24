@@ -35,7 +35,7 @@ public class MarginDecoration : AbstractMargin
 
             foreach (var (startOffset, endOffset) in area)
             {
-                DrawImage(drawingContext, textView, startOffset, endOffset);
+                DrawImage(drawingContext, startOffset, endOffset);
             }
             //var foreground = (Brush)GetValue(Control.ForegroundProperty);
             //foreach (VisualLine line in textView.VisualLines)
@@ -53,7 +53,7 @@ public class MarginDecoration : AbstractMargin
     {
         if (Image != null)
         {
-            if ((TextView != null) && TextView.VisualLinesValid)
+            if (TextView is { VisualLinesValid: true })
             {
                 var area = roiFinder.DetermineRangesOfInterest(TextView.Document.Text);
                 var (startOffset, endOffset) = area.First();
@@ -78,8 +78,10 @@ public class MarginDecoration : AbstractMargin
         return availableSize;
     }
 
-    private void DrawImage(DrawingContext drawingContext, TextView textView, int startOffset, int endOffset)
+    private void DrawImage(DrawingContext drawingContext, int startOffset, int endOffset)
     {
+        if (Image == null) return;
+
         var textSegment = new TextSegment { StartOffset = startOffset, EndOffset = endOffset };
 
         var rects = BackgroundGeometryBuilder.GetRectsForSegment(parent.TextView, textSegment).ToList();

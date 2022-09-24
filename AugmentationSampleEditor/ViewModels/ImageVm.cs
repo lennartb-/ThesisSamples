@@ -5,9 +5,6 @@ using ReactiveUI;
 using RoslynPad.Editor;
 using System.Collections.Generic;
 using System.Reactive;
-using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace AugmentationSampleEditor.ViewModels;
