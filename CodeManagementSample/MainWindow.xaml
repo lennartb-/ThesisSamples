@@ -26,7 +26,7 @@
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="0"
-            Document="{Binding OutputDocument}"
+            Document="{Binding OutputDocument, Mode=OneWay}"
             FontSize="16"
             IsReadOnly="True"
             WordWrap="True">
@@ -39,7 +39,7 @@
             FontSize="24"
             WordWrap="True">
             <b:Interaction.Triggers>
-                <b:EventTrigger EventName="MouseEnter">
+                <b:EventTrigger EventName="Loaded">
                     <b:EventTrigger.Actions>
                         <b:InvokeCommandAction Command="{Binding OnLoadedCommand}" />
                     </b:EventTrigger.Actions>

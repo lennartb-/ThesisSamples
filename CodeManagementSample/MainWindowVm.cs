@@ -19,9 +19,9 @@ public class MainWindowVm : INotifyPropertyChanged
     public MainWindowVm()
     {
         OnLoadedCommand = new RelayCommand(OnLoaded);
-        CompileCommand = new AsyncRelayCommand(OnCompile);
-        AnalyzeCommand = new RelayCommand(OnAnalyze);
-        VersioningCommand = new RelayCommand(OnVersioning);
+        CompileCommand = new AsyncRelayCommand(OnCompile, () => code != null);
+        AnalyzeCommand = new RelayCommand(OnAnalyze,() => code!=null);
+        VersioningCommand = new RelayCommand(OnVersioning, () => code != null);
         Document = new TextDocument("Console.WriteLine(\"Hello World\");");
         OutputDocument = new TextDocument();
     }
@@ -61,6 +61,7 @@ public class MainWindowVm : INotifyPropertyChanged
         code.Compile();
 
         OutputDocument.Text = code.Result ?? string.Empty;
+        
         OnPropertyChanged(nameof(OutputDocument));
     }
 
