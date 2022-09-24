@@ -52,6 +52,16 @@ public class MainWindowVm : INotifyPropertyChanged
 
     private void OnAnalyze()
     {
+        if (code == null)
+        {
+            return;
+        }
+
+        code.Text = Document.Text;
+        code.Compile();
+
+        OutputDocument.Text = code.Result ?? string.Empty;
+        OnPropertyChanged(nameof(OutputDocument));
     }
 
     private void OnVersioning()

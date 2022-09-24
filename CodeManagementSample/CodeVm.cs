@@ -17,7 +17,7 @@ namespace CodeManagementSample;
 public class CodeVm : INotifyPropertyChanged
 {
     private readonly RoslynHost host;
-    private string result;
+    private string? result;
 
     public CodeVm(RoslynHost host)
     {
@@ -28,7 +28,7 @@ public class CodeVm : INotifyPropertyChanged
 
     public Script<object> Script { get; private set; }
 
-    public string Result
+    public string? Result
     {
         get => result;
         private set => SetProperty(ref result, value);
@@ -45,6 +45,20 @@ public class CodeVm : INotifyPropertyChanged
 
     public async Task<bool> TryRunScript()
     {
+       
+        if (!Compile())
+        {
+            return false;
+        }
+        var compilationResult = Script.GetCompilation();
+        var hasResult = (bool?)HasSubmissionResult?.Invoke(compilationResult, null);
+        await Run(hasResult);
+
+        return true;
+    }
+
+    public bool Compile()
+    {
         Script = Script?.ContinueWith(Text) ??
                  CSharpScript.Create(
                      Text,
@@ -52,16 +66,12 @@ public class CodeVm : INotifyPropertyChanged
                          .WithReferences(host.DefaultReferences)
                          .WithImports(host.DefaultImports));
 
-        var compilationResult = Script.GetCompilation();
-        var hasResult = (bool?)HasSubmissionResult?.Invoke(compilationResult, null);
         var diagnostics = Script.Compile();
         if (diagnostics.Any(t => t.Severity == DiagnosticSeverity.Error))
         {
             Result = string.Join(Environment.NewLine, diagnostics.Select(FormatReturnValue));
             return false;
         }
-
-        await Run(hasResult);
 
         return true;
     }
