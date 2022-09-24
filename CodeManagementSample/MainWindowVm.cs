@@ -13,15 +13,29 @@ namespace CodeManagementSample;
 
 public class MainWindowVm : INotifyPropertyChanged
 {
-    private CodeVm? code;
+    public CodeVm? Code
+    {
+        get => code;
+        private set
+        {
+            SetField(ref code, value);
+            CompileCommand.NotifyCanExecuteChanged();
+            VersioningCommand.NotifyCanExecuteChanged();
+            AnalyzeCommand.NotifyCanExecuteChanged();
+        }
+    }
+
     private RoslynHost? host;
+    private CodeVm? code;
+    private TextDocument outputDocument;
+    private TextDocument document;
 
     public MainWindowVm()
     {
         OnLoadedCommand = new RelayCommand(OnLoaded);
-        CompileCommand = new AsyncRelayCommand(OnCompile, () => code != null);
-        AnalyzeCommand = new RelayCommand(OnAnalyze,() => code!=null);
-        VersioningCommand = new RelayCommand(OnVersioning, () => code != null);
+        CompileCommand = new AsyncRelayCommand(OnCompile, () => Code != null);
+        AnalyzeCommand = new RelayCommand(OnAnalyze,() => Code!=null);
+        VersioningCommand = new RelayCommand(OnVersioning, () => Code != null);
         Document = new TextDocument("Console.WriteLine(\"Hello World\");");
         OutputDocument = new TextDocument();
     }
@@ -30,38 +44,47 @@ public class MainWindowVm : INotifyPropertyChanged
     public AsyncRelayCommand CompileCommand { get; }
     public RelayCommand AnalyzeCommand { get; }
     public RelayCommand VersioningCommand { get; }
-    public TextDocument Document { get; }
 
-    public TextDocument OutputDocument { get; }
+    public TextDocument Document
+    {
+        get => document;
+        private set => SetField(ref document, value);
+    }
+
+    public TextDocument OutputDocument
+    {
+        get => outputDocument;
+        private set => SetField(ref outputDocument, value);
+    }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private async Task OnCompile()
     {
-        if (code == null)
+        if (Code == null)
         {
             return;
         }
 
-        code.Text = Document.Text;
-        await code.TryRunScript();
+        Code.Text = Document.Text;
+        await Code.TryRunScript();
 
-        OutputDocument.Text = code.Result;
+        OutputDocument = new TextDocument(Code.Result ?? string.Empty);
         OnPropertyChanged(nameof(OutputDocument));
     }
 
     private void OnAnalyze()
     {
-        if (code == null)
+        if (Code == null)
         {
             return;
         }
 
-        code.Text = Document.Text;
-        code.Compile();
+        Code.Text = Document.Text;
+        Code.Compile();
 
-        OutputDocument.Text = code.Result ?? string.Empty;
-        
+        OutputDocument = new TextDocument(Code.Result ?? string.Empty);
+
         OnPropertyChanged(nameof(OutputDocument));
     }
 
@@ -75,7 +98,7 @@ public class MainWindowVm : INotifyPropertyChanged
             new[] { Assembly.Load("RoslynPad.Roslyn.Windows"), Assembly.Load("RoslynPad.Editor.Windows") },
             RoslynHostReferences.NamespaceDefault.With(assemblyReferences: new[] { typeof(object).Assembly, typeof(Regex).Assembly, typeof(Enumerable).Assembly }));
 
-        code = new CodeVm(host);
+        Code = new CodeVm(host);
     }
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

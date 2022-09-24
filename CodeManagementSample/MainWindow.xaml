@@ -21,21 +21,23 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <editor:RoslynCodeEditor
+        <editor:CodeTextEditor
             Name="OutputEditor"
             Grid.Row="0"
             Grid.RowSpan="2"
+            TextChanged="OnTextChanged"
             Grid.Column="0"
             Document="{Binding OutputDocument, Mode=OneWay}"
             FontSize="16"
             IsReadOnly="True"
             WordWrap="True">
-        </editor:RoslynCodeEditor>
-        <editor:RoslynCodeEditor
+        </editor:CodeTextEditor>
+        <editor:CodeTextEditor
             Name="Editor"
             Grid.Row="0"
             Grid.Column="1"
             Document="{Binding Document}"
+            TextChanged="OnTextChanged"
             FontSize="24"
             WordWrap="True">
             <b:Interaction.Triggers>
@@ -45,7 +47,7 @@
                     </b:EventTrigger.Actions>
                 </b:EventTrigger>
             </b:Interaction.Triggers>
-        </editor:RoslynCodeEditor>
+        </editor:CodeTextEditor>
         <WrapPanel Grid.Row="1" Grid.Column="1">
             <Button Command="{Binding AnalyzeCommand}" Content="Analyze" />
             <Button Command="{Binding CompileCommand}" Content="Compile" />
