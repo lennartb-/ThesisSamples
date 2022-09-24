@@ -45,7 +45,7 @@ public class CodeVm : INotifyPropertyChanged
 
     public async Task<bool> TryRunScript()
     {
-        Script = Script.ContinueWith(Text) ??
+        Script = Script?.ContinueWith(Text) ??
                  CSharpScript.Create(
                      Text,
                      ScriptOptions.Default
