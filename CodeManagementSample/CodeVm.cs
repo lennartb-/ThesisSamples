@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -52,6 +53,7 @@ public class CodeVm : INotifyPropertyChanged
         }
         var compilationResult = Script.GetCompilation();
         var hasResult = (bool?)HasSubmissionResult?.Invoke(compilationResult, null);
+
         await Run(hasResult);
 
         return true;
@@ -59,8 +61,7 @@ public class CodeVm : INotifyPropertyChanged
 
     public bool Compile()
     {
-        Script = Script?.ContinueWith(Text) ??
-                 CSharpScript.Create(
+        Script = CSharpScript.Create(
                      Text,
                      ScriptOptions.Default
                          .WithReferences(host.DefaultReferences)
@@ -73,6 +74,7 @@ public class CodeVm : INotifyPropertyChanged
             return false;
         }
 
+        Result = string.Empty;
         return true;
     }
 
