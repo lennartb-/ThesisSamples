@@ -13,23 +13,12 @@ namespace CodeManagementSample;
 
 public class MainWindowVm : INotifyPropertyChanged
 {
-    public CodeVm? Code
-    {
-        get => code;
-        private set
-        {
-            SetField(ref code, value);
-            CompileCommand.NotifyCanExecuteChanged();
-            VersioningCommand.NotifyCanExecuteChanged();
-            AnalyzeCommand.NotifyCanExecuteChanged();
-        }
-    }
-
-    private RoslynHost? host;
     private CodeVm? code;
-    private TextDocument outputDocument;
     private TextDocument consoleOutputDocument;
     private TextDocument document;
+
+    private RoslynHost? host;
+    private TextDocument outputDocument;
 
     public MainWindowVm()
     {
@@ -40,6 +29,18 @@ public class MainWindowVm : INotifyPropertyChanged
         Document = new TextDocument("Console.WriteLine(\"Hello World\");");
         OutputDocument = new TextDocument();
         ConsoleOutputDocument = new TextDocument();
+    }
+
+    public CodeVm? Code
+    {
+        get => code;
+        private set
+        {
+            SetField(ref code, value);
+            CompileCommand.NotifyCanExecuteChanged();
+            VersioningCommand.NotifyCanExecuteChanged();
+            AnalyzeCommand.NotifyCanExecuteChanged();
+        }
     }
 
     public RelayCommand OnLoadedCommand { get; }

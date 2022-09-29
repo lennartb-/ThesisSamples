@@ -1,11 +1,9 @@
-﻿using System;
-using System.Windows;
-using Microsoft.CodeAnalysis.Differencing;
-using RoslynPad.Editor;
+﻿using System.Windows;
 
 namespace CodeManagementSample;
+
 /// <summary>
-/// Interaction logic for MainWindow.xaml
+///     Interaction logic for MainWindow.xaml
 /// </summary>
 public partial class MainWindow : Window
 {
