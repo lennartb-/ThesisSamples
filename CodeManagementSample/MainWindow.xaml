@@ -12,8 +12,15 @@
     Height="450"
     d:DataContext="{d:DesignInstance Type=codemanagementsample:MainWindowVm}"
     mc:Ignorable="d">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -25,20 +32,18 @@
             Name="OutputEditor"
             Grid.Row="0"
             Grid.RowSpan="2"
-            TextChanged="OnTextChanged"
             Grid.Column="0"
             Document="{Binding OutputDocument, Mode=OneWay}"
             FontSize="16"
             IsReadOnly="True"
-            WordWrap="True">
-        </editor:CodeTextEditor>
+            ShowLineNumbers="False"
+            WordWrap="True" />
         <editor:CodeTextEditor
             Name="Editor"
             Grid.Row="0"
             Grid.Column="1"
             Document="{Binding Document}"
-            TextChanged="OnTextChanged"
-            FontSize="24"
+            FontSize="20"
             WordWrap="True">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="Loaded">
@@ -48,6 +53,17 @@
                 </b:EventTrigger>
             </b:Interaction.Triggers>
         </editor:CodeTextEditor>
+
+        <editor:CodeTextEditor
+            Name="ConsoleOutput"
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            Document="{Binding ConsoleOutputDocument, Mode=OneWay}"
+            FontSize="16"
+            IsReadOnly="True"
+            ShowLineNumbers="False"
+            WordWrap="True" />
         <WrapPanel Grid.Row="1" Grid.Column="1">
             <Button Command="{Binding AnalyzeCommand}" Content="Analyze" />
             <Button Command="{Binding CompileCommand}" Content="Compile" />

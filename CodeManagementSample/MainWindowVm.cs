@@ -28,16 +28,18 @@ public class MainWindowVm : INotifyPropertyChanged
     private RoslynHost? host;
     private CodeVm? code;
     private TextDocument outputDocument;
+    private TextDocument consoleOutputDocument;
     private TextDocument document;
 
     public MainWindowVm()
     {
         OnLoadedCommand = new RelayCommand(OnLoaded);
         CompileCommand = new AsyncRelayCommand(OnCompile, () => Code != null);
-        AnalyzeCommand = new RelayCommand(OnAnalyze,() => Code!=null);
+        AnalyzeCommand = new RelayCommand(OnAnalyze, () => Code != null);
         VersioningCommand = new RelayCommand(OnVersioning, () => Code != null);
         Document = new TextDocument("Console.WriteLine(\"Hello World\");");
         OutputDocument = new TextDocument();
+        ConsoleOutputDocument = new TextDocument();
     }
 
     public RelayCommand OnLoadedCommand { get; }
@@ -57,6 +59,12 @@ public class MainWindowVm : INotifyPropertyChanged
         private set => SetField(ref outputDocument, value);
     }
 
+    public TextDocument ConsoleOutputDocument
+    {
+        get => consoleOutputDocument;
+        private set => SetField(ref consoleOutputDocument, value);
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private async Task OnCompile()
@@ -69,7 +77,8 @@ public class MainWindowVm : INotifyPropertyChanged
         Code.Text = Document.Text;
         await Code.TryRunScript();
 
-        OutputDocument = new TextDocument(Code.Result ?? string.Empty);
+        OutputDocument.Text = Code.Result ?? "✅";
+        ConsoleOutputDocument.Text = Code.ConsoleOutput ?? string.Empty;
         OnPropertyChanged(nameof(OutputDocument));
     }
 
@@ -83,7 +92,7 @@ public class MainWindowVm : INotifyPropertyChanged
         Code.Text = Document.Text;
         Code.Compile();
 
-        OutputDocument = new TextDocument(Code.Result ?? string.Empty);
+        OutputDocument.Text = Code.Result ?? "✅";
 
         OnPropertyChanged(nameof(OutputDocument));
     }

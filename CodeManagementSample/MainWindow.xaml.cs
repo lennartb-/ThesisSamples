@@ -14,16 +14,4 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = new MainWindowVm();
     }
-
-    private void OnTextChanged(object? sender, EventArgs e)
-    {
-        CorrectCaretOffset(ref OutputEditor);
-        CorrectCaretOffset(ref Editor);
-    }
-
-    private static void CorrectCaretOffset(ref CodeTextEditor editor)
-    {
-        if (editor?.Document == null) return;
-        editor.CaretOffset = editor.Document.TextLength < editor.CaretOffset ? editor.Document.TextLength : editor.CaretOffset;
-    }
 }

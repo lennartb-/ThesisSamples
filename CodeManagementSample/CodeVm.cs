@@ -1,7 +1,7 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -18,6 +18,7 @@ namespace CodeManagementSample;
 public class CodeVm : INotifyPropertyChanged
 {
     private readonly RoslynHost host;
+    private string? consoleOutput;
     private string? result;
 
     public CodeVm(RoslynHost host)
@@ -35,6 +36,12 @@ public class CodeVm : INotifyPropertyChanged
         private set => SetProperty(ref result, value);
     }
 
+    public string? ConsoleOutput
+    {
+        get => consoleOutput;
+        private set => SetProperty(ref consoleOutput, value);
+    }
+
     public bool HasError { get; private set; }
 
     private static MethodInfo? HasSubmissionResult { get; } =
@@ -46,11 +53,11 @@ public class CodeVm : INotifyPropertyChanged
 
     public async Task<bool> TryRunScript()
     {
-       
         if (!Compile())
         {
             return false;
         }
+
         var compilationResult = Script.GetCompilation();
         var hasResult = (bool?)HasSubmissionResult?.Invoke(compilationResult, null);
 
@@ -62,10 +69,12 @@ public class CodeVm : INotifyPropertyChanged
     public bool Compile()
     {
         Script = CSharpScript.Create(
-                     Text,
-                     ScriptOptions.Default
-                         .WithReferences(host.DefaultReferences)
-                         .WithImports(host.DefaultImports));
+            Text,
+            ScriptOptions.Default
+                .WithReferences(host.DefaultReferences)
+                .AddReferences(Assembly.GetAssembly(typeof(Console)))
+                .WithImports(host.DefaultImports)
+                .AddImports("System.Console"));
 
         var diagnostics = Script.Compile();
         if (diagnostics.Any(t => t.Severity == DiagnosticSeverity.Error))
@@ -74,7 +83,7 @@ public class CodeVm : INotifyPropertyChanged
             return false;
         }
 
-        Result = string.Empty;
+        Result = null;
         return true;
     }
 
@@ -97,16 +106,28 @@ public class CodeVm : INotifyPropertyChanged
 
         try
         {
-            var scriptResult = await Script.RunAsync();
+            var previousConsoleOut = Console.Out;
+            try
+            {
+                await using var writer = new StringWriter();
+                Console.SetOut(writer);
+                var scriptResult = await Script.RunAsync();
+                await writer.FlushAsync();
+                ConsoleOutput = writer.GetStringBuilder().ToString();
 
-            if (scriptResult.Exception != null)
-            {
-                HasError = true;
-                Result = FormatException(scriptResult.Exception);
+                if (scriptResult.Exception != null)
+                {
+                    HasError = true;
+                    Result = FormatException(scriptResult.Exception);
+                }
+                else
+                {
+                    Result = hasResult.Value ? FormatReturnValue(scriptResult.ReturnValue) : null;
+                }
             }
-            else
+            finally
             {
-                Result = hasResult.Value ? FormatReturnValue(scriptResult.ReturnValue) : string.Empty;
+                Console.SetOut(previousConsoleOut);
             }
         }
         catch (Exception ex)
