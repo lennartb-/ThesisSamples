@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrapperApiSample", "Wrapper
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoslynPadWrapperApiSample", "RoslynPadWrapperApiSample\RoslynPadWrapperApiSample.csproj", "{22385620-C1B0-4D1A-8604-A6D2BA356ACA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeManagementSample", "CodeManagementSample\CodeManagementSample.csproj", "{76CCCD2D-8EBE-49A7-9CD7-23E3558EF534}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeManagementSample", "CodeManagementSample\CodeManagementSample.csproj", "{76CCCD2D-8EBE-49A7-9CD7-23E3558EF534}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
