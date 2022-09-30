@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     Title="Versioning"
     Width="800"
     Height="450"
@@ -18,31 +19,44 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <DataGrid
             Grid.Row="0"
-            Grid.Column="1"
-            ItemsSource="{Binding History}" />
+            Grid.Column="0"
+            AutoGenerateColumns="False"
+            IsReadOnly="True"
+            ItemsSource="{Binding History}"
+            SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+            SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" />
+                <DataGridTextColumn Binding="{Binding Author}" />
+                <DataGridTextColumn Binding="{Binding Message}" />
+                <DataGridTextColumn Binding="{Binding Time}" />
+            </DataGrid.Columns>
+        </DataGrid>
 
-        <TextBox
-            Grid.Row="1"
-            Grid.Column="1"
-            Text="{Binding EntityName}" />
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <TextBox Text="{Binding EntityName}" />
+            <Button Command="{Binding RefreshCommand}" Content="🔄" />
+        </StackPanel>
+
+        </StackPanel>
 
         <StackPanel
             Grid.Row="2"
-            Grid.Column="1"
+            Grid.Column="0"
             Orientation="Horizontal">
             <Button Command="{Binding PushCommand}" Content="Push" />
             <Button Command="{Binding PullCommand}" Content="Pull" />
         </StackPanel>
         <StackPanel
             Grid.Row="3"
-            Grid.Column="1"
+            Grid.Column="0"
             Orientation="Horizontal">
             <Button Command="{Binding OkCommand}" Content="OK" />
             <Button Command="{Binding CancelCommand}" Content="Cancel" />

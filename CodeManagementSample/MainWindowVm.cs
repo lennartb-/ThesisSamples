@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -13,6 +14,10 @@ namespace CodeManagementSample;
 
 public class MainWindowVm : INotifyPropertyChanged
 {
+    private const string Author = "J Doe";
+    private static readonly Guid FileGuid = Guid.Parse("9320336C07D54E8FB0E9B132EFCCEFEF");
+    private const string SampleRepoPath = @"..\..\..\VersioningSampleRepo";
+
     private CodeVm? code;
     private TextDocument consoleOutputDocument;
     private TextDocument document;
@@ -100,6 +105,10 @@ public class MainWindowVm : INotifyPropertyChanged
 
     private void OnVersioning()
     {
+        var versioningWindow = new Versioning();
+        var model = new VersioningModel("John Doe", FileGuid, Document.Text, SampleRepoPath);
+        versioningWindow.DataContext = new VersioningVm(model);
+        versioningWindow.ShowDialog();
     }
 
     private void OnLoaded()
