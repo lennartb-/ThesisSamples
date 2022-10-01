@@ -17,16 +17,18 @@ internal class VersioningVm : ObservableObject
     private readonly VersioningModel model;
     private string? previewText;
     private CommitModel? selectedItem;
+    private string? commitMessage;
 
     public VersioningVm(VersioningModel model)
     {
         this.model = model;
         RefreshCommand = new RelayCommand(GetHistory);
         PushCommand = new RelayCommand(CommitCode);
-        RefreshCommand.Execute(null);
 
         using var repo = new Repository(model.RepositoryPath);
-        gitProcessWrapper = new GitProcessWrapper(repo.Info.Path);
+        gitProcessWrapper = new GitProcessWrapper(repo.Info.WorkingDirectory);
+
+        RefreshCommand.Execute(null);
     }
 
     public RelayCommand OkCommand { get; }
@@ -34,6 +36,12 @@ internal class VersioningVm : ObservableObject
     public RelayCommand PushCommand { get; }
     public RelayCommand PullCommand { get; }
     public RelayCommand RefreshCommand { get; }
+
+    public string? CommitMessage
+    {
+        get => commitMessage;
+        set => SetProperty(ref commitMessage, value);
+    }
 
     public string? PreviewText
     {
@@ -69,7 +77,7 @@ internal class VersioningVm : ObservableObject
     {
         History.Clear();
         using var repo = new Repository(model.RepositoryPath);
-
+        gitProcessWrapper.Pull();
         foreach (var c in repo.Commits.Take(15))
         {
             History.Add(new CommitModel(c.Id.Sha[..7], c.Author.Name, c.Message, c.Author.When.DateTime));
@@ -92,9 +100,24 @@ internal class VersioningVm : ObservableObject
 
         var committer = new Signature(model.Author, "test@example.com", DateTime.Now);
 
+        TreeDefinition td = new TreeDefinition();
+        td.Add(model.BlobId.ToString(), blob, Mode.NonExecutableFile);
+        Tree tree = repo.ObjectDatabase.CreateTree(td);
         repo.Index.Add(blob, model.BlobId.ToString(), Mode.NonExecutableFile);
+        repo.Index.Write();
 
-        repo.Commit("Update", committer, committer);
+        var commit = repo.ObjectDatabase.CreateCommit(
+            committer,
+            committer,
+            "i'm a commit message :)",
+            tree,
+            repo.Commits,
+        prettifyMessage: false);
+
+        // Update the HEAD reference to point to the latest commit
+        repo.Refs.UpdateTarget(repo.Refs.Head, commit.Id);
+
+        var d = repo.Diff.Compare<TreeChanges>().Count > 0;
 
         gitProcessWrapper.Push();
     }

@@ -31,10 +31,10 @@
             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
             SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Id}" />
-                <DataGridTextColumn Binding="{Binding Author}" />
-                <DataGridTextColumn Binding="{Binding Message}" />
-                <DataGridTextColumn Binding="{Binding Time}" />
+                <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
+                <DataGridTextColumn Binding="{Binding Author}" Header="Author" />
+                <DataGridTextColumn Binding="{Binding Message}" Header="Message" />
+                <DataGridTextColumn Binding="{Binding Time}" Header="Time" />
             </DataGrid.Columns>
         </DataGrid>
 
@@ -43,14 +43,36 @@
             Grid.Column="0"
             Orientation="Horizontal">
             <Button Command="{Binding RefreshCommand}" Content="Refresh History" />
-            <Button Command="{Binding PushCommand}" Content="Push" />
-            <Button Command="{Binding PullCommand}" Content="Pull" />
+
+            <Button Command="{Binding PushCommand}" Content="Store current version" />
+            <Grid>
+                <TextBox x:Name="CommitMessageBox" Text="{Binding CommitMessage}" />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Foreground="DarkGray"
+                    IsHitTestVisible="False"
+                    Text="Enter Commit message">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=CommitMessageBox}" Value="">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+            <Button Command="{Binding PullCommand}" Content="Retrieve selected version" />
         </StackPanel>
         <StackPanel
             Grid.Row="2"
             Grid.Column="0"
             Orientation="Horizontal">
-            <Button Command="{Binding OkCommand}" Content="OK" />
+            <Button Command="{Binding OkCommand}" Content="Apply selected version" />
             <Button Command="{Binding CancelCommand}" Content="Cancel" />
         </StackPanel>
         <TextBox

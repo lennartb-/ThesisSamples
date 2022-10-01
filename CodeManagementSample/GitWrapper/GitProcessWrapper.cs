@@ -15,6 +15,12 @@ public class GitProcessWrapper
     public void Push()
     {
         RunGitCommand("push");
+
+    }
+
+    public void Commit(string message)
+    {
+        RunGitCommand("commit", "-m", message);
     }
 
     public void Pull()
@@ -26,7 +32,9 @@ public class GitProcessWrapper
     {
         var process = new Process();
 
-        var processStartInfo = new ProcessStartInfo("cmd", "/c git " + args)
+        var argumentString = string.Join(' ', args);
+
+        var processStartInfo = new ProcessStartInfo("cmd", "/c git " + argumentString)
         {
             RedirectStandardError = true,
             RedirectStandardInput = true,
