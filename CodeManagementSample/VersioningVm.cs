@@ -3,15 +3,13 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security;
 using System.Text;
 using System.Text.Json;
+using CodeManagementSample;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
 using LibGit2Sharp;
-
-namespace CodeManagementSample;
 
 internal class VersioningVm : ObservableObject
 {
@@ -33,9 +31,6 @@ internal class VersioningVm : ObservableObject
     public RelayCommand PushCommand { get; }
     public RelayCommand PullCommand { get; }
     public RelayCommand RefreshCommand { get; }
-
-    public string Username { get; set; }
-    public SecureString Password { get; set; }
 
     public string EntityName { get; set; }
     public TextDocument PreviewDocument { get; set; }
