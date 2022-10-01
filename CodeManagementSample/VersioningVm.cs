@@ -5,11 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using CodeManagementSample;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
 using LibGit2Sharp;
+
+namespace CodeManagementSample;
 
 internal class VersioningVm : ObservableObject
 {
