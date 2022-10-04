@@ -1,29 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
 using RoslynPad.Roslyn;
 
 namespace CodeManagementSample;
 
-public class MainWindowVm : INotifyPropertyChanged
+public class MainWindowVm : ObservableObject
 {
     private const string Author = "J Doe";
-    private static readonly Guid FileGuid = Guid.Parse("9320336C07D54E8FB0E9B132EFCCEFEF");
     private const string SampleRepoPath = @"..\..\..\VersioningSampleRepo";
+    private static readonly Guid FileGuid = Guid.Parse("9320336C07D54E8FB0E9B132EFCCEFEF");
 
     private CodeVm? code;
-    private TextDocument consoleOutputDocument;
-    private TextDocument document;
+    private string? compilerOutput;
+    private string? consoleOutput;
+    private readonly TextDocument document;
 
     private RoslynHost? host;
-    private TextDocument outputDocument;
 
     public MainWindowVm()
     {
@@ -32,8 +30,6 @@ public class MainWindowVm : INotifyPropertyChanged
         AnalyzeCommand = new RelayCommand(OnAnalyze, () => Code != null);
         VersioningCommand = new RelayCommand(OnVersioning, () => Code != null);
         Document = new TextDocument("Console.WriteLine(\"Hello World\");");
-        OutputDocument = new TextDocument();
-        ConsoleOutputDocument = new TextDocument();
     }
 
     public CodeVm? Code
@@ -41,7 +37,7 @@ public class MainWindowVm : INotifyPropertyChanged
         get => code;
         private set
         {
-            SetField(ref code, value);
+            SetProperty(ref code, value);
             CompileCommand.NotifyCanExecuteChanged();
             VersioningCommand.NotifyCanExecuteChanged();
             AnalyzeCommand.NotifyCanExecuteChanged();
@@ -56,22 +52,20 @@ public class MainWindowVm : INotifyPropertyChanged
     public TextDocument Document
     {
         get => document;
-        private set => SetField(ref document, value);
+        private init => SetProperty(ref document, value);
     }
 
-    public TextDocument OutputDocument
+    public string? CompilerOutput
     {
-        get => outputDocument;
-        private set => SetField(ref outputDocument, value);
+        get => compilerOutput;
+        private set => SetProperty(ref compilerOutput, value);
     }
 
-    public TextDocument ConsoleOutputDocument
+    public string? ConsoleOutput
     {
-        get => consoleOutputDocument;
-        private set => SetField(ref consoleOutputDocument, value);
+        get => consoleOutput;
+        private set => SetProperty(ref consoleOutput, value);
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
 
     private async Task OnCompile()
     {
@@ -83,9 +77,8 @@ public class MainWindowVm : INotifyPropertyChanged
         Code.Text = Document.Text;
         await Code.TryRunScript();
 
-        OutputDocument.Text = Code.Result ?? "✅";
-        ConsoleOutputDocument.Text = Code.ConsoleOutput ?? string.Empty;
-        OnPropertyChanged(nameof(OutputDocument));
+        CompilerOutput = Code.Result ?? "✅";
+        ConsoleOutput = Code.ConsoleOutput ?? string.Empty;
     }
 
     private void OnAnalyze()
@@ -98,15 +91,13 @@ public class MainWindowVm : INotifyPropertyChanged
         Code.Text = Document.Text;
         Code.Compile();
 
-        OutputDocument.Text = Code.Result ?? "✅";
-
-        OnPropertyChanged(nameof(OutputDocument));
+        CompilerOutput = Code.Result ?? "✅";
     }
 
     private void OnVersioning()
     {
         var versioningWindow = new Versioning();
-        var model = new VersioningModel("John Doe", FileGuid, Document.Text, SampleRepoPath);
+        var model = new VersioningModel(Author, FileGuid, Document.Text, SampleRepoPath);
         versioningWindow.DataContext = new VersioningVm(model);
         versioningWindow.ShowDialog();
     }
@@ -118,22 +109,5 @@ public class MainWindowVm : INotifyPropertyChanged
             RoslynHostReferences.NamespaceDefault.With(assemblyReferences: new[] { typeof(object).Assembly, typeof(Regex).Assembly, typeof(Enumerable).Assembly }));
 
         Code = new CodeVm(host);
-    }
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value))
-        {
-            return false;
-        }
-
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
     }
 }

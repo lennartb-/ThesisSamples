@@ -12,7 +12,7 @@
     Height="450"
     d:DataContext="{d:DesignInstance Type=codemanagementsample:MainWindowVm}"
     mc:Ignorable="d">
-  
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -23,22 +23,22 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <editor:CodeTextEditor
+        <TextBox
             Name="OutputEditor"
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="0"
-            Document="{Binding OutputDocument, Mode=OneWay}"
             FontSize="16"
             IsReadOnly="True"
-            ShowLineNumbers="False"
-            WordWrap="True" />
+            Text="{Binding CompilerOutput, Mode=OneWay}"
+            VerticalScrollBarVisibility="Auto" />
         <editor:CodeTextEditor
             Name="Editor"
             Grid.Row="0"
             Grid.Column="1"
             Document="{Binding Document}"
             FontSize="20"
+            VerticalScrollBarVisibility="Auto"
             WordWrap="True">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="Loaded">
@@ -49,16 +49,15 @@
             </b:Interaction.Triggers>
         </editor:CodeTextEditor>
 
-        <editor:CodeTextEditor
+        <TextBox
             Name="ConsoleOutput"
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="2"
-            Document="{Binding ConsoleOutputDocument, Mode=OneWay}"
             FontSize="16"
             IsReadOnly="True"
-            ShowLineNumbers="False"
-            WordWrap="True" />
+            Text="{Binding ConsoleOutput, Mode=OneWay}"
+            VerticalScrollBarVisibility="Auto" />
         <WrapPanel Grid.Row="1" Grid.Column="1">
             <Button Command="{Binding AnalyzeCommand}" Content="Analyze" />
             <Button Command="{Binding CompileCommand}" Content="Compile" />

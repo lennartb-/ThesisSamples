@@ -33,8 +33,8 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
                 <DataGridTextColumn Binding="{Binding Author}" Header="Author" />
-                <DataGridTextColumn Binding="{Binding Message}" Header="Message" />
                 <DataGridTextColumn Binding="{Binding Time}" Header="Time" />
+                <DataGridTextColumn Binding="{Binding Message}" Header="Message" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
 
