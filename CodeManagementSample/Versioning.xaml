@@ -4,11 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:codeManagementSample="clr-namespace:CodeManagementSample"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Versioning"
-    Width="800"
-    Height="450"
+    Width="1000"
+    Height="550"
     d:DataContext="{d:DesignInstance codeManagementSample:VersioningVm}"
     mc:Ignorable="d">
     <Grid>
@@ -34,18 +33,36 @@
                 <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
                 <DataGridTextColumn Binding="{Binding Author}" Header="Author" />
                 <DataGridTextColumn Binding="{Binding Time}" Header="Time" />
-                <DataGridTextColumn Binding="{Binding Message}" Header="Message" Width="*" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Message}"
+                    Header="Message" />
             </DataGrid.Columns>
         </DataGrid>
 
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="0"
-            Orientation="Horizontal">
-            <Button Command="{Binding RefreshCommand}" Content="Refresh History" />
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Button
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Command="{Binding RefreshCommand}"
+                Content="Refresh History" />
 
-            <Button Command="{Binding PushCommand}" Content="Store current version" />
-            <Grid>
+            <Button
+                Grid.Row="1"
+                Grid.Column="0"
+                Command="{Binding PushCommand}"
+                Content="Store current version" />
+            <Grid Grid.Row="1" Grid.Column="1">
                 <TextBox x:Name="CommitMessageBox" Text="{Binding CommitMessage}" />
                 <TextBlock
                     Margin="10,0,0,0"
@@ -66,15 +83,27 @@
                     </TextBlock.Style>
                 </TextBlock>
             </Grid>
-            <Button Command="{Binding PullCommand}" Content="Retrieve selected version" />
-        </StackPanel>
-        <StackPanel
-            Grid.Row="2"
-            Grid.Column="0"
-            Orientation="Horizontal">
-            <Button Command="{Binding OkCommand}" Content="Apply selected version" />
-            <Button Command="{Binding CancelCommand}" Content="Cancel" />
-        </StackPanel>
+            <Button
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Command="{Binding PullCommand}"
+                Content="Retrieve selected version" />
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Command="{Binding OkCommand}"
+                Content="Apply selected version" />
+            <Button
+                Grid.Column="1"
+                Command="{Binding CancelCommand}"
+                Content="Cancel" />
+        </Grid>
         <TextBox
             Name="Preview"
             Grid.Row="0"
