@@ -15,21 +15,35 @@ public class MainWindowVm : ObservableObject
     private const string Author = "J Doe";
     private const string SampleRepoPath = @"..\..\..\VersioningSampleRepo";
     private static readonly Guid FileGuid = Guid.Parse("9320336C07D54E8FB0E9B132EFCCEFEF");
+    private readonly TextDocument document;
 
     private CodeVm? code;
     private string? compilerOutput;
     private string? consoleOutput;
-    private readonly TextDocument document;
 
     private RoslynHost? host;
+    private bool isCompilationRunning;
+    private bool isApplicationExecuting;
 
     public MainWindowVm()
     {
         OnLoadedCommand = new RelayCommand(OnLoaded);
-        CompileCommand = new AsyncRelayCommand(OnCompile, () => Code != null);
-        AnalyzeCommand = new RelayCommand(OnAnalyze, () => Code != null);
+        ExecuteCommand = new AsyncRelayCommand(OnExecute, () => Code != null);
+        CompileCommand = new RelayCommand(OnCompile, () => Code != null);
         VersioningCommand = new RelayCommand(OnVersioning, () => Code != null);
         Document = new TextDocument("Console.WriteLine(\"Hello World\");");
+    }
+
+    public bool IsCompilationRunning
+    {
+        get => isCompilationRunning;
+        set => SetProperty(ref isCompilationRunning, value);
+    }
+
+    public bool IsApplicationExecuting
+    {
+        get => isApplicationExecuting;
+        set => SetProperty(ref isApplicationExecuting, value);
     }
 
     public CodeVm? Code
@@ -38,15 +52,15 @@ public class MainWindowVm : ObservableObject
         private set
         {
             SetProperty(ref code, value);
-            CompileCommand.NotifyCanExecuteChanged();
+            ExecuteCommand.NotifyCanExecuteChanged();
             VersioningCommand.NotifyCanExecuteChanged();
-            AnalyzeCommand.NotifyCanExecuteChanged();
+            CompileCommand.NotifyCanExecuteChanged();
         }
     }
 
     public RelayCommand OnLoadedCommand { get; }
-    public AsyncRelayCommand CompileCommand { get; }
-    public RelayCommand AnalyzeCommand { get; }
+    public AsyncRelayCommand ExecuteCommand { get; }
+    public RelayCommand CompileCommand { get; }
     public RelayCommand VersioningCommand { get; }
 
     public TextDocument Document
@@ -67,7 +81,7 @@ public class MainWindowVm : ObservableObject
         private set => SetProperty(ref consoleOutput, value);
     }
 
-    private async Task OnCompile()
+    private async Task OnExecute()
     {
         if (Code == null)
         {
@@ -75,13 +89,14 @@ public class MainWindowVm : ObservableObject
         }
 
         Code.Text = Document.Text;
+        IsApplicationExecuting = true;
         await Code.TryRunScript();
-
+        IsApplicationExecuting = false;
         CompilerOutput = Code.Result ?? "✅";
         ConsoleOutput = Code.ConsoleOutput ?? string.Empty;
     }
 
-    private void OnAnalyze()
+    private void OnCompile()
     {
         if (Code == null)
         {
@@ -89,8 +104,9 @@ public class MainWindowVm : ObservableObject
         }
 
         Code.Text = Document.Text;
+        IsCompilationRunning = true;
         Code.Compile();
-
+        IsCompilationRunning = false;
         CompilerOutput = Code.Result ?? "✅";
     }
 
