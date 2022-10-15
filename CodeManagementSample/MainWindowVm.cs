@@ -98,8 +98,15 @@ public class MainWindowVm : ObservableObject
     {
         var versioningWindow = new Versioning();
         var model = new VersioningModel(Author, FileGuid, Document.Text, SampleRepoPath);
-        versioningWindow.DataContext = new VersioningVm(model);
+        var versioningVm = new VersioningVm(model);
+        versioningWindow.DataContext = versioningVm;
+        versioningVm.RequestClose += () => versioningWindow.Close();
         versioningWindow.ShowDialog();
+
+        if (versioningVm.CheckedOutText != null)
+        {
+            Document.Text = versioningVm.CheckedOutText;
+        }
     }
 
     private void OnLoaded()

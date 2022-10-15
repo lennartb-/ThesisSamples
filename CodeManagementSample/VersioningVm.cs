@@ -18,17 +18,32 @@ internal class VersioningVm : ObservableObject
     private string? previewText;
     private CommitModel? selectedItem;
     private string? commitMessage;
+    public string? CheckedOutText { get; private set; }
 
     public VersioningVm(VersioningModel model)
     {
         this.model = model;
+        OkCommand = new RelayCommand(ApplyCheckout);
+        CancelCommand = new RelayCommand(CancelCheckout);
         RefreshCommand = new RelayCommand(GetHistory);
         PushCommand = new RelayCommand(CommitCode);
+        PullCommand = new RelayCommand(CheckoutVersion, () => SelectedItem != null);
 
         using var repo = new Repository(model.RepositoryPath);
         gitProcessWrapper = new GitProcessWrapper(repo.Info.WorkingDirectory);
 
         RefreshCommand.Execute(null);
+    }
+    public event Action RequestClose = delegate {  };
+    private void CancelCheckout()
+    {
+        CheckedOutText = null;
+        RequestClose();
+    }
+
+    private void ApplyCheckout()
+    {
+        RequestClose();
     }
 
     public RelayCommand OkCommand { get; }
@@ -68,6 +83,12 @@ internal class VersioningVm : ObservableObject
             {
                 PreviewText = DeserializeBlob(blob);
             }
+            else
+            {
+                PreviewText = "[No content available]";
+            }
+
+            PullCommand.NotifyCanExecuteChanged();
         }
     }
 
@@ -130,7 +151,16 @@ internal class VersioningVm : ObservableObject
         return repo.ObjectDatabase.CreateBlob(ms);
     }
 
-    public void PullCode()
+    public void CheckoutVersion()
     {
+        using var repo = new Repository(model.RepositoryPath);
+
+        var selectedCommit = repo.Commits.Single(c => c.Id.Sha[..7] == SelectedItem.Id);
+        var gitObject = selectedCommit.Tree.SingleOrDefault(t => t.Name == model.BlobId.ToString())?.Target;
+
+        if (gitObject is Blob blob)
+        {
+            CheckedOutText = DeserializeBlob(blob);
+        }
     }
 }
