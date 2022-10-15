@@ -47,9 +47,6 @@ public class CodeVm : INotifyPropertyChanged
 
     public bool HasError { get; private set; }
 
-    private static MethodInfo? HasSubmissionResult { get; } =
-        typeof(Compilation).GetMethod(nameof(HasSubmissionResult), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-
     private static PrintOptions PrintOptions { get; } = new() { MemberDisplayFormat = MemberDisplayFormat.SeparateLines };
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -62,7 +59,7 @@ public class CodeVm : INotifyPropertyChanged
         }
 
         var compilationResult = Script.GetCompilation();
-        var hasResult = (bool?)HasSubmissionResult?.Invoke(compilationResult, null);
+        var hasResult = compilationResult.HasSubmissionResult();
 
         await Run(hasResult);
 
