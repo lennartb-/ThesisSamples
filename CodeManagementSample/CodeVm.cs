@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
@@ -29,6 +30,8 @@ public class CodeVm : INotifyPropertyChanged
     public string Text { get; set; }
 
     public Script<object> Script { get; private set; }
+
+    private readonly StringBuilder resultBuilder = new();
 
     public string? Result
     {
@@ -68,6 +71,8 @@ public class CodeVm : INotifyPropertyChanged
 
     public bool Compile()
     {
+        Result = null;
+        resultBuilder.Clear();
         Script = CSharpScript.Create(
             Text,
             ScriptOptions.Default
@@ -76,14 +81,20 @@ public class CodeVm : INotifyPropertyChanged
                 .WithImports(host.DefaultImports)
                 .AddImports("System.Console"));
 
-        var diagnostics = Script.Compile();
-        if (diagnostics.Any(t => t.Severity == DiagnosticSeverity.Error))
+        var compileDiagnostics = Script.Compile();
+        var allDiagnostics = Script.GetCompilation().GetDiagnostics();
+        if (compileDiagnostics.Any(t => t.Severity == DiagnosticSeverity.Error))
         {
-            Result = string.Join(Environment.NewLine, diagnostics.Select(FormatReturnValue));
+            Result = string.Join(Environment.NewLine, compileDiagnostics.Select(FormatReturnValue));
             return false;
         }
 
-        Result = null;
+        if (allDiagnostics.Any())
+        {
+            resultBuilder.AppendLine(string.Join(Environment.NewLine, allDiagnostics.Select(FormatReturnValue)));
+        }
+
+        Result = resultBuilder.ToString();
         return true;
     }
 
@@ -118,11 +129,14 @@ public class CodeVm : INotifyPropertyChanged
                 if (scriptResult.Exception != null)
                 {
                     HasError = true;
-                    Result = FormatException(scriptResult.Exception);
+                    resultBuilder.AppendLine(FormatException(scriptResult.Exception));
                 }
                 else
                 {
-                    Result = hasResult.Value ? FormatReturnValue(scriptResult.ReturnValue) : null;
+                    if (hasResult.Value)
+                    {
+                        resultBuilder.AppendLine(FormatReturnValue(scriptResult.ReturnValue));
+                    }
                 }
             }
             finally
@@ -133,7 +147,11 @@ public class CodeVm : INotifyPropertyChanged
         catch (Exception ex)
         {
             HasError = true;
-            Result = FormatException(ex);
+            resultBuilder.AppendLine(FormatException(ex));
+        }
+        finally
+        {
+            Result = resultBuilder.ToString();
         }
     }
 
