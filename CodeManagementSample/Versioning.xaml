@@ -83,12 +83,6 @@
                     </TextBlock.Style>
                 </TextBlock>
             </Grid>
-            <Button
-                Grid.Row="2"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Command="{Binding PullCommand}"
-                Content="Retrieve selected version" />
         </Grid>
         <Grid Grid.Row="2" Grid.Column="0">
             <Grid.ColumnDefinitions>

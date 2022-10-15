@@ -23,18 +23,17 @@ internal class VersioningVm : ObservableObject
     public VersioningVm(VersioningModel model)
     {
         this.model = model;
-        OkCommand = new RelayCommand(ApplyCheckout);
+        OkCommand = new RelayCommand(ApplyCheckout, () => SelectedItem != null);
         CancelCommand = new RelayCommand(CancelCheckout);
         RefreshCommand = new RelayCommand(GetHistory);
         PushCommand = new RelayCommand(CommitCode);
-        PullCommand = new RelayCommand(CheckoutVersion, () => SelectedItem != null);
 
         using var repo = new Repository(model.RepositoryPath);
         gitProcessWrapper = new GitProcessWrapper(repo.Info.WorkingDirectory);
 
         RefreshCommand.Execute(null);
     }
-    public event Action RequestClose = delegate {  };
+    public event Action RequestClose = delegate { };
     private void CancelCheckout()
     {
         CheckedOutText = null;
@@ -43,13 +42,13 @@ internal class VersioningVm : ObservableObject
 
     private void ApplyCheckout()
     {
+        CheckoutVersion();
         RequestClose();
     }
 
     public RelayCommand OkCommand { get; }
     public RelayCommand CancelCommand { get; }
     public RelayCommand PushCommand { get; }
-    public RelayCommand PullCommand { get; }
     public RelayCommand RefreshCommand { get; }
 
     public string? CommitMessage
@@ -75,20 +74,11 @@ internal class VersioningVm : ObservableObject
                 return;
             }
 
-            using var repo = new Repository(model.RepositoryPath);
-            var selectedCommit = repo.Commits.Single(c => c.Id.Sha[..7] == selectedItem.Id);
-            var gitObject = selectedCommit.Tree.SingleOrDefault(t => t.Name == model.BlobId.ToString())?.Target;
+            var selectedText = GetStringOfSelectedCommit();
 
-            if (gitObject is Blob blob)
-            {
-                PreviewText = DeserializeBlob(blob);
-            }
-            else
-            {
-                PreviewText = "[No content available]";
-            }
+            PreviewText = selectedText ?? "[No content available]";
 
-            PullCommand.NotifyCanExecuteChanged();
+            OkCommand.NotifyCanExecuteChanged();
         }
     }
 
@@ -130,7 +120,7 @@ internal class VersioningVm : ObservableObject
         var commit = repo.ObjectDatabase.CreateCommit(
             committer,
             committer,
-            "i'm a commit message :)",
+            CommitMessage,
             tree,
             repo.Commits,
         prettifyMessage: false);
@@ -153,14 +143,20 @@ internal class VersioningVm : ObservableObject
 
     public void CheckoutVersion()
     {
+        CheckedOutText = GetStringOfSelectedCommit();
+    }
+
+    private string? GetStringOfSelectedCommit()
+    {
         using var repo = new Repository(model.RepositoryPath);
 
         var selectedCommit = repo.Commits.Single(c => c.Id.Sha[..7] == SelectedItem.Id);
         var gitObject = selectedCommit.Tree.SingleOrDefault(t => t.Name == model.BlobId.ToString())?.Target;
-
         if (gitObject is Blob blob)
         {
-            CheckedOutText = DeserializeBlob(blob);
+            return DeserializeBlob(blob);
         }
+
+        return null;
     }
 }
