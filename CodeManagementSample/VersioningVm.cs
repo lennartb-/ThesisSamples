@@ -131,6 +131,7 @@ internal class VersioningVm : ObservableObject
         var d = repo.Diff.Compare<TreeChanges>().Count > 0;
 
         gitProcessWrapper.Push();
+        GetHistory();
     }
 
     private Blob SerializeBlob()
