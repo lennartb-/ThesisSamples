@@ -108,6 +108,7 @@ public class MainWindowVm : ObservableObject
         Code.Compile();
         IsCompilationRunning = false;
         CompilerOutput = Code.Result ?? "✅";
+        ConsoleOutput = Code.ConsoleOutput;
     }
 
     private void OnVersioning()

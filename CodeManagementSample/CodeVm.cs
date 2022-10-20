@@ -66,6 +66,7 @@ public class CodeVm : INotifyPropertyChanged
     public bool Compile()
     {
         Result = null;
+        ConsoleOutput = null;
         resultBuilder.Clear();
         Script = CSharpScript.Create(
             Text,
@@ -151,7 +152,7 @@ public class CodeVm : INotifyPropertyChanged
 
     protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
-        if (EqualityComparer<T>.Default.Equals(field, value))
+        if (EqualityComparer<T>.Default.Equals(field, value) && value != null)
         {
             return false;
         }

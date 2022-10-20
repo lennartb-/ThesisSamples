@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using ICSharpCode.AvalonEdit.Highlighting;
+using Microsoft.CodeAnalysis.Differencing;
 
 namespace CodeManagementSample;
 
@@ -11,5 +13,6 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
         DataContext = new MainWindowVm();
+        Editor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
     }
 }
