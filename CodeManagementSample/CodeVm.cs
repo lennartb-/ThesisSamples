@@ -58,10 +58,7 @@ public class CodeVm : INotifyPropertyChanged
             return false;
         }
 
-        var compilationResult = Script.GetCompilation();
-        var hasResult = compilationResult.HasSubmissionResult();
-
-        await Run(hasResult);
+        await Run();
 
         return true;
     }
@@ -105,13 +102,8 @@ public class CodeVm : INotifyPropertyChanged
         return CSharpObjectFormatter.Instance.FormatObject(o, PrintOptions);
     }
 
-    private async Task Run(bool? hasResult)
+    private async Task Run()
     {
-        if (!hasResult.HasValue)
-        {
-            return;
-        }
-
         try
         {
             var previousConsoleOut = Console.Out;
@@ -130,9 +122,9 @@ public class CodeVm : INotifyPropertyChanged
                 }
                 else
                 {
-                    if (hasResult.Value)
+                    if (scriptResult.ReturnValue is { } returnValue)
                     {
-                        resultBuilder.AppendLine(FormatReturnValue(scriptResult.ReturnValue));
+                        resultBuilder.AppendLine(FormatReturnValue(returnValue));
                     }
                 }
             }
