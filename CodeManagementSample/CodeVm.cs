@@ -47,7 +47,7 @@ public class CodeVm : INotifyPropertyChanged
 
     public bool HasError { get; private set; }
 
-    private static PrintOptions PrintOptions { get; } = new() { MemberDisplayFormat = MemberDisplayFormat.SeparateLines };
+    private static PrintOptions PrintOptions { get; } = new() { MemberDisplayFormat = MemberDisplayFormat.Hidden, };
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
