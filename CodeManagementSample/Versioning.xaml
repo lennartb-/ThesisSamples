@@ -30,9 +30,9 @@
             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
             SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Id}" Header="Id" />
-                <DataGridTextColumn Binding="{Binding Author}" Header="Author" />
+                <!--<DataGridTextColumn Binding="{Binding Id}" Header="Id" />-->
                 <DataGridTextColumn Binding="{Binding Time}" Header="Time" />
+                <DataGridTextColumn Binding="{Binding Author}" Header="Author" />
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding Message}"
