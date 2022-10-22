@@ -12,6 +12,8 @@
     <PackageReference Include="libgit2sharp" Version="0.27.0-preview-0182" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="RoslynPad.Editor.Windows" Version="1.2.0" />
+    <PackageReference Include="serilog" Version="2.12.0" />
+    <PackageReference Include="serilog.sinks.seq" Version="5.2.1" />
   </ItemGroup>
 
 </Project>
