@@ -8,6 +8,7 @@ using CodeManagementSample.GitWrapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LibGit2Sharp;
+using Serilog;
 
 namespace CodeManagementSample;
 
@@ -93,6 +94,7 @@ internal class VersioningVm : ObservableObject
         {
             History.Add(new CommitModel(c.Id.Sha[..7], c.Author.Name, c.Message, c.Author.When.DateTime));
         }
+
         PushCommand.NotifyCanExecuteChanged();
     }
 
@@ -108,6 +110,7 @@ internal class VersioningVm : ObservableObject
     {
         if (GetStringOfSelectedCommit(History.First().Id) == model.BlobContent)
         {
+            Log.Logger.Warning("Text to commit is equal to latest commit. Cancelling.");
             return;
         }
 
@@ -120,16 +123,12 @@ internal class VersioningVm : ObservableObject
         repo.Index.Add(blob, model.BlobId.ToString(), Mode.NonExecutableFile);
         repo.Index.Write();
 
-        var repositoryStatus = repo.RetrieveStatus(new LibGit2Sharp.StatusOptions());
+        var repositoryStatus = repo.RetrieveStatus(new StatusOptions());
 
         if (!repositoryStatus.Any())
         {
+            Log.Logger.Information("No changes to commit. Cancelling.");
             return;
-        }
-
-        foreach (var item in repositoryStatus)
-        {
-            Console.WriteLine(item.FilePath);
         }
 
         _ = repo.Commit(CommitMessage, committer, committer);
@@ -154,7 +153,11 @@ internal class VersioningVm : ObservableObject
 
     private string? GetStringOfSelectedCommit(string? id)
     {
-        if (id == null) return null;
+        if (id == null)
+        {
+            Log.Logger.Warning("Id is null, can't check for selected commit.");
+            return null;
+        }
 
         using var repo = new Repository(model.RepositoryPath);
 
@@ -165,6 +168,7 @@ internal class VersioningVm : ObservableObject
             return DeserializeBlob(blob);
         }
 
+        Log.Logger.Warning("{Id} is not a blob.", id);
         return null;
     }
 }

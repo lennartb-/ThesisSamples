@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using Serilog;
 
 namespace CodeManagementSample.GitWrapper;
 
@@ -16,11 +17,6 @@ public class GitProcessWrapper
     {
         RunGitCommand("push");
 
-    }
-
-    public void Commit(string message)
-    {
-        RunGitCommand("commit", "-m", message);
     }
 
     public void Pull()
@@ -44,6 +40,8 @@ public class GitProcessWrapper
             WorkingDirectory = workingDirectory
         };
         process.StartInfo = processStartInfo;
+
+        Log.Logger.Information("About to run {Process} {CommandLine}", processStartInfo.FileName, processStartInfo.Arguments);
         process.Start();
 
         var stringBuilder = new StringBuilder();
@@ -53,5 +51,7 @@ public class GitProcessWrapper
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
         process.WaitForExit();
+
+        Log.Logger.Information("git returned: {Status}", stringBuilder.ToString());
     }
 }
