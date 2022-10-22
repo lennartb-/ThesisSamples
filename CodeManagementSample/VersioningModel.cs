@@ -2,4 +2,4 @@
 
 namespace CodeManagementSample;
 
-public record VersioningModel(string Author, Guid BlobId, object BlobContent, string RepositoryPath);
+public record VersioningModel(string Author, Guid BlobId, string BlobContent, string RepositoryPath);

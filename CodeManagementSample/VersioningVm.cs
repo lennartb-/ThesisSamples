@@ -26,7 +26,7 @@ internal class VersioningVm : ObservableObject
         OkCommand = new RelayCommand(ApplyCheckout, () => SelectedItem != null);
         CancelCommand = new RelayCommand(CancelCheckout);
         RefreshCommand = new RelayCommand(GetHistory);
-        PushCommand = new RelayCommand(CommitCode);
+        PushCommand = new RelayCommand(CommitCode, () => GetStringOfSelectedCommit(History.First().Id) != model.BlobContent);
 
         using var repo = new Repository(model.RepositoryPath);
         gitProcessWrapper = new GitProcessWrapper(repo.Info.WorkingDirectory);
@@ -74,7 +74,7 @@ internal class VersioningVm : ObservableObject
                 return;
             }
 
-            var selectedText = GetStringOfSelectedCommit();
+            var selectedText = GetStringOfSelectedCommit(SelectedItem?.Id);
 
             PreviewText = selectedText ?? "[No content available]";
 
@@ -93,6 +93,7 @@ internal class VersioningVm : ObservableObject
         {
             History.Add(new CommitModel(c.Id.Sha[..7], c.Author.Name, c.Message, c.Author.When.DateTime));
         }
+        PushCommand.NotifyCanExecuteChanged();
     }
 
     private string? DeserializeBlob(Blob blob)
@@ -105,53 +106,59 @@ internal class VersioningVm : ObservableObject
 
     public void CommitCode()
     {
-        var blob = SerializeBlob();
+        if (GetStringOfSelectedCommit(History.First().Id) == model.BlobContent)
+        {
+            return;
+        }
+
+        var blob = SerializeBlob(model.BlobContent);
 
         using var repo = new Repository(model.RepositoryPath);
 
         var committer = new Signature(model.Author, "test@example.com", DateTime.Now);
 
-        TreeDefinition td = new TreeDefinition();
-        td.Add(model.BlobId.ToString(), blob, Mode.NonExecutableFile);
-        Tree tree = repo.ObjectDatabase.CreateTree(td);
         repo.Index.Add(blob, model.BlobId.ToString(), Mode.NonExecutableFile);
         repo.Index.Write();
 
-        var commit = repo.ObjectDatabase.CreateCommit(
-            committer,
-            committer,
-            CommitMessage,
-            tree,
-            repo.Commits,
-        prettifyMessage: false);
+        var repositoryStatus = repo.RetrieveStatus(new LibGit2Sharp.StatusOptions());
 
-        // Update the HEAD reference to point to the latest commit
-        repo.Refs.UpdateTarget(repo.Refs.Head, commit.Id);
+        if (!repositoryStatus.Any())
+        {
+            return;
+        }
 
-        var d = repo.Diff.Compare<TreeChanges>().Count > 0;
+        foreach (var item in repositoryStatus)
+        {
+            Console.WriteLine(item.FilePath);
+        }
+
+        _ = repo.Commit(CommitMessage, committer, committer);
 
         gitProcessWrapper.Push();
         GetHistory();
+        SelectedItem = History.First();
     }
 
-    private Blob SerializeBlob()
+    private Blob SerializeBlob(string blobContents)
     {
         using var repo = new Repository(model.RepositoryPath);
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(model.BlobContent);
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(blobContents);
         var ms = new MemoryStream(bytes);
         return repo.ObjectDatabase.CreateBlob(ms);
     }
 
     public void CheckoutVersion()
     {
-        CheckedOutText = GetStringOfSelectedCommit();
+        CheckedOutText = GetStringOfSelectedCommit(SelectedItem?.Id);
     }
 
-    private string? GetStringOfSelectedCommit()
+    private string? GetStringOfSelectedCommit(string? id)
     {
+        if (id == null) return null;
+
         using var repo = new Repository(model.RepositoryPath);
 
-        var selectedCommit = repo.Commits.Single(c => c.Id.Sha[..7] == SelectedItem.Id);
+        var selectedCommit = repo.Commits.Single(c => c.Id.Sha[..7] == id);
         var gitObject = selectedCommit.Tree.SingleOrDefault(t => t.Name == model.BlobId.ToString())?.Target;
         if (gitObject is Blob blob)
         {
