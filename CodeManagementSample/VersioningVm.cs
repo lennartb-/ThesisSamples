@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Json;
+using AdysTech.CredentialManager;
 using CodeManagementSample.GitWrapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -14,12 +16,12 @@ namespace CodeManagementSample;
 
 internal class VersioningVm : ObservableObject
 {
+    private const string GithubCredentialAddress = "git:https://github.com";
     private readonly GitProcessWrapper gitProcessWrapper;
     private readonly VersioningModel model;
+    private string? commitMessage;
     private string? previewText;
     private CommitModel? selectedItem;
-    private string? commitMessage;
-    public string? CheckedOutText { get; private set; }
 
     public VersioningVm(VersioningModel model)
     {
@@ -34,18 +36,8 @@ internal class VersioningVm : ObservableObject
 
         RefreshCommand.Execute(null);
     }
-    public event Action RequestClose = delegate { };
-    private void CancelCheckout()
-    {
-        CheckedOutText = null;
-        RequestClose();
-    }
 
-    private void ApplyCheckout()
-    {
-        CheckoutVersion();
-        RequestClose();
-    }
+    public string? CheckedOutText { get; private set; }
 
     public RelayCommand OkCommand { get; }
     public RelayCommand CancelCommand { get; }
@@ -84,12 +76,28 @@ internal class VersioningVm : ObservableObject
     }
 
     public ObservableCollection<CommitModel> History { get; } = new();
+    public event Action RequestClose = delegate { };
+
+    private void CancelCheckout()
+    {
+        CheckedOutText = null;
+        RequestClose();
+    }
+
+    private void ApplyCheckout()
+    {
+        CheckoutVersion();
+        RequestClose();
+    }
 
     private void GetHistory()
     {
         History.Clear();
         using var repo = new Repository(model.RepositoryPath);
-        gitProcessWrapper.Pull();
+        //gitProcessWrapper.Pull();
+        var merger = new Signature(model.Author, "test@example.com", DateTime.Now);
+        var credentials = GetOrAskCredentials();
+        Pull(credentials, repo, merger);
         foreach (var c in repo.Commits.Take(15))
         {
             History.Add(new CommitModel(c.Id.Sha[..7], c.Author.Name, c.Message, c.Author.When.DateTime));
@@ -133,9 +141,47 @@ internal class VersioningVm : ObservableObject
 
         _ = repo.Commit(CommitMessage, committer, committer);
 
-        gitProcessWrapper.Push();
+        var credentials = GetOrAskCredentials();
+        Push(credentials, repo);
+
         GetHistory();
         SelectedItem = History.First();
+    }
+
+    private static NetworkCredential GetOrAskCredentials()
+    {
+        var existingCredentials = CredentialManager.GetCredentials(GithubCredentialAddress);
+
+        if (existingCredentials == null)
+        {
+            var save = false;
+            return CredentialManager.PromptForCredentials(GithubCredentialAddress, ref save, "Please provide credentials", "Credentials for service");
+        }
+
+        return existingCredentials;
+    }
+
+    private static void Push(NetworkCredential cred, Repository repo)
+    {
+        var options = new PushOptions
+        {
+            CredentialsProvider = (_, _, _) =>
+                new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword }
+        };
+        repo.Network.Push(repo.Head, options);
+    }
+
+    private static void Pull(NetworkCredential cred, Repository repo, Signature merger)
+    {
+        var options = new PullOptions()
+        {
+            FetchOptions = new FetchOptions
+            {
+                CredentialsProvider = (_, _, _) =>
+                    new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword }
+            }
+        };
+        Commands.Pull(repo, merger, options);
     }
 
     private Blob SerializeBlob(string blobContents)
