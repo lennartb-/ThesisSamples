@@ -19,6 +19,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <DataGrid
@@ -106,5 +107,12 @@
             FontSize="16"
             IsReadOnly="True"
             Text="{Binding PreviewText, Mode=OneWay}" />
+        <Expander
+            Grid.Row="2"
+            Grid.Column="1"
+            VerticalAlignment="Center"
+            Header="Advanced Options">
+            <CheckBox Content="Use built-in Git authentication" IsChecked="{Binding IsExternalGitAuthenticationEnabled}" />
+        </Expander>
     </Grid>
 </Window>

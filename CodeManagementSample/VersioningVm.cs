@@ -22,6 +22,7 @@ internal class VersioningVm : ObservableObject
     private string? commitMessage;
     private string? previewText;
     private CommitModel? selectedItem;
+    private bool isExternalGitAuthenticationEnabled;
 
     public VersioningVm(VersioningModel model)
     {
@@ -43,6 +44,12 @@ internal class VersioningVm : ObservableObject
     public RelayCommand CancelCommand { get; }
     public RelayCommand PushCommand { get; }
     public RelayCommand RefreshCommand { get; }
+
+    public bool IsExternalGitAuthenticationEnabled
+    {
+        get => isExternalGitAuthenticationEnabled;
+        set => SetProperty(ref isExternalGitAuthenticationEnabled, value);
+    }
 
     public string? CommitMessage
     {
@@ -94,10 +101,18 @@ internal class VersioningVm : ObservableObject
     {
         History.Clear();
         using var repo = new Repository(model.RepositoryPath);
-        //gitProcessWrapper.Pull();
-        var merger = new Signature(model.Author, "test@example.com", DateTime.Now);
-        var credentials = GetOrAskCredentials();
-        Pull(credentials, repo, merger);
+
+        if (IsExternalGitAuthenticationEnabled)
+        {
+            gitProcessWrapper.Pull();
+        }
+        else
+        {
+            var merger = new Signature(model.Author, "test@example.com", DateTime.Now);
+            var credentials = GetOrAskCredentials();
+            Pull(credentials, repo, merger);
+        }
+
         foreach (var c in repo.Commits.Take(15))
         {
             History.Add(new CommitModel(c.Id.Sha[..7], c.Author.Name, c.Message, c.Author.When.DateTime));
@@ -141,8 +156,15 @@ internal class VersioningVm : ObservableObject
 
         _ = repo.Commit(CommitMessage, committer, committer);
 
-        var credentials = GetOrAskCredentials();
-        Push(credentials, repo);
+        if (IsExternalGitAuthenticationEnabled)
+        {
+            gitProcessWrapper.Push();
+        }
+        else
+        {
+            var credentials = GetOrAskCredentials();
+            Push(credentials, repo);
+        }
 
         GetHistory();
         SelectedItem = History.First();
@@ -150,10 +172,13 @@ internal class VersioningVm : ObservableObject
 
     private static NetworkCredential GetOrAskCredentials()
     {
+        Log.Logger.Information("Getting credentials via credential manager.");
         var existingCredentials = CredentialManager.GetCredentials(GithubCredentialAddress);
 
         if (existingCredentials == null)
         {
+
+            Log.Logger.Information("Existing credentials not found, prompting user.");
             var save = false;
             return CredentialManager.PromptForCredentials(GithubCredentialAddress, ref save, "Please provide credentials", "Credentials for service");
         }
@@ -163,6 +188,7 @@ internal class VersioningVm : ObservableObject
 
     private static void Push(NetworkCredential cred, Repository repo)
     {
+        Log.Logger.Information("Pushing via libgit2sharp.");
         var options = new PushOptions
         {
             CredentialsProvider = (_, _, _) =>
@@ -173,6 +199,7 @@ internal class VersioningVm : ObservableObject
 
     private static void Pull(NetworkCredential cred, Repository repo, Signature merger)
     {
+        Log.Logger.Information("Pulling via libgit2sharp.");
         var options = new PullOptions()
         {
             FetchOptions = new FetchOptions
