@@ -108,6 +108,7 @@
             IsReadOnly="True"
             Text="{Binding PreviewText, Mode=OneWay}" />
         <Expander
+            ExpandDirection="Right"
             Grid.Row="2"
             Grid.Column="1"
             VerticalAlignment="Center"
