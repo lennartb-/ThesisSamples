@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:codeManagementSample="clr-namespace:CodeManagementSample"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Versioning"
     Width="1000"
@@ -26,6 +27,7 @@
             Grid.Row="0"
             Grid.Column="0"
             AutoGenerateColumns="False"
+            FontSize="14"
             IsReadOnly="True"
             ItemsSource="{Binding History}"
             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
@@ -99,19 +101,19 @@
                 Command="{Binding CancelCommand}"
                 Content="Cancel" />
         </Grid>
-        <TextBox
+        <editor:CodeTextEditor
             Name="Preview"
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="1"
-            FontSize="16"
-            IsReadOnly="True"
-            Text="{Binding PreviewText, Mode=OneWay}" />
+            Document="{Binding PreviewDocument, Mode=OneWay}"
+            FontSize="20"
+            IsReadOnly="True" />
         <Expander
-            ExpandDirection="Right"
             Grid.Row="2"
             Grid.Column="1"
             VerticalAlignment="Center"
+            ExpandDirection="Right"
             Header="Advanced Options">
             <CheckBox Content="Use built-in Git authentication" IsChecked="{Binding IsExternalGitAuthenticationEnabled}" />
         </Expander>

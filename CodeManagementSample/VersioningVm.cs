@@ -10,7 +10,9 @@ using CodeManagementSample.GitWrapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LibGit2Sharp;
+using Microsoft.CodeAnalysis;
 using Serilog;
+using TextDocument = ICSharpCode.AvalonEdit.Document.TextDocument;
 
 namespace CodeManagementSample;
 
@@ -20,7 +22,7 @@ internal class VersioningVm : ObservableObject
     private readonly GitProcessWrapper gitProcessWrapper;
     private readonly VersioningModel model;
     private string? commitMessage;
-    private string? previewText;
+    private TextDocument previewDocument;
     private CommitModel? selectedItem;
     private bool isExternalGitAuthenticationEnabled;
 
@@ -31,6 +33,7 @@ internal class VersioningVm : ObservableObject
         CancelCommand = new RelayCommand(CancelCheckout);
         RefreshCommand = new RelayCommand(GetHistory);
         PushCommand = new RelayCommand(CommitCode, () => GetStringOfSelectedCommit(History.First().Id) != model.BlobContent);
+        PreviewDocument = new TextDocument();
 
         using var repo = new Repository(model.RepositoryPath);
         gitProcessWrapper = new GitProcessWrapper(repo.Info.WorkingDirectory);
@@ -57,10 +60,10 @@ internal class VersioningVm : ObservableObject
         set => SetProperty(ref commitMessage, value);
     }
 
-    public string? PreviewText
+    public TextDocument PreviewDocument
     {
-        get => previewText;
-        set => SetProperty(ref previewText, value);
+        get => previewDocument;
+        set => SetProperty(ref previewDocument, value);
     }
 
     public CommitModel? SelectedItem
@@ -76,7 +79,7 @@ internal class VersioningVm : ObservableObject
 
             var selectedText = GetStringOfSelectedCommit(SelectedItem?.Id);
 
-            PreviewText = selectedText ?? "[No content available]";
+            PreviewDocument.Text = selectedText ?? "[No content available]";
 
             OkCommand.NotifyCanExecuteChanged();
         }
