@@ -63,27 +63,54 @@ namespace SampleAnalyzer {
         /// <summary>
         ///   Looks up a localized string similar to Strings should not contain the &quot;\n&quot; control character..
         /// </summary>
-        internal static string AnalyzerDescription {
+        internal static string NewlineAnalyzerDescription {
             get {
-                return ResourceManager.GetString("AnalyzerDescription", resourceCulture);
+                return ResourceManager.GetString("NewlineAnalyzerDescription", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to String &apos;{0}&apos; contains &quot;\n&quot; control character.
         /// </summary>
-        internal static string AnalyzerMessageFormat {
+        internal static string NewlineAnalyzerMessageFormat {
             get {
-                return ResourceManager.GetString("AnalyzerMessageFormat", resourceCulture);
+                return ResourceManager.GetString("NewlineAnalyzerMessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to String contains newline control character.
         /// </summary>
-        internal static string AnalyzerTitle {
+        internal static string NewlineAnalyzerTitle {
             get {
-                return ResourceManager.GetString("AnalyzerTitle", resourceCulture);
+                return ResourceManager.GetString("NewlineAnalyzerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SHA1 is cryptographically broken and should not be used.
+        /// </summary>
+        internal static string Sha1AnalyzerDescription {
+            get {
+                return ResourceManager.GetString("Sha1AnalyzerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SHA1 is cryptographically broken and should not be used.
+        /// </summary>
+        internal static string Sha1AnalyzerMessageFormat {
+            get {
+                return ResourceManager.GetString("Sha1AnalyzerMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cryptographically broken algorithm.
+        /// </summary>
+        internal static string Sha1AnalyzerTitle {
+            get {
+                return ResourceManager.GetString("Sha1AnalyzerTitle", resourceCulture);
             }
         }
     }

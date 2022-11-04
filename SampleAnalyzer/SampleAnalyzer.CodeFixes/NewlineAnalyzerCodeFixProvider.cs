@@ -16,12 +16,12 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace SampleAnalyzer
 {
-    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(SampleAnalyzerCodeFixProvider)), Shared]
-    public class SampleAnalyzerCodeFixProvider : CodeFixProvider
+    [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(NewlineAnalyzerCodeFixProvider)), Shared]
+    public class NewlineAnalyzerCodeFixProvider : CodeFixProvider
     {
         public sealed override ImmutableArray<string> FixableDiagnosticIds
         {
-            get { return ImmutableArray.Create(SampleAnalyzerAnalyzer.DiagnosticId); }
+            get { return ImmutableArray.Create(NewlineAnalyzer.DiagnosticId); }
         }
 
         public sealed override FixAllProvider GetFixAllProvider()

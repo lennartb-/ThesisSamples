@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VerifyCS = SampleAnalyzer.Test.CSharpCodeFixVerifier<
-    SampleAnalyzer.SampleAnalyzerAnalyzer,
-    SampleAnalyzer.SampleAnalyzerCodeFixProvider>;
+    SampleAnalyzer.NewlineAnalyzer,
+    SampleAnalyzer.NewlineAnalyzerCodeFixProvider>;
 
 namespace SampleAnalyzer.Test
 {
     [TestClass]
-    public class SampleAnalyzerUnitTest
+    public class NewlineAnalyzerUnitTest
     {
         //No diagnostics expected to show up
         [TestMethod]

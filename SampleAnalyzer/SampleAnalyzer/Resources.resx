@@ -117,16 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AnalyzerDescription" xml:space="preserve">
+  <data name="NewlineAnalyzerDescription" xml:space="preserve">
     <value>Strings should not contain the "\n" control character.</value>
     <comment>An optional longer localizable description of the diagnostic.</comment>
   </data>
-  <data name="AnalyzerMessageFormat" xml:space="preserve">
+  <data name="NewlineAnalyzerMessageFormat" xml:space="preserve">
     <value>String '{0}' contains "\n" control character</value>
     <comment>The format-able message the diagnostic displays.</comment>
   </data>
-  <data name="AnalyzerTitle" xml:space="preserve">
+  <data name="NewlineAnalyzerTitle" xml:space="preserve">
     <value>String contains newline control character</value>
     <comment>The title of the diagnostic.</comment>
+  </data>
+  <data name="Sha1AnalyzerDescription" xml:space="preserve">
+    <value>SHA1 is cryptographically broken and should not be used</value>
+  </data>
+  <data name="Sha1AnalyzerMessageFormat" xml:space="preserve">
+    <value>SHA1 is cryptographically broken and should not be used</value>
+  </data>
+  <data name="Sha1AnalyzerTitle" xml:space="preserve">
+    <value>Cryptographically broken algorithm</value>
   </data>
 </root>
