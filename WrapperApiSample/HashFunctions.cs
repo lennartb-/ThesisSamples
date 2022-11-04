@@ -55,4 +55,20 @@ public static class HashFunctions
         var hashedBytes = md5Hash.ComputeHash(inputBytes);
         return Convert.ToHexString(hashedBytes);
     }
+
+    /// <summary>
+    ///     Hashes a string using the SHA1 algorithm.
+    /// </summary>
+    /// <param name="input">An UTF8 string to hash.</param>
+    /// <returns>
+    ///     The SHA1-hashed equivalent of <paramref name="input" />,
+    ///     as a uppercase hex string without dashes.
+    /// </returns>
+    public static string HashAsSha1(this string input)
+    {
+        using var sha1Hash = SHA1.Create();
+        var inputBytes = Encoding.UTF8.GetBytes(input);
+        var hashedBytes = sha1Hash.ComputeHash(inputBytes);
+        return Convert.ToHexString(hashedBytes);
+    }
 }
