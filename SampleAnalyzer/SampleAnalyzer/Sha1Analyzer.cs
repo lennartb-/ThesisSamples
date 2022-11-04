@@ -27,18 +27,21 @@ namespace SampleAnalyzer
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
 
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.StringLiteralExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.InvocationExpression);
         }
 
         private static void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
         {
-            var literalNode = context.Node as LiteralExpressionSyntax;
+            var literalNode = context.Node as InvocationExpressionSyntax;
 
             // Find just those named type symbols with names containing lowercase letters.
-            if (literalNode?.Token.ValueText.Contains("\n") == true)
+            var expression = literalNode?.Expression as MemberAccessExpressionSyntax;
+            var memberSymbol = context.SemanticModel.
+                GetSymbolInfo(expression).Symbol as IMethodSymbol;
+            if (memberSymbol?.Name == "HashAsSha1")
             {
                 // For all such symbols, produce a diagnostic.
-                var diagnostic = Diagnostic.Create(Rule, literalNode.GetLocation(), literalNode.Token.ValueText);
+                var diagnostic = Diagnostic.Create(Rule, expression.GetLocation());
 
                 context.ReportDiagnostic(diagnostic);
             }
