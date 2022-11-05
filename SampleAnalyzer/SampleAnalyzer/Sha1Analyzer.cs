@@ -36,9 +36,8 @@ namespace SampleAnalyzer
 
             // Find just those named type symbols with names containing lowercase letters.
             var expression = literalNode?.Expression as MemberAccessExpressionSyntax;
-            var memberSymbol = context.SemanticModel.
-                GetSymbolInfo(expression).Symbol as IMethodSymbol;
-            if (memberSymbol?.Name == "HashAsSha1")
+
+            if (expression.Name.Identifier.Text == "HashAsSha1")
             {
                 // For all such symbols, produce a diagnostic.
                 var diagnostic = Diagnostic.Create(Rule, expression.GetLocation());
