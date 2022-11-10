@@ -27,15 +27,15 @@ namespace SampleAnalyzer
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
             context.EnableConcurrentExecution();
 
-            context.RegisterSyntaxNodeAction(AnalyzeSymbol, SyntaxKind.StringLiteralExpression);
+            context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.StringLiteralExpression);
         }
 
-        private static void AnalyzeSymbol(SyntaxNodeAnalysisContext context)
+        private static void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
         {
-            var literalNode = context.Node as LiteralExpressionSyntax;
+            if (context.Node is not LiteralExpressionSyntax literalNode) return;
 
             // Find just those named type symbols with names containing lowercase letters.
-            if (literalNode?.Token.ValueText.Contains("\n") == true)
+            if (literalNode.Token.ValueText.Contains("\n") == true)
             {
                 // For all such symbols, produce a diagnostic.
                 var diagnostic = Diagnostic.Create(Rule, literalNode.GetLocation(), literalNode.Token.ValueText);
