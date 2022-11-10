@@ -1,12 +1,17 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Data;
+using System.Windows.Markup;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
 using RoslynPad.Editor;
 using RoslynPad.Roslyn;
+using RoslynPad.Roslyn.CodeActions;
 using RoslynPad.Roslyn.CodeFixes;
 using WrapperApiSample;
 
@@ -64,5 +69,22 @@ public partial class MainWindow
     {
         var loader = host.GetService<IAnalyzerAssemblyLoader>();
         return new AnalyzerFileReference(analyzerPath, loader);
+    }
+}
+internal sealed class CodeActionsConverter : MarkupExtension, IValueConverter
+{
+    public override object ProvideValue(IServiceProvider serviceProvider)
+    {
+        return this;
+    }
+
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return ((CodeAction)value).GetCodeActions();
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotSupportedException();
     }
 }
