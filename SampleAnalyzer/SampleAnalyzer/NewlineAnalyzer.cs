@@ -38,7 +38,7 @@ namespace SampleAnalyzer
             if (literalNode.Token.ValueText.Contains("\n") == true)
             {
                 // For all such symbols, produce a diagnostic.
-                var diagnostic = Diagnostic.Create(Rule, literalNode.GetLocation(), literalNode.Token.ValueText);
+                var diagnostic = Diagnostic.Create(Rule, literalNode.GetLocation(), literalNode.Token.ValueText.Replace("\n","\\n"));
 
                 context.ReportDiagnostic(diagnostic);
             }
