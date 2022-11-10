@@ -34,7 +34,8 @@ public partial class MainWindow
 
         var host = new RoslynHost(
             new[] { Assembly.Load("RoslynPad.Roslyn.Windows"), Assembly.Load("RoslynPad.Editor.Windows") },
-            RoslynHostReferences.NamespaceDefault.With(assemblyReferences: new[] { typeof(object).Assembly, typeof(HashFunctions).Assembly }));
+            RoslynHostReferences.NamespaceDefault.With(assemblyReferences: new[] { typeof(object).Assembly, typeof(HashFunctions).Assembly },
+                imports: new []{ "WrapperApiSample" }));
 
         var documentId = editor.Initialize(
             host,
