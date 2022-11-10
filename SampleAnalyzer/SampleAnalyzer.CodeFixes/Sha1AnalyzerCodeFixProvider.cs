@@ -38,9 +38,9 @@ public class Sha1AnalyzerCodeFixProvider : CodeFixProvider
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
             CodeAction.Create(
-                title: CodeFixResources.CodeFixTitle,
+                title: CodeFixResources.Sha1CodeFixTitle,
                 createChangedDocument: c => ReplaceNewlineAsync(context.Document, declaration, c),
-                equivalenceKey: nameof(CodeFixResources.CodeFixTitle)),
+                equivalenceKey: nameof(CodeFixResources.Sha1CodeFixTitle)),
             diagnostic);
     }
 

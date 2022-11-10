@@ -43,9 +43,9 @@ namespace SampleAnalyzer
             // Register a code action that will invoke the fix.
             context.RegisterCodeFix(
                 CodeAction.Create(
-                    title: CodeFixResources.CodeFixTitle,
+                    title: CodeFixResources.NewlineCodeFixTitle,
                     createChangedDocument: c => ReplaceNewlineAsync(context.Document, declaration, c),
-                    equivalenceKey: nameof(CodeFixResources.CodeFixTitle)),
+                    equivalenceKey: nameof(CodeFixResources.NewlineCodeFixTitle)),
                 diagnostic);
         }
 

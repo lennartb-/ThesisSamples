@@ -40,8 +40,7 @@ public partial class MainWindow
             host,
             new ClassificationHighlightColors(),
             "C:\\WorkingDirectory",
-            string.Empty,
-            SourceCodeKind.Script);
+            string.Empty);
 
         var analyzerRef = GetAnalyzerReference(host, "C:\\Users\\lbrue\\Source\\Repos\\RoslynPadTest\\SampleAnalyzer\\SampleAnalyzer\\bin\\Debug\\netstandard2.0\\SampleAnalyzer.dll");
         var analyzerRef2 = GetAnalyzerReference(host, "C:\\Users\\lbrue\\Source\\Repos\\RoslynPadTest\\SampleAnalyzer\\SampleAnalyzer.CodeFixes\\bin\\Debug\\netstandard2.0\\SampleAnalyzer.CodeFixes.dll");
