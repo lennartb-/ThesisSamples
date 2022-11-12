@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reactive;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using AugmentationFramework.Augmentations;
 using ICSharpCode.AvalonEdit.Document;
 using ReactiveUI;
 using RoslynPad.Editor;
-using System.Collections.Generic;
-using System.Reactive;
-using System.Windows.Media.Imaging;
 
 namespace AugmentationSampleEditor.ViewModels;
 
@@ -13,10 +14,12 @@ public class ImageVm : ISampleContent
 {
     private readonly IList<Augmentation> augmentations = new List<Augmentation>();
     private bool isEnabled;
-    private const string Text = @"save here";
+    private const string TextForRightAugmentation = @"public bool IsSaved {get; set;}";
+
+    private const string TextForLeftAugmentation = @"public string Name {get; set;}";
     public ImageVm()
     {
-        var stringTextSource = new StringTextSource(Text);
+        var stringTextSource = new StringTextSource(TextForLeftAugmentation + Environment.NewLine + TextForRightAugmentation);
         Document = new TextDocument(stringTextSource);
         EditorLoadedCommand = ReactiveCommand.Create<CodeTextEditor>(OnLoaded);
     }
@@ -32,11 +35,17 @@ public class ImageVm : ISampleContent
             isEnabled = value;
             if (isEnabled)
             {
-                foreach (var augmentation in augmentations) augmentation.Enable();
+                foreach (var augmentation in augmentations)
+                {
+                    augmentation.Enable();
+                }
             }
             else
             {
-                foreach (var augmentation in augmentations) augmentation.Disable();
+                foreach (var augmentation in augmentations)
+                {
+                    augmentation.Disable();
+                }
             }
         }
     }
@@ -50,12 +59,12 @@ public class ImageVm : ISampleContent
         var imageAugmentation = new Augmentation(editor.TextArea)
             .WithImage(image)
         .OnRight()
-        .ForText(Text);
+        .ForText(TextForRightAugmentation);
         augmentations.Add(imageAugmentation);
-        
+
         var imageAugmentation2 = new Augmentation(editor.TextArea)
-            .InLeftMargin(image)
-            .ForText(Text);
+            .InLeftMargin("\xE735", Brushes.Yellow,Brushes.Black, "Segoe MDL2 Assets", 25)
+            .ForText(TextForLeftAugmentation);
         augmentations.Add(imageAugmentation2);
     }
 }

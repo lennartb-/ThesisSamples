@@ -1,11 +1,16 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using AugmentationFramework.AdviceDisplay;
 using AugmentationFramework.Generators;
 using AugmentationFramework.LeftMargins;
 using AugmentationFramework.Renderer;
 using AugmentationFramework.Transformers;
+using Brush = System.Windows.Media.Brush;
+using FontFamily = System.Windows.Media.FontFamily;
+using FontStyle = System.Windows.FontStyle;
 
 namespace AugmentationFramework.Augmentations;
 
@@ -234,10 +239,33 @@ public static class AugmentationExtensions
 
     public static Augmentation InLeftMargin(this Augmentation augmentation, ImageSource image)
     {
-        var marginDecoration = new MarginDecoration(augmentation) { Image = image};
+        var marginDecoration = new MarginDecoration(augmentation) { Image = image };
         augmentation.AddLeftMargin(marginDecoration);
 
         return augmentation;
+    }
+
+    public static Augmentation InLeftMargin(this Augmentation augmentation, string text, Brush foreground, Brush outline, string fontName, int fontSize)
+    {
+        var textRun = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface(fontName), fontSize, foreground, 96);
+
+        var visual = new DrawingVisual();
+
+        using (var drawingContext = visual.RenderOpen())
+        {
+            drawingContext.DrawText(textRun, new Point(0, 0));
+            drawingContext.DrawGeometry(null, new Pen(outline, 1), textRun.BuildGeometry(new Point(0, 0)));
+        }
+
+        var bitmap = new RenderTargetBitmap(
+            fontSize,
+            fontSize,
+            96,
+            96,
+            PixelFormats.Default);
+        bitmap.Render(visual);
+
+        return augmentation.InLeftMargin(bitmap);
     }
 
     public static Augmentation WithDecoration(this Augmentation augmentation, Func<Rect, Geometry> geometry)
@@ -324,7 +352,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var toolTipGenerator = new OverlayGenerator(augmentation) { AdviceModel = model};
+        var toolTipGenerator = new OverlayGenerator(augmentation) { AdviceModel = model };
         augmentation.AddElementGenerator(toolTipGenerator);
 
         return augmentation;
