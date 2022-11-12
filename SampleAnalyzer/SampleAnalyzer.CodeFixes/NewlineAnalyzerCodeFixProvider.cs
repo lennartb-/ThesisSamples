@@ -53,11 +53,10 @@ namespace SampleAnalyzer
         {
             var identifierToken = expressionSyntax.Token;
             var updatedText = identifierToken.Text.Replace(@"\n", "\" + Str.Lf + \"");
-            var valueText = identifierToken.ValueText.Replace("\n", "\" + Str.Lf + \"");
-            var newToken = SyntaxFactory.Literal(identifierToken.LeadingTrivia, updatedText, valueText, identifierToken.TrailingTrivia);
+            var updatedValue = identifierToken.ValueText.Replace("\n", "\" + Str.Lf + \"");
+            var newToken = SyntaxFactory.Literal(identifierToken.LeadingTrivia, updatedText, updatedValue, identifierToken.TrailingTrivia);
 
             var sourceText = await expressionSyntax.SyntaxTree.GetTextAsync(cancellationToken);
-            // update document by changing the source text
             return document.WithText(sourceText.WithChanges(new TextChange(identifierToken.FullSpan, newToken.ToFullString())));
         }
     }
