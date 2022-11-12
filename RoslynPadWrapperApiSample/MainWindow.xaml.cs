@@ -30,6 +30,7 @@ public partial class MainWindow
     private void OnEditorLoaded(object sender, RoutedEventArgs e)
     {
         var editor = (RoslynCodeEditor)sender;
+        editor.Text = "var a = \"new\\nline\";";
         Loaded -= OnEditorLoaded;
 
         var host = new RoslynHost(
