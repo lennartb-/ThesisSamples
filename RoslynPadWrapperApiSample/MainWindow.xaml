@@ -52,7 +52,7 @@
             Name="Editor"
             ContextActionsIcon="{StaticResource Bulb}"
             FontSize="24"
-            Loaded="OnEditorLoaded"
+            Text="var a =&quot;new\nline&quot;;"
             WordWrap="True" />
     </Grid>
 </Window>

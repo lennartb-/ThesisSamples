@@ -1,18 +1,12 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Markup;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CodeActions;
-using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.VisualStudio.Threading;
 using RoslynPad.Editor;
 using RoslynPad.Roslyn;
-using RoslynPad.Roslyn.CodeActions;
-using RoslynPad.Roslyn.CodeFixes;
 using WrapperApiSample;
 
 namespace RoslynPadWrapperApiSample;
@@ -25,27 +19,27 @@ public partial class MainWindow
     public MainWindow()
     {
         InitializeComponent();
+        var joinableTaskFactory = new JoinableTaskContext().Factory;
+        Editor.Loaded += (s, _)=> joinableTaskFactory.RunAsync(() => InitializeEditorAsync(s));
     }
 
-    private void OnEditorLoaded(object sender, RoutedEventArgs e)
+    private static async Task InitializeEditorAsync(object sender)
     {
         var editor = (RoslynCodeEditor)sender;
-        editor.Text = "var a = \"new\\nline\";";
-        Loaded -= OnEditorLoaded;
 
         var host = new RoslynHost(
             new[] { Assembly.Load("RoslynPad.Roslyn.Windows"), Assembly.Load("RoslynPad.Editor.Windows") },
             RoslynHostReferences.NamespaceDefault.With(assemblyReferences: new[] { typeof(object).Assembly, typeof(HashFunctions).Assembly },
-                imports: new []{ "WrapperApiSample" }));
+                imports: new[] { "WrapperApiSample" }));
 
-        var documentId = editor.Initialize(
+        var documentId = await editor.InitializeAsync(
             host,
             new ClassificationHighlightColors(),
             "C:\\WorkingDirectory",
-            string.Empty);
+            string.Empty, SourceCodeKind.Script);
 
-        var analyzerRef = GetAnalyzerReference(host, "C:\\Users\\lbrue\\Source\\Repos\\RoslynPadTest\\SampleAnalyzer\\SampleAnalyzer\\bin\\Debug\\netstandard2.0\\SampleAnalyzer.dll");
-        var analyzerRef2 = GetAnalyzerReference(host, "C:\\Users\\lbrue\\Source\\Repos\\RoslynPadTest\\SampleAnalyzer\\SampleAnalyzer.CodeFixes\\bin\\Debug\\netstandard2.0\\SampleAnalyzer.CodeFixes.dll");
+        var analyzerRef = GetAnalyzerReference(host, new FileInfo("SampleAnalyzer.dll").FullName);
+        var analyzerRef2 = GetAnalyzerReference(host, new FileInfo("SampleAnalyzer.CodeFixes.dll").FullName);
 
         var document = host.GetDocument(documentId);
 
@@ -53,7 +47,7 @@ public partial class MainWindow
         {
             return;
         }
-        
+
         var project = document.Project.AddAnalyzerReferences(new[] { analyzerRef, analyzerRef2 });
 
         document = project.GetDocument(documentId);
@@ -70,22 +64,5 @@ public partial class MainWindow
     {
         var loader = host.GetService<IAnalyzerAssemblyLoader>();
         return new AnalyzerFileReference(analyzerPath, loader);
-    }
-}
-internal sealed class CodeActionsConverter : MarkupExtension, IValueConverter
-{
-    public override object ProvideValue(IServiceProvider serviceProvider)
-    {
-        return this;
-    }
-
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        return ((CodeAction)value).GetCodeActions();
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotSupportedException();
     }
 }
