@@ -52,8 +52,8 @@ namespace SampleAnalyzer
         private async Task<Document> ReplaceNewlineAsync(Document document, LiteralExpressionSyntax expressionSyntax, CancellationToken cancellationToken)
         {
             var identifierToken = expressionSyntax.Token;
-            var updatedText = identifierToken.Text.Replace(@"\n", "\" + Str.Lf + \"");
-            var updatedValue = identifierToken.ValueText.Replace("\n", "\" + Str.Lf + \"");
+            var updatedText = identifierToken.Text.Replace(@"\n", "\" + Str.NewLine + \"");
+            var updatedValue = identifierToken.ValueText.Replace("\n", "\" + Str.NewLine + \"");
             var newToken = SyntaxFactory.Literal(identifierToken.LeadingTrivia, updatedText, updatedValue, identifierToken.TrailingTrivia);
 
             var sourceText = await expressionSyntax.SyntaxTree.GetTextAsync(cancellationToken);

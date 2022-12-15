@@ -1,6 +1,12 @@
 ﻿namespace WrapperApiSample;
 
+/// <summary>
+/// Provides helper functions for strings.
+/// </summary>
 public static class Str
 {
-    public static string Lf => Environment.NewLine;
+    /// <summary>
+    /// Represents a newline character.
+    /// </summary>
+    public static string NewLine => Environment.NewLine;
 }
