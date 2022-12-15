@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
     xmlns:global="clr-namespace:AugmentationSampleEditor.Controls"
-    xmlns:local="clr-namespace:AugmentationSampleEditor"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:AugmentationSampleEditor.ViewModels"
     Title="MainWindow"
@@ -90,7 +89,8 @@
                         WordWrap="True">
                         <b:Interaction.Triggers>
                             <b:EventTrigger SourceName="LoadedEvent">
-                                <b:InvokeCommandAction Command="{Binding EditorLoadedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=editor:CodeTextEditor}}" />
+                                <b:InvokeCommandAction Command="{Binding EditorLoadedCommand}"
+                                                       CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=editor:CodeTextEditor}}" />
                             </b:EventTrigger>
                         </b:Interaction.Triggers>
                     </editor:CodeTextEditor>

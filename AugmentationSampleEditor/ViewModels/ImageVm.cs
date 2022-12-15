@@ -12,11 +12,12 @@ namespace AugmentationSampleEditor.ViewModels;
 
 public class ImageVm : ISampleContent
 {
-    private readonly IList<Augmentation> augmentations = new List<Augmentation>();
-    private bool isEnabled;
     private const string TextForRightAugmentation = @"public bool IsSaved {get; set;}";
 
     private const string TextForLeftAugmentation = @"public string Name {get; set;}";
+    private readonly IList<Augmentation> augmentations = new List<Augmentation>();
+    private bool isEnabled;
+
     public ImageVm()
     {
         var stringTextSource = new StringTextSource(TextForLeftAugmentation + Environment.NewLine + TextForRightAugmentation);
@@ -58,13 +59,14 @@ public class ImageVm : ISampleContent
             new Uri("pack://application:,,,/Resources/ic_menu_save.png"));
         var imageAugmentation = new Augmentation(editor.TextArea)
             .WithImage(image)
-        .OnRight()
-        .ForText(TextForRightAugmentation);
+            .OnRight()
+            .ForText(TextForRightAugmentation);
         augmentations.Add(imageAugmentation);
 
         var imageAugmentation2 = new Augmentation(editor.TextArea)
-            .InLeftMargin("\xE735", Brushes.Yellow,Brushes.Black, "Segoe MDL2 Assets", 25)
+            .InLeftMargin("\xE735", Brushes.Yellow, Brushes.Black, "Segoe MDL2 Assets", 25)
             .ForText(TextForLeftAugmentation);
         augmentations.Add(imageAugmentation2);
     }
 }
+

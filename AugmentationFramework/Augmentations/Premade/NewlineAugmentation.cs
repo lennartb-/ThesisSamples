@@ -15,6 +15,6 @@ public class NewlineAugmentation
             .WithDecoration(UnderlineBracket.Geometry)
             .WithDecorationColor(Brushes.Orange)
             .WithAdviceOverlay(new NewlineAdviceModel());
-
     }
 }
+

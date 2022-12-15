@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.Threading;
@@ -20,7 +19,7 @@ public partial class MainWindow
     {
         InitializeComponent();
         var joinableTaskFactory = new JoinableTaskContext().Factory;
-        Editor.Loaded += (s, _)=> joinableTaskFactory.RunAsync(() => InitializeEditorAsync(s));
+        Editor.Loaded += (s, _) => joinableTaskFactory.RunAsync(() => InitializeEditorAsync(s));
     }
 
     private static async Task InitializeEditorAsync(object sender)
@@ -29,14 +28,16 @@ public partial class MainWindow
 
         var host = new RoslynHost(
             new[] { Assembly.Load("RoslynPad.Roslyn.Windows"), Assembly.Load("RoslynPad.Editor.Windows") },
-            RoslynHostReferences.NamespaceDefault.With(assemblyReferences: new[] { typeof(object).Assembly, typeof(HashFunctions).Assembly },
+            RoslynHostReferences.NamespaceDefault.With(
+                assemblyReferences: new[] { typeof(object).Assembly, typeof(HashFunctions).Assembly },
                 imports: new[] { "WrapperApiSample" }));
 
         var documentId = await editor.InitializeAsync(
             host,
             new ClassificationHighlightColors(),
             "C:\\WorkingDirectory",
-            string.Empty, SourceCodeKind.Script);
+            string.Empty,
+            SourceCodeKind.Script);
 
         var analyzerRef = GetAnalyzerReference(host, new FileInfo("SampleAnalyzer.dll").FullName);
         var analyzerRef2 = GetAnalyzerReference(host, new FileInfo("SampleAnalyzer.CodeFixes.dll").FullName);
@@ -66,3 +67,4 @@ public partial class MainWindow
         return new AnalyzerFileReference(analyzerPath, loader);
     }
 }
+

@@ -9,10 +9,9 @@ using AdysTech.CredentialManager;
 using CodeManagementSample.GitWrapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ICSharpCode.AvalonEdit.Document;
 using LibGit2Sharp;
-using Microsoft.CodeAnalysis;
 using Serilog;
-using TextDocument = ICSharpCode.AvalonEdit.Document.TextDocument;
 
 namespace CodeManagementSample;
 
@@ -22,9 +21,9 @@ internal class VersioningVm : ObservableObject
     private readonly GitProcessWrapper gitProcessWrapper;
     private readonly VersioningModel model;
     private string? commitMessage;
+    private bool isExternalGitAuthenticationEnabled;
     private TextDocument previewDocument = null!;
     private CommitModel? selectedItem;
-    private bool isExternalGitAuthenticationEnabled;
 
     public VersioningVm(VersioningModel model)
     {
@@ -180,7 +179,6 @@ internal class VersioningVm : ObservableObject
 
         if (existingCredentials == null)
         {
-
             Log.Logger.Information("Existing credentials not found, prompting user.");
             var save = false;
             return CredentialManager.PromptForCredentials(GithubCredentialAddress, ref save, "Please provide credentials", "Credentials for service");
@@ -203,7 +201,7 @@ internal class VersioningVm : ObservableObject
     private static void Pull(NetworkCredential cred, Repository repo, Signature merger)
     {
         Log.Logger.Information("Pulling via libgit2sharp.");
-        var options = new PullOptions()
+        var options = new PullOptions
         {
             FetchOptions = new FetchOptions
             {
@@ -248,3 +246,4 @@ internal class VersioningVm : ObservableObject
         return null;
     }
 }
+

@@ -21,7 +21,7 @@ public partial class MainWindow : Window
         ViewModels.Add(new NewlineVm());
         ViewModels.Add(new ImageVm());
         DataContext = this;
-        
+
         //var image = new BitmapImage(
         //    new Uri("pack://application:,,,/Resources/ic_menu_save.png"));
 
@@ -34,3 +34,4 @@ public partial class MainWindow : Window
 
     public IList<ISampleContent> ViewModels { get; } = new List<ISampleContent>();
 }
+

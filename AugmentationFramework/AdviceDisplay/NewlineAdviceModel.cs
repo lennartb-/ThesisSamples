@@ -14,3 +14,4 @@ public class NewlineAdviceModel : IAdviceModel
     public string InsecureAdvice => "Continuing with newline characters in a string has likely not the desired effects in the resulting application.";
     public string InsecureSample => "\"This is a newline \\n in a string.\"\n";
 }
+

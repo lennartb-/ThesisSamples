@@ -7,17 +7,17 @@ namespace AugmentationFramework.Augmentations;
 
 public class Augmentation
 {
-    public TextArea TextArea { get; }
-    public IList<IBackgroundRenderer> Renderers { get; } = new List<IBackgroundRenderer>();
-
-    public IList<IVisualLineTransformer> Transformers { get; } = new List<IVisualLineTransformer>();
-    public IList<AbstractMargin> LeftMargins { get; } = new List<AbstractMargin>();
-
     public Augmentation(TextArea textArea)
     {
         TextArea = textArea;
         TextView = textArea.TextView;
     }
+
+    public TextArea TextArea { get; }
+    public IList<IBackgroundRenderer> Renderers { get; } = new List<IBackgroundRenderer>();
+
+    public IList<IVisualLineTransformer> Transformers { get; } = new List<IVisualLineTransformer>();
+    public IList<AbstractMargin> LeftMargins { get; } = new List<AbstractMargin>();
 
     public IList<VisualLineElementGenerator> Generators { get; } = new List<VisualLineElementGenerator>();
 
@@ -27,7 +27,7 @@ public class Augmentation
     public string? TextMatch { get; set; }
     public IEnumerable<string>? TextMatches { get; set; }
     public Func<IEnumerable<string>>? TextMatchesFunc { get; set; }
-    public Func<Match,bool>? MatchingDelegate { get; set; }
+    public Func<Match, bool>? MatchingDelegate { get; set; }
 
     public TextView TextView { get; }
 
@@ -97,3 +97,4 @@ public class Augmentation
         LeftMargins.Add(leftMargin);
     }
 }
+

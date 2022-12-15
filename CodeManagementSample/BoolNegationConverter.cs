@@ -21,3 +21,4 @@ public class BoolNegationConverter : IValueConverter
         throw new NotImplementedException();
     }
 }
+

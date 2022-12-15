@@ -21,14 +21,15 @@ public static class FieldAugmentation
     {
         return new List<(string, string)>
         {
-            ( "T1000.F1000", "Order ID" ),
-            ( "T1000.F1001", "Products" ),
-            ( "T1000.F1002", "Amount" ),
-            ( "T2000.F2000", "Product ID" ),
-            ( "T2000.F2001", "Categories" ),
-            ( "T2000.F2002", "Name" ),
-            ( "T3000.F3000", "Category ID" ),
-            ( "T3000.F3001", "Name" )
+            ("T1000.F1000", "Order ID"),
+            ("T1000.F1001", "Products"),
+            ("T1000.F1002", "Amount"),
+            ("T2000.F2000", "Product ID"),
+            ("T2000.F2001", "Categories"),
+            ("T2000.F2002", "Name"),
+            ("T3000.F3000", "Category ID"),
+            ("T3000.F3001", "Name")
         };
     }
 }
+

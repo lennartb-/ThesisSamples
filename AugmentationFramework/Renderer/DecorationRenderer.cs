@@ -4,20 +4,13 @@ using AugmentationFramework.Augmentations;
 using AugmentationFramework.Renderer.Premade;
 using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
-using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
-using Pen = System.Windows.Media.Pen;
 
 namespace AugmentationFramework.Renderer;
 
 public class DecorationRenderer : IBackgroundRenderer
 {
     private readonly Augmentation parent;
-    public Brush DecorationColor { get; set; } = Brushes.Transparent;
-    public ImageSource? Image { get; set; }
-    public bool OnRight { get; set; }
     private readonly RoiFinder roiFinder;
-    public Func<Rect, Geometry> GeometryDelegate { get; set; } = UnderlineBracket.Geometry;
 
     public DecorationRenderer(Augmentation parent)
     {
@@ -25,10 +18,15 @@ public class DecorationRenderer : IBackgroundRenderer
         roiFinder = new RoiFinder(parent);
     }
 
+    public Brush DecorationColor { get; set; } = Brushes.Transparent;
+    public ImageSource? Image { get; set; }
+    public bool OnRight { get; set; }
+    public Func<Rect, Geometry> GeometryDelegate { get; set; } = UnderlineBracket.Geometry;
+
     public void Draw(TextView textView, DrawingContext drawingContext)
     {
         var area = roiFinder.DetermineRangesOfInterest(textView.Document.Text);
-        
+
         foreach (var (startOffset, endOffset) in area)
         {
             var textSegment = new TextSegment { StartOffset = startOffset, EndOffset = endOffset };
@@ -46,9 +44,11 @@ public class DecorationRenderer : IBackgroundRenderer
         }
     }
 
+    public KnownLayer Layer => KnownLayer.Selection;
+
     private void DrawImage(DrawingContext drawingContext, int startOffset, int endOffset)
     {
-        if (Image == null || (!OnRight))
+        if ((Image == null) || !OnRight)
         {
             return;
         }
@@ -60,6 +60,7 @@ public class DecorationRenderer : IBackgroundRenderer
         {
             return;
         }
+
         var rect = rects.First();
 
         var scale = Math.Min(rect.Width / Image.Width, rect.Height / Image.Height);
@@ -69,12 +70,9 @@ public class DecorationRenderer : IBackgroundRenderer
 
         if (OnRight)
         {
-            var r = new Rect(rect.X + rect.Width, rect.Y + (rect.Height - scaleHeight) / 2, scaleWidth, scaleHeight);
+            var r = new Rect(rect.X + rect.Width, rect.Y + ((rect.Height - scaleHeight) / 2), scaleWidth, scaleHeight);
             drawingContext.DrawImage(Image, r);
         }
-
     }
-
-    public KnownLayer Layer => KnownLayer.Selection;
-
 }
+

@@ -6,49 +6,55 @@ using ICSharpCode.AvalonEdit.Document;
 using ReactiveUI;
 using RoslynPad.Editor;
 
-namespace AugmentationSampleEditor.ViewModels
+namespace AugmentationSampleEditor.ViewModels;
+
+public class NewlineVm : ISampleContent
 {
-    public class NewlineVm : ISampleContent
+    private const string Text = "\"This is a newline \\n in a string\"\n" +
+                                "\"This is a newline\\nin a string\"\n" +
+                                "This is a newline \\n in a regular line\n" +
+                                "This is a newline\\nin a regular line\n";
+
+    private readonly IList<Augmentation> augmentations = new List<Augmentation>();
+    private bool isEnabled;
+
+    public NewlineVm()
     {
-        private const string Text = "\"This is a newline \\n in a string\"\n" +
-                                    "\"This is a newline\\nin a string\"\n" +
-                                    "This is a newline \\n in a regular line\n" +
-                                    "This is a newline\\nin a regular line\n";
-        private readonly IList<Augmentation> augmentations = new List<Augmentation>();
-        private bool isEnabled;
+        var stringTextSource = new StringTextSource(Text);
+        Document = new TextDocument(stringTextSource);
+        EditorLoadedCommand = ReactiveCommand.Create<CodeTextEditor>(OnLoaded);
+    }
 
-        public NewlineVm()
+    public ReactiveCommand<CodeTextEditor, Unit> EditorLoadedCommand { get; }
+    public TextDocument Document { get; }
+
+    public bool IsEnabled
+    {
+        get => isEnabled;
+        set
         {
-            var stringTextSource = new StringTextSource(Text);
-            Document = new TextDocument(stringTextSource);
-            EditorLoadedCommand = ReactiveCommand.Create<CodeTextEditor>(OnLoaded);
-        }
-
-        public ReactiveCommand<CodeTextEditor, Unit> EditorLoadedCommand { get; }
-        public TextDocument Document { get; }
-
-        public bool IsEnabled
-        {
-            get => isEnabled;
-            set
+            isEnabled = value;
+            if (isEnabled)
             {
-                isEnabled = value;
-                if (isEnabled)
+                foreach (var augmentation in augmentations)
                 {
-                    foreach (var augmentation in augmentations) augmentation.Enable();
+                    augmentation.Enable();
                 }
-                else
+            }
+            else
+            {
+                foreach (var augmentation in augmentations)
                 {
-                    foreach (var augmentation in augmentations) augmentation.Disable();
+                    augmentation.Disable();
                 }
             }
         }
+    }
 
-        public string Title => "Newlines";
+    public string Title => "Newlines";
 
-        private void OnLoaded(CodeTextEditor editor)
-        {
-            augmentations.Add(NewlineAugmentation.GetAugmentation(editor.TextArea));
-        }
+    private void OnLoaded(CodeTextEditor editor)
+    {
+        augmentations.Add(NewlineAugmentation.GetAugmentation(editor.TextArea));
     }
 }

@@ -19,6 +19,8 @@ namespace CodeManagementSample;
 public class CodeVm : INotifyPropertyChanged
 {
     private readonly RoslynHost host;
+
+    private readonly StringBuilder resultBuilder = new();
     private string? consoleOutput;
     private string? result;
 
@@ -27,11 +29,9 @@ public class CodeVm : INotifyPropertyChanged
         this.host = host;
     }
 
-    public string Text { get; set; }
+    public string? Text { get; set; }
 
-    public Script<object> Script { get; private set; }
-
-    private readonly StringBuilder resultBuilder = new();
+    public Script<object>? Script { get; private set; }
 
     public string? Result
     {
@@ -47,7 +47,7 @@ public class CodeVm : INotifyPropertyChanged
 
     public bool HasError { get; private set; }
 
-    private static PrintOptions PrintOptions { get; } = new() { MemberDisplayFormat = MemberDisplayFormat.Hidden, };
+    private static PrintOptions PrintOptions { get; } = new() { MemberDisplayFormat = MemberDisplayFormat.Hidden };
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -105,6 +105,11 @@ public class CodeVm : INotifyPropertyChanged
 
     private async Task Run()
     {
+        if (Script == null)
+        {
+            return;
+        }
+
         try
         {
             var previousConsoleOut = Console.Out;
@@ -152,7 +157,7 @@ public class CodeVm : INotifyPropertyChanged
 
     protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
     {
-        if (EqualityComparer<T>.Default.Equals(field, value) && value != null)
+        if (EqualityComparer<T>.Default.Equals(field, value) && (value != null))
         {
             return false;
         }
@@ -162,3 +167,4 @@ public class CodeVm : INotifyPropertyChanged
         return true;
     }
 }
+

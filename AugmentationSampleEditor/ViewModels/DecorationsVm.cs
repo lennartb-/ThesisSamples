@@ -40,11 +40,17 @@ public class DecorationsVm : ISampleContent
             isEnabled = value;
             if (isEnabled)
             {
-                foreach (var augmentation in augmentations) augmentation.Enable();
+                foreach (var augmentation in augmentations)
+                {
+                    augmentation.Enable();
+                }
             }
             else
             {
-                foreach (var augmentation in augmentations) augmentation.Disable();
+                foreach (var augmentation in augmentations)
+                {
+                    augmentation.Disable();
+                }
             }
         }
     }
@@ -67,12 +73,12 @@ public class DecorationsVm : ISampleContent
         //plugins.Add(underlineAugmentation);
 
         var tooltipAugmentation = new Augmentation(editor.TextArea)
-        .WithTooltip(() => new Calendar())
-        .WithOverlay(
-            () => new Button
-            { Content = "Hallo" })
-        .WithBackground(Brushes.LightGreen)
-        .ForText(new Regex(@"\besse\b"));
+            .WithTooltip(() => new Calendar())
+            .WithOverlay(
+                () => new Button { Content = "Hallo" })
+            .WithBackground(Brushes.LightGreen)
+            .ForText(new Regex(@"\besse\b"));
         augmentations.Add(tooltipAugmentation);
     }
 }
+

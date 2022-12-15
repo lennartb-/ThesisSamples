@@ -6,7 +6,7 @@ namespace AugmentationFramework.AdviceDisplay;
 /// <summary>
 ///     Interaction logic for AdviceView.xaml
 /// </summary>
-public partial class AdviceView 
+public partial class AdviceView
 {
     public AdviceView()
     {
@@ -19,3 +19,4 @@ public partial class AdviceView
         e.Handled = true;
     }
 }
+

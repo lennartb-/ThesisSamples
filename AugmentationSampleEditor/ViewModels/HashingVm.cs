@@ -34,11 +34,17 @@ public class HashingVm : ISampleContent
             isEnabled = value;
             if (isEnabled)
             {
-                foreach (var augmentation in augmentations) augmentation.Enable();
+                foreach (var augmentation in augmentations)
+                {
+                    augmentation.Enable();
+                }
             }
             else
             {
-                foreach (var augmentation in augmentations) augmentation.Disable();
+                foreach (var augmentation in augmentations)
+                {
+                    augmentation.Disable();
+                }
             }
         }
     }
@@ -55,3 +61,4 @@ public class HashingVm : ISampleContent
         augmentations.Add(underlineAugmentation);
     }
 }
+

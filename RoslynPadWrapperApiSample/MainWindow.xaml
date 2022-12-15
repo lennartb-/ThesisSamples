@@ -2,7 +2,6 @@
     x:Class="RoslynPadWrapperApiSample.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:codeActions="clr-namespace:Microsoft.CodeAnalysis.CodeActions;assembly=Microsoft.CodeAnalysis.Workspaces"
     xmlns:codeFixes="clr-namespace:RoslynPad.Roslyn.CodeFixes;assembly=RoslynPad.Roslyn"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -34,11 +33,13 @@
 
         </DrawingImage>
         <!--  Begin source from RoslynPad Sample code  -->
-        <HierarchicalDataTemplate DataType="{x:Type codeFixes:CodeFixCollection}" ItemsSource="{Binding Fixes, Mode=OneTime}">
+        <HierarchicalDataTemplate DataType="{x:Type codeFixes:CodeFixCollection}"
+                                  ItemsSource="{Binding Fixes, Mode=OneTime}">
             <TextBlock Text="{Binding Provider, Mode=OneTime}" />
         </HierarchicalDataTemplate>
 
-        <HierarchicalDataTemplate DataType="{x:Type codeFixes:CodeFix}" ItemsSource="{Binding Action, Mode=OneTime, Converter={local:CodeActionsConverter}}">
+        <HierarchicalDataTemplate DataType="{x:Type codeFixes:CodeFix}"
+                                  ItemsSource="{Binding Action, Mode=OneTime, Converter={local:CodeActionsConverter}}">
             <ContentPresenter Content="{Binding Action, Mode=OneTime}" />
         </HierarchicalDataTemplate>
 

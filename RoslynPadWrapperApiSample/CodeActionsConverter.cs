@@ -8,15 +8,13 @@ using RoslynPad.Roslyn.CodeActions;
 namespace RoslynPadWrapperApiSample;
 
 /// <summary>
-/// From <see href="https://github.com/roslynpad/roslynpad/blob/73372a15821287161dbaaf4415b81daef44f17eb/src/RoslynPad/Formatting/CodeActionsConverter.cs"/>.
+///     From
+///     <see
+///         href="https://github.com/roslynpad/roslynpad/blob/73372a15821287161dbaaf4415b81daef44f17eb/src/RoslynPad/Formatting/CodeActionsConverter.cs" />
+///     .
 /// </summary>
 internal sealed class CodeActionsConverter : MarkupExtension, IValueConverter
 {
-    public override object ProvideValue(IServiceProvider serviceProvider)
-    {
-        return this;
-    }
-
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         return ((CodeAction)value).GetCodeActions();
@@ -26,4 +24,10 @@ internal sealed class CodeActionsConverter : MarkupExtension, IValueConverter
     {
         throw new NotSupportedException();
     }
+
+    public override object ProvideValue(IServiceProvider serviceProvider)
+    {
+        return this;
+    }
 }
+

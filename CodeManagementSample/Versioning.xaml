@@ -115,7 +115,8 @@
             VerticalAlignment="Center"
             ExpandDirection="Right"
             Header="Advanced Options">
-            <CheckBox Content="Use built-in Git authentication" IsChecked="{Binding IsExternalGitAuthenticationEnabled}" />
+            <CheckBox Content="Use built-in Git authentication"
+                      IsChecked="{Binding IsExternalGitAuthenticationEnabled}" />
         </Expander>
     </Grid>
 </Window>

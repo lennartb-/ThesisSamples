@@ -21,3 +21,4 @@ public class SampleAdviceModel : IAdviceModel
 
     public string InsecureSample => "public static void Main (string[] args){}";
 }
+

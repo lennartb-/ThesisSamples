@@ -53,7 +53,7 @@ public class RoiFinder
         }
     }
 
-    private static IEnumerable<(int startOffset, int endOffset)> DetermineDelegateMatches(Func<Match,bool> matchingDelegate, Regex regex, string textRegion)
+    private static IEnumerable<(int startOffset, int endOffset)> DetermineDelegateMatches(Func<Match, bool> matchingDelegate, Regex regex, string textRegion)
     {
         var match = FindTextRegexMatch(regex, textRegion);
 
@@ -114,3 +114,4 @@ public class RoiFinder
         return relevantText.IndexOf(text, startIndex, StringComparison.CurrentCulture);
     }
 }
+

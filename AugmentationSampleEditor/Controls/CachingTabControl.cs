@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
 namespace AugmentationSampleEditor.Controls;
+
 /// <summary>
 ///     https://stackoverflow.com/a/9802346/368354
 /// </summary>
@@ -83,6 +84,7 @@ public class CachingTabControl : TabControl
             case NotifyCollectionChangedAction.Replace:
                 break;
         }
+
         UpdateSelectedItem();
     }
 
@@ -109,7 +111,7 @@ public class CachingTabControl : TabControl
         // show the right child
         foreach (ContentPresenter child in itemsHolderPanel.Children)
         {
-            if(child.Tag is TabItem tabItem)
+            if (child.Tag is TabItem tabItem)
             {
                 child.Visibility = tabItem.IsSelected ? Visibility.Visible : Visibility.Collapsed;
             }
@@ -187,3 +189,4 @@ public class CachingTabControl : TabControl
         return item;
     }
 }
+

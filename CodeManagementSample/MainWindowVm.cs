@@ -22,8 +22,8 @@ public class MainWindowVm : ObservableObject
     private string? consoleOutput;
 
     private RoslynHost? host;
-    private bool isCompilationRunning;
     private bool isApplicationExecuting;
+    private bool isCompilationRunning;
 
     public MainWindowVm()
     {
@@ -135,3 +135,4 @@ public class MainWindowVm : ObservableObject
         Code = new CodeVm(host);
     }
 }
+

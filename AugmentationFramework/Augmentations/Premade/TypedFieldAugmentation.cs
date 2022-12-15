@@ -18,19 +18,18 @@ public class TypedFieldAugmentation
             .WithDecoration(UnderlineBracket.Geometry)
             .WithDecorationColor(Brushes.Red)
             .WithAdviceOverlay(new StringEqualityAdviceModel());
-
     }
 
     private static IEnumerable<DemoField> GetFieldMapping()
     {
         return new List<DemoField>
         {
-           new(DataType.Int, "F1000"),
-           new(DataType.Int, "F1001"),
-           new(DataType.String, "F2000"),
-           new(DataType.String, "F2001"),
-           new(DataType.Double, "F3000"),
-           new(DataType.Double, "F3001"),
+            new(DataType.Int, "F1000"),
+            new(DataType.Int, "F1001"),
+            new(DataType.String, "F2000"),
+            new(DataType.String, "F2001"),
+            new(DataType.Double, "F3000"),
+            new(DataType.Double, "F3001")
         };
     }
 
@@ -52,7 +51,7 @@ public class TypedFieldAugmentation
         var leftField = Fields.FirstOrDefault(f => f.Id == left.Value);
         var rightField = Fields.FirstOrDefault(f => f.Id == right.Value);
 
-        return leftField?.DataType == DataType.String && rightField?.DataType == DataType.String;
+        return (leftField?.DataType == DataType.String) && (rightField?.DataType == DataType.String);
     }
 
     private record DemoField(DataType DataType, string Id);
@@ -61,5 +60,5 @@ public class TypedFieldAugmentation
     {
         Int, Double, String
     }
-
 }
+

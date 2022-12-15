@@ -80,7 +80,10 @@ public class MarginDecoration : AbstractMargin
 
     private void DrawImage(DrawingContext drawingContext, int startOffset, int endOffset)
     {
-        if (Image == null) return;
+        if (Image == null)
+        {
+            return;
+        }
 
         var textSegment = new TextSegment { StartOffset = startOffset, EndOffset = endOffset };
 
@@ -101,3 +104,4 @@ public class MarginDecoration : AbstractMargin
         drawingContext.DrawImage(Image, r);
     }
 }
+

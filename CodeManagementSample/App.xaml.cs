@@ -16,3 +16,4 @@ public partial class App : Application
             .CreateLogger();
     }
 }
+

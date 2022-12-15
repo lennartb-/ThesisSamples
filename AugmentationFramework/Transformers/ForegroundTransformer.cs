@@ -1,5 +1,4 @@
-﻿
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using AugmentationFramework.Augmentations;
@@ -13,17 +12,17 @@ public class ForegroundTransformer : DocumentColorizingTransformer
 {
     private readonly RoiFinder roiFinder;
 
+    public ForegroundTransformer(Augmentation parent)
+    {
+        roiFinder = new RoiFinder(parent);
+    }
+
     public Brush? Foreground { get; set; }
     public Brush? Background { get; set; }
     public FontFamily? FontFamily { get; set; }
     public double? FontSize { get; set; }
     public FontWeight? FontWeight { get; set; }
     public FontStyle? FontStyle { get; set; }
-
-    public ForegroundTransformer(Augmentation parent)
-    {
-        roiFinder = new RoiFinder(parent);
-    }
 
     protected override void ColorizeLine(DocumentLine line)
     {
@@ -62,14 +61,17 @@ public class ForegroundTransformer : DocumentColorizingTransformer
                         {
                             tb.FontSize = FontSize.Value;
                         }
+
                         if (FontFamily != null)
                         {
                             tb.FontFamily = FontFamily;
                         }
+
                         if (FontWeight.HasValue)
                         {
                             tb.FontWeight = FontWeight.Value;
                         }
+
                         if (FontStyle.HasValue)
                         {
                             tb.FontStyle = FontStyle.Value;
@@ -93,13 +95,13 @@ public class ForegroundTransformer : DocumentColorizingTransformer
                         }
 
                         var tf = element.TextRunProperties.Typeface;
-                        element.TextRunProperties.SetTypeface(new Typeface(
-                            tf.FontFamily.IfNotNull(FontFamily),
-                            tf.Style.IfNotNull(FontStyle),
-                            tf.Weight.IfNotNull(FontWeight),
-                            tf.Stretch
-                        ));
-
+                        element.TextRunProperties.SetTypeface(
+                            new Typeface(
+                                tf.FontFamily.IfNotNull(FontFamily),
+                                tf.Style.IfNotNull(FontStyle),
+                                tf.Weight.IfNotNull(FontWeight),
+                                tf.Stretch
+                            ));
                     }
                 });
         }

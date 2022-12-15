@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using ICSharpCode.AvalonEdit.Highlighting;
-using Microsoft.CodeAnalysis.Differencing;
+﻿using ICSharpCode.AvalonEdit.Highlighting;
 
 namespace CodeManagementSample;
 
@@ -15,3 +13,4 @@ public partial class Versioning
         Preview.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
     }
 }
+

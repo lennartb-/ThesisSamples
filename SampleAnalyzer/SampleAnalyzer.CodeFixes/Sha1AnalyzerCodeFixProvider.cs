@@ -8,8 +8,6 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Rename;
-using Microsoft.CodeAnalysis.Text;
 
 namespace SampleAnalyzer;
 
@@ -38,9 +36,9 @@ public class Sha1AnalyzerCodeFixProvider : CodeFixProvider
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
             CodeAction.Create(
-                title: CodeFixResources.Sha1CodeFixTitle,
-                createChangedDocument: c => ReplaceNewlineAsync(context.Document, declaration, c),
-                equivalenceKey: nameof(CodeFixResources.Sha1CodeFixTitle)),
+                CodeFixResources.Sha1CodeFixTitle,
+                c => ReplaceNewlineAsync(context.Document, declaration, c),
+                nameof(CodeFixResources.Sha1CodeFixTitle)),
             diagnostic);
     }
 
@@ -58,3 +56,4 @@ public class Sha1AnalyzerCodeFixProvider : CodeFixProvider
         return document.WithSyntaxRoot((await document.GetSyntaxRootAsync(cancellationToken)).ReplaceNode(invokedExpression, updatedExpression));
     }
 }
+

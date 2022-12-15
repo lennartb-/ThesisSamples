@@ -16,7 +16,6 @@ public class GitProcessWrapper
     public void Push()
     {
         RunGitCommand("push");
-
     }
 
     public void Pull()
@@ -55,3 +54,4 @@ public class GitProcessWrapper
         Log.Logger.Information("git returned: {Status}", stringBuilder.ToString());
     }
 }
+

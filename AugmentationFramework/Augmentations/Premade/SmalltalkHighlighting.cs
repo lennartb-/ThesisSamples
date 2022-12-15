@@ -47,3 +47,4 @@ public class SmalltalkHighlighting
         return new[] { keywords, messages, numbersAndStrings, symbols, parameters, comments };
     }
 }
+

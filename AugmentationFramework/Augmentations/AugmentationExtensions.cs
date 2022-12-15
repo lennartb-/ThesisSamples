@@ -8,9 +8,6 @@ using AugmentationFramework.Generators;
 using AugmentationFramework.LeftMargins;
 using AugmentationFramework.Renderer;
 using AugmentationFramework.Transformers;
-using Brush = System.Windows.Media.Brush;
-using FontFamily = System.Windows.Media.FontFamily;
-using FontStyle = System.Windows.FontStyle;
 
 namespace AugmentationFramework.Augmentations;
 
@@ -358,3 +355,4 @@ public static class AugmentationExtensions
         return augmentation;
     }
 }
+

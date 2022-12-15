@@ -3,13 +3,12 @@ using ICSharpCode.AvalonEdit.Document;
 using ReactiveUI;
 using RoslynPad.Editor;
 
-namespace AugmentationSampleEditor.ViewModels
+namespace AugmentationSampleEditor.ViewModels;
+
+public interface ISampleContent
 {
-    public interface ISampleContent
-    {
-        TextDocument Document { get; }
-        bool IsEnabled { get; set; }
-        string Title { get; }
-        ReactiveCommand<CodeTextEditor, Unit> EditorLoadedCommand { get; }
-    }
+    TextDocument Document { get; }
+    bool IsEnabled { get; set; }
+    string Title { get; }
+    ReactiveCommand<CodeTextEditor, Unit> EditorLoadedCommand { get; }
 }

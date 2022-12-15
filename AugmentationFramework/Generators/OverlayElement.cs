@@ -6,13 +6,13 @@ namespace AugmentationFramework.Generators;
 
 public class OverlayElement : VisualLineElement
 {
-    public UIElement Element { get; }
-
     public OverlayElement(int documentLength, UIElement element)
         : base(1, documentLength)
     {
         Element = element;
     }
+
+    public UIElement Element { get; }
 
     public override TextRun CreateTextRun(int startVisualColumn, ITextRunConstructionContext context)
     {
@@ -21,5 +21,5 @@ public class OverlayElement : VisualLineElement
 
         return new InlineObjectRun(1, textRunProperties, Element);
     }
-
 }
+

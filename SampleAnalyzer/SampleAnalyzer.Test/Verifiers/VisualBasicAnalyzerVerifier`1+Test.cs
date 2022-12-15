@@ -9,9 +9,6 @@ namespace SampleAnalyzer.Test
     {
         public class Test : VisualBasicAnalyzerTest<TAnalyzer, MSTestVerifier>
         {
-            public Test()
-            {
-            }
         }
     }
 }
