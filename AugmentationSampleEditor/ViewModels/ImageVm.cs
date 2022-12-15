@@ -59,7 +59,7 @@ public class ImageVm : ISampleContent
             new Uri("pack://application:,,,/Resources/ic_menu_save.png"));
         var imageAugmentation = new Augmentation(editor.TextArea)
             .WithImage(image)
-            .OnRight()
+            .InCodeArea()
             .ForText(TextForRightAugmentation);
         augmentations.Add(imageAugmentation);
 

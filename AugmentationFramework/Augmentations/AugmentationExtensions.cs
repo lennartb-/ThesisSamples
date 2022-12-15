@@ -168,13 +168,13 @@ public static class AugmentationExtensions
         {
             foreach (var existingGenerator in augmentation.Renderers.OfType<DecorationRenderer>())
             {
-                existingGenerator.DecorationColor = decorationColor;
+                existingGenerator.GeometryBrush = decorationColor;
             }
 
             return augmentation;
         }
 
-        var toolTipGenerator = new DecorationRenderer(augmentation) { DecorationColor = decorationColor };
+        var toolTipGenerator = new DecorationRenderer(augmentation) { GeometryBrush = decorationColor };
         augmentation.AddBackgroundRenderer(toolTipGenerator);
 
         return augmentation;
@@ -216,19 +216,19 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation OnRight(this Augmentation augmentation)
+    public static Augmentation InCodeArea(this Augmentation augmentation)
     {
         if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
         {
             foreach (var existingRenderer in augmentation.Renderers.OfType<DecorationRenderer>())
             {
-                existingRenderer.OnRight = true;
+                existingRenderer.DrawInCodeArea = true;
             }
 
             return augmentation;
         }
 
-        var imageRenderer = new DecorationRenderer(augmentation) { OnRight = true };
+        var imageRenderer = new DecorationRenderer(augmentation) { DrawInCodeArea = true };
         augmentation.AddBackgroundRenderer(imageRenderer);
 
         return augmentation;

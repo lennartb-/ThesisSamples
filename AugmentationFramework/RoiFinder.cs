@@ -14,7 +14,7 @@ public class RoiFinder
 
     public IEnumerable<(int startOffset, int endOffset)> DetermineRangesOfInterest(string textRegion)
     {
-        if (parent.MatchingDelegate is { } matchingDelegate && parent.TextMatchRegex is { } matchingRegex)
+        if (parent is { MatchingDelegate: { } matchingDelegate, TextMatchRegex: { } matchingRegex })
         {
             return DetermineDelegateMatches(matchingDelegate, matchingRegex, textRegion);
         }
