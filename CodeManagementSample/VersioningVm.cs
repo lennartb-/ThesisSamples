@@ -22,7 +22,7 @@ internal class VersioningVm : ObservableObject
     private readonly GitProcessWrapper gitProcessWrapper;
     private readonly VersioningModel model;
     private string? commitMessage;
-    private TextDocument previewDocument;
+    private TextDocument previewDocument = null!;
     private CommitModel? selectedItem;
     private bool isExternalGitAuthenticationEnabled;
 
@@ -124,7 +124,7 @@ internal class VersioningVm : ObservableObject
         PushCommand.NotifyCanExecuteChanged();
     }
 
-    private string? DeserializeBlob(Blob blob)
+    private static string? DeserializeBlob(Blob blob)
     {
         var contentStream = blob.GetContentStream();
 

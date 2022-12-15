@@ -15,7 +15,7 @@ public class MainWindowVm : ObservableObject
     private const string Author = "J Doe";
     private const string SampleRepoPath = @"..\..\..\VersioningSampleRepo";
     private static readonly Guid FileGuid = Guid.Parse("9320336C07D54E8FB0E9B132EFCCEFEF");
-    private readonly TextDocument document;
+    private readonly TextDocument document = null!;
 
     private CodeVm? code;
     private string? compilerOutput;
