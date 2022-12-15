@@ -2,19 +2,26 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.4.27" />
     <PackageReference Include="microsoft.xaml.behaviors.wpf" Version="1.1.39" />
-    <PackageReference Include="roslynpad.editor.windows" Version="1.2.0" />
-    <PackageReference Include="roslynpad.roslyn" Version="3.6.0" />
-    <PackageReference Include="roslynpad.roslyn.windows" Version="3.6.0" />
+    <PackageReference Include="roslynpad.editor.windows" Version="4.4.0" />
+    <PackageReference Include="roslynpad.roslyn" Version="4.4.0" />
+    <PackageReference Include="roslynpad.roslyn.windows" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <!--<ProjectReference Include="..\..\roslynpad\src\RoslynPad.Editor.Windows\RoslynPad.Editor.Windows.csproj" />
+    <ProjectReference Include="..\..\roslynpad\src\RoslynPad.Roslyn.Windows\RoslynPad.Roslyn.Windows.csproj" />
+    <ProjectReference Include="..\..\roslynpad\src\RoslynPad.Roslyn\RoslynPad.Roslyn.csproj" />-->
+    <ProjectReference Include="..\SampleAnalyzer\SampleAnalyzer.CodeFixes\SampleAnalyzer.CodeFixes.csproj" />
+    <ProjectReference Include="..\SampleAnalyzer\SampleAnalyzer\SampleAnalyzer.csproj" />
     <ProjectReference Include="..\WrapperApiSample\WrapperApiSample.csproj" />
   </ItemGroup>
 

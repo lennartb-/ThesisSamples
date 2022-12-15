@@ -14,11 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="reactiveui" Version="18.2.5" />
-    <PackageReference Include="reactiveui.wpf" Version="18.2.5" />
-    <PackageReference Include="RoslynPad.Editor.Windows" Version="1.2.0" />
-    <PackageReference Include="RoslynPad.Roslyn" Version="3.6.0" />
-    <PackageReference Include="RoslynPad.Roslyn.Windows" Version="3.6.0" />
+    <PackageReference Include="reactiveui" Version="18.4.1" />
+    <PackageReference Include="reactiveui.wpf" Version="18.4.1" />
+    <PackageReference Include="RoslynPad.Editor.Windows" Version="4.4.0" />
+    <PackageReference Include="RoslynPad.Roslyn" Version="4.4.0" />
+    <PackageReference Include="RoslynPad.Roslyn.Windows" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>
