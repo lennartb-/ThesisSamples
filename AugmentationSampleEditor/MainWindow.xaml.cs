@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using AugmentationSampleEditor.ViewModels;
+using AugmentationFrameworkSampleApp.ViewModels;
 
-namespace AugmentationSampleEditor;
+namespace AugmentationFrameworkSampleApp;
 
 /// <summary>
 ///     Interaction logic for MainWindow.xaml

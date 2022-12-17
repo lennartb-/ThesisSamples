@@ -5,7 +5,7 @@ using System.Windows.Markup;
 using Microsoft.CodeAnalysis.CodeActions;
 using RoslynPad.Roslyn.CodeActions;
 
-namespace RoslynPadWrapperApiSample;
+namespace WrapperApiSampleApp;
 
 /// <summary>
 ///     From

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace AugmentationSampleEditor.Controls;
+namespace AugmentationFrameworkSampleApp.Controls;
 
 /// <summary>
 ///     https://stackoverflow.com/a/9802346/368354

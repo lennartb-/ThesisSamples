@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace AugmentationSampleEditor;
+namespace AugmentationFrameworkSampleApp;
 
 /// <summary>
 ///     Interaction logic for App.xaml

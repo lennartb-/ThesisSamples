@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AugmentationFramework", "Au
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FC592741-86C5-4920-9C4A-88DB54931D81}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AugmentationSampleEditor", "AugmentationSampleEditor\AugmentationSampleEditor.csproj", "{2C3DE69C-DA67-49A6-9768-32B33C94E022}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AugmentationFrameworkSampleApp", "AugmentationSampleEditor\AugmentationFrameworkSampleApp.csproj", "{2C3DE69C-DA67-49A6-9768-32B33C94E022}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrapperApi", "WrapperApiSample\WrapperApi.csproj", "{7E5A6210-238E-470E-BF3F-9709860B70AC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RoslynPadWrapperApiSample", "RoslynPadWrapperApiSample\RoslynPadWrapperApiSample.csproj", "{22385620-C1B0-4D1A-8604-A6D2BA356ACA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WrapperApiSampleApp", "RoslynPadWrapperApiSample\WrapperApiSampleApp.csproj", "{22385620-C1B0-4D1A-8604-A6D2BA356ACA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeManagementSample", "CodeManagementSample\CodeManagementSample.csproj", "{76CCCD2D-8EBE-49A7-9CD7-23E3558EF534}"
 EndProject

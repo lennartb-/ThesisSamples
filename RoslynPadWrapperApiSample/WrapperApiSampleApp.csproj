@@ -17,9 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!--<ProjectReference Include="..\..\roslynpad\src\RoslynPad.Editor.Windows\RoslynPad.Editor.Windows.csproj" />
-    <ProjectReference Include="..\..\roslynpad\src\RoslynPad.Roslyn.Windows\RoslynPad.Roslyn.Windows.csproj" />
-    <ProjectReference Include="..\..\roslynpad\src\RoslynPad.Roslyn\RoslynPad.Roslyn.csproj" />-->
     <ProjectReference Include="..\SampleAnalyzer\SampleAnalyzer.CodeFixes\SampleAnalyzer.CodeFixes.csproj" />
     <ProjectReference Include="..\SampleAnalyzer\SampleAnalyzer\SampleAnalyzer.csproj" />
     <ProjectReference Include="..\WrapperApiSample\WrapperApi.csproj" />

@@ -3,7 +3,7 @@ using ICSharpCode.AvalonEdit.Document;
 using ReactiveUI;
 using RoslynPad.Editor;
 
-namespace AugmentationSampleEditor.ViewModels;
+namespace AugmentationFrameworkSampleApp.ViewModels;
 
 public interface ISampleContent
 {

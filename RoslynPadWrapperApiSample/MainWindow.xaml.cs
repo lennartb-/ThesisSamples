@@ -8,7 +8,7 @@ using RoslynPad.Editor;
 using RoslynPad.Roslyn;
 using WrapperApi;
 
-namespace RoslynPadWrapperApiSample;
+namespace WrapperApiSampleApp;
 
 /// <summary>
 ///     Interaction logic for MainWindow.xaml

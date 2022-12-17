@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace RoslynPadWrapperApiSample;
+namespace WrapperApiSampleApp;
 
 /// <summary>
 ///     Interaction logic for App.xaml
