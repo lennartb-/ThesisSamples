@@ -1,4 +1,4 @@
-﻿namespace WrapperApiSample;
+﻿namespace WrapperApi;
 
 /// <summary>
 ///     Provides helper functions for strings.

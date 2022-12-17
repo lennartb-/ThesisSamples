@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.VisualStudio.Threading;
 using RoslynPad.Editor;
 using RoslynPad.Roslyn;
-using WrapperApiSample;
+using WrapperApi;
 
 namespace RoslynPadWrapperApiSample;
 
@@ -30,7 +30,7 @@ public partial class MainWindow
             new[] { Assembly.Load("RoslynPad.Roslyn.Windows"), Assembly.Load("RoslynPad.Editor.Windows") },
             RoslynHostReferences.NamespaceDefault.With(
                 assemblyReferences: new[] { typeof(object).Assembly, typeof(HashFunctions).Assembly },
-                imports: new[] { "WrapperApiSample" }));
+                imports: new[] { nameof(WrapperApi) }));
 
         var documentId = await editor.InitializeAsync(
             host,

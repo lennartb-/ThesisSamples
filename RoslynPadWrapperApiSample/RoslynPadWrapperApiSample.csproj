@@ -22,7 +22,7 @@
     <ProjectReference Include="..\..\roslynpad\src\RoslynPad.Roslyn\RoslynPad.Roslyn.csproj" />-->
     <ProjectReference Include="..\SampleAnalyzer\SampleAnalyzer.CodeFixes\SampleAnalyzer.CodeFixes.csproj" />
     <ProjectReference Include="..\SampleAnalyzer\SampleAnalyzer\SampleAnalyzer.csproj" />
-    <ProjectReference Include="..\WrapperApiSample\WrapperApiSample.csproj" />
+    <ProjectReference Include="..\WrapperApiSample\WrapperApi.csproj" />
   </ItemGroup>
 
 </Project>

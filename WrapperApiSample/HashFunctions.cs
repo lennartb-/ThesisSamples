@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace WrapperApiSample;
+namespace WrapperApi;
 
 /// <summary>
 ///     Provides sample hashing functions.
