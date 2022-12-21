@@ -15,9 +15,9 @@ public static class AugmentationExtensions
 {
     public static Augmentation WithBackground(this Augmentation augmentation, Brush background)
     {
-        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
         {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
             {
                 existingGenerator.Background = background;
             }
@@ -25,7 +25,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation) { Background = background };
+        var foregroundTransformer = new TextTransformer(augmentation) { Background = background };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
@@ -34,9 +34,9 @@ public static class AugmentationExtensions
 
     public static Augmentation WithForeground(this Augmentation augmentation, Brush foreground)
     {
-        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
         {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
             {
                 existingGenerator.Foreground = foreground;
             }
@@ -44,7 +44,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation) { Foreground = foreground };
+        var foregroundTransformer = new TextTransformer(augmentation) { Foreground = foreground };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
@@ -53,9 +53,9 @@ public static class AugmentationExtensions
 
     public static Augmentation WithFontSize(this Augmentation augmentation, double fontSize)
     {
-        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
         {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
             {
                 existingGenerator.FontSize = fontSize;
             }
@@ -63,7 +63,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation) { FontSize = fontSize };
+        var foregroundTransformer = new TextTransformer(augmentation) { FontSize = fontSize };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
@@ -72,9 +72,9 @@ public static class AugmentationExtensions
 
     public static Augmentation WithFontWeight(this Augmentation augmentation, FontWeight fontWeight)
     {
-        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
         {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
             {
                 existingGenerator.FontWeight = fontWeight;
             }
@@ -82,7 +82,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation) { FontWeight = fontWeight };
+        var foregroundTransformer = new TextTransformer(augmentation) { FontWeight = fontWeight };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
@@ -91,9 +91,9 @@ public static class AugmentationExtensions
 
     public static Augmentation WithFontFamily(this Augmentation augmentation, FontFamily fontFamily)
     {
-        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
         {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
             {
                 existingGenerator.FontFamily = fontFamily;
             }
@@ -101,7 +101,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation) { FontFamily = fontFamily };
+        var foregroundTransformer = new TextTransformer(augmentation) { FontFamily = fontFamily };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
@@ -110,9 +110,9 @@ public static class AugmentationExtensions
 
     public static Augmentation WithFontStyle(this Augmentation augmentation, FontStyle fontStyle)
     {
-        if (augmentation.Transformers.OfType<ForegroundTransformer>().Any())
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
         {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<ForegroundTransformer>())
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
             {
                 existingGenerator.FontStyle = fontStyle;
             }
@@ -120,7 +120,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var foregroundTransformer = new ForegroundTransformer(augmentation) { FontStyle = fontStyle };
+        var foregroundTransformer = new TextTransformer(augmentation) { FontStyle = fontStyle };
 
         augmentation.AddLineTransformer(foregroundTransformer);
 
