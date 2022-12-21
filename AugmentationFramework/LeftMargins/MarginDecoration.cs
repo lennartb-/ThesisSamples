@@ -7,17 +7,27 @@ using ICSharpCode.AvalonEdit.Rendering;
 
 namespace AugmentationFramework.LeftMargins;
 
+/// <summary>
+/// Places images in an additional margin on the left side.
+/// </summary>
 public class MarginDecoration : AbstractMargin
 {
     private readonly Augmentation parent;
     private readonly RoiFinder roiFinder;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MarginDecoration"/> class.
+    /// </summary>
+    /// <param name="parent">The <see cref="Augmentation"/> this instance is based on.</param>
     public MarginDecoration(Augmentation parent)
     {
         this.parent = parent;
         roiFinder = new RoiFinder(parent);
     }
 
+    /// <summary>
+    /// Gets or sets an <see cref="ImageSource"/> to display.
+    /// </summary>
     public ImageSource? Image { get; set; }
 
     /// <inheritdoc />
@@ -28,23 +38,14 @@ public class MarginDecoration : AbstractMargin
             return;
         }
 
-        var textView = TextView;
-        if ((TextView != null) && textView.VisualLinesValid)
+        if (TextView is { VisualLinesValid: true })
         {
-            var area = roiFinder.DetermineRangesOfInterest(textView.Document.Text);
+            var area = roiFinder.DetermineRangesOfInterest(TextView.Document.Text);
 
             foreach (var (startOffset, endOffset) in area)
             {
                 DrawImage(drawingContext, startOffset, endOffset);
             }
-            //var foreground = (Brush)GetValue(Control.ForegroundProperty);
-            //foreach (VisualLine line in textView.VisualLines)
-            //{
-            //    int lineNumber = line.FirstDocumentLine.LineNumber;
-
-            //    double y = line.GetTextLineVisualYPosition(line.TextLines[0], VisualYPosition.TextTop);
-            //    drawingContext.DrawImage(text, new Point(renderSize.Width - text.Width, y - textView.VerticalOffset));
-            //}
         }
     }
 
@@ -55,8 +56,8 @@ public class MarginDecoration : AbstractMargin
         {
             if (TextView is { VisualLinesValid: true })
             {
-                var area = roiFinder.DetermineRangesOfInterest(TextView.Document.Text);
-                var (startOffset, endOffset) = area.First();
+                var ranges = roiFinder.DetermineRangesOfInterest(TextView.Document.Text);
+                var (startOffset, endOffset) = ranges.First();
                 var textSegment = new TextSegment { StartOffset = startOffset, EndOffset = endOffset };
 
                 var rects = BackgroundGeometryBuilder.GetRectsForSegment(parent.TextView, textSegment).ToList();

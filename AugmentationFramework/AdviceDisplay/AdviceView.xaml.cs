@@ -8,12 +8,15 @@ namespace AugmentationFramework.AdviceDisplay;
 /// </summary>
 public partial class AdviceView
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AdviceView"/> class.
+    /// </summary>
     public AdviceView()
     {
         InitializeComponent();
     }
 
-    private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+    private void OnHyperlinkRequestNavigate(object sender, RequestNavigateEventArgs e)
     {
         Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
         e.Handled = true;

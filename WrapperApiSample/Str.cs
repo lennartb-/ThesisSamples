@@ -6,7 +6,7 @@
 public static class Str
 {
     /// <summary>
-    ///     Represents a newline character.
+    ///     Gets the representation of a newline character.
     /// </summary>
     public static string NewLine => Environment.NewLine;
 }

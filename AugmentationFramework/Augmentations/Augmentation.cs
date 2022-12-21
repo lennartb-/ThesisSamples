@@ -11,7 +11,7 @@ namespace AugmentationFramework.Augmentations;
 public class Augmentation
 {
     /// <summary>
-    ///     Creates a new instance of the <see cref="Augmentation" /> class.
+    ///     Initializes a new instance of the <see cref="Augmentation" /> class.
     /// </summary>
     /// <param name="textArea">The <see cref="TextArea" /> this augmentation is rendered on.</param>
     public Augmentation(TextArea textArea)

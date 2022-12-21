@@ -331,7 +331,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var toolTipGenerator = new OverlayGenerator(augmentation, overlay);
+        var toolTipGenerator = new OverlayGenerator(augmentation) { CustomOverlay = overlay };
         augmentation.AddElementGenerator(toolTipGenerator);
 
         return augmentation;
