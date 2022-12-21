@@ -11,8 +11,17 @@ using AugmentationFramework.Transformers;
 
 namespace AugmentationFramework.Augmentations;
 
+/// <summary>
+/// Provides extension methods to build <see cref="Augmentation"/>s.
+/// </summary>
 public static class AugmentationExtensions
 {
+    /// <summary>
+    /// Adds a color background to the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to add the background color to.</param>
+    /// <param name="background">A brush for the background.</param>
+    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
     public static Augmentation WithBackground(this Augmentation augmentation, Brush background)
     {
         if (augmentation.Transformers.OfType<TextTransformer>().Any())
@@ -32,6 +41,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    /// Adds a color foreground to the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to add the foreground color to.</param>
+    /// <param name="foreground">A brush for the foreground.</param>
+    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
     public static Augmentation WithForeground(this Augmentation augmentation, Brush foreground)
     {
         if (augmentation.Transformers.OfType<TextTransformer>().Any())
@@ -51,6 +66,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    /// Sets the font size for the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to apply the font size to.</param>
+    /// <param name="fontSize">The font size in device independent units.</param>
+    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
     public static Augmentation WithFontSize(this Augmentation augmentation, double fontSize)
     {
         if (augmentation.Transformers.OfType<TextTransformer>().Any())
@@ -70,6 +91,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    /// Sets the font weight for the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to apply the font weight to.</param>
+    /// <param name="fontWeight">The font weight.</param>
+    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
     public static Augmentation WithFontWeight(this Augmentation augmentation, FontWeight fontWeight)
     {
         if (augmentation.Transformers.OfType<TextTransformer>().Any())
@@ -89,6 +116,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    /// Sets the font family for the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to apply the font family to.</param>
+    /// <param name="fontFamily">The font family.</param>
+    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
     public static Augmentation WithFontFamily(this Augmentation augmentation, FontFamily fontFamily)
     {
         if (augmentation.Transformers.OfType<TextTransformer>().Any())
@@ -108,6 +141,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    /// Sets the font style for the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to apply the font style to.</param>
+    /// <param name="fontStyle">The font style.</param>
+    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
     public static Augmentation WithFontStyle(this Augmentation augmentation, FontStyle fontStyle)
     {
         if (augmentation.Transformers.OfType<TextTransformer>().Any())
@@ -127,20 +166,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation ForText(this Augmentation augmentation, string text)
-    {
-        augmentation.TextMatch = text;
-
-        return augmentation;
-    }
-
-    public static Augmentation ForText(this Augmentation augmentation, Regex textMatch)
-    {
-        augmentation.TextMatchRegex = textMatch;
-
-        return augmentation;
-    }
-
+    /// <summary>
+    /// Sets the regular expressions the augmentation applies to.
+    /// </summary>
+    /// <param name="augmentation">The augmentation that applies to the matches found by <paramref name="textMatch"/>.</param>
+    /// <param name="textMatch">One or more regular expressions that the augmentation will match to.</param>
+    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
     public static Augmentation ForText(this Augmentation augmentation, params Regex[] textMatch)
     {
         augmentation.TextMatchesRegex = textMatch;
@@ -148,6 +179,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    /// Sets the text the augmentation applies to.
+    /// </summary>
+    /// <param name="augmentation">The augmentation that applies to the text.</param>
+    /// <param name="regexMatcher">A delegate taking a <see cref="Match"/> and returning a value indicating whether the result should apply to the augmentation.</param>
+    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
     public static Augmentation ForDelegate(this Augmentation augmentation, Func<Match, bool> regexMatcher)
     {
         augmentation.MatchingDelegate = regexMatcher;
@@ -155,6 +192,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    /// Sets the text the augmentation applies to.
+    /// </summary>
+    /// <param name="augmentation">The augmentation that applies to the text.</param>
+    /// <param name="textMatches">One or more strings with text.</param>
+    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
     public static Augmentation ForText(this Augmentation augmentation, params string[] textMatches)
     {
         augmentation.TextMatches = textMatches;
@@ -162,6 +205,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    /// Sets the brush of the decoration added with <see cref="WithDecoration"/>.
+    /// </summary>
+    /// <param name="augmentation">The augmentation that applies to the text.</param>
+    /// <param name="decorationColor">A brush for the decoration.</param>
+    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
     public static Augmentation WithDecorationColor(this Augmentation augmentation, Brush decorationColor)
     {
         if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
