@@ -58,6 +58,8 @@ public class TypedFieldAugmentation
 
     private enum DataType
     {
-        Int, Double, String,
+        Int,
+        Double,
+        String,
     }
 }

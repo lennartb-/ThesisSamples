@@ -36,10 +36,13 @@ public class SmalltalkHighlightingVm : ISampleContent
         EditorLoadedCommand = new RelayCommand<CodeTextEditor>(OnLoaded);
     }
 
+    /// <inheritdoc />
     public IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
 
+    /// <inheritdoc />
     public TextDocument Document { get; }
 
+    /// <inheritdoc />
     public bool IsEnabled
     {
         get => isEnabled;
@@ -63,6 +66,7 @@ public class SmalltalkHighlightingVm : ISampleContent
         }
     }
 
+    /// <inheritdoc />
     public string Title => "Smalltalk Syntax Highlighting";
 
     private void OnLoaded(CodeTextEditor editor)

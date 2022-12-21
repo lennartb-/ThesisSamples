@@ -25,10 +25,13 @@ public class FieldComparisonVm : ISampleContent
         EditorLoadedCommand = new RelayCommand<CodeTextEditor>(OnLoaded);
     }
 
+    /// <inheritdoc />
     public IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
 
+    /// <inheritdoc />
     public TextDocument Document { get; }
 
+    /// <inheritdoc />
     public bool IsEnabled
     {
         get => isEnabled;
@@ -52,6 +55,7 @@ public class FieldComparisonVm : ISampleContent
         }
     }
 
+    /// <inheritdoc />
     public string Title => "Field Comparison";
 
     private void OnLoaded(CodeTextEditor editor)

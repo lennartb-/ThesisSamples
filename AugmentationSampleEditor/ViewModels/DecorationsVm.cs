@@ -28,10 +28,13 @@ public class DecorationsVm : ISampleContent
         EditorLoadedCommand = new RelayCommand<CodeTextEditor>(OnLoaded);
     }
 
+    /// <inheritdoc />
     public IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
 
+    /// <inheritdoc />
     public TextDocument Document { get; }
 
+    /// <inheritdoc />
     public bool IsEnabled
     {
         get => isEnabled;
@@ -55,6 +58,7 @@ public class DecorationsVm : ISampleContent
         }
     }
 
+    /// <inheritdoc />
     public string Title => "Decorations Demo";
 
     private void OnLoaded(CodeTextEditor editor)

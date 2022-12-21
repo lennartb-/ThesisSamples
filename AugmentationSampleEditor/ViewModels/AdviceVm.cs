@@ -24,10 +24,13 @@ public class AdviceVm : ISampleContent
         EditorLoadedCommand = new RelayCommand<CodeTextEditor>(OnLoaded);
     }
 
+    /// <inheritdoc />
     public IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
 
+    /// <inheritdoc />
     public TextDocument Document { get; }
 
+    /// <inheritdoc />
     public bool IsEnabled
     {
         get => isEnabled;
@@ -51,6 +54,7 @@ public class AdviceVm : ISampleContent
         }
     }
 
+    /// <inheritdoc />
     public string Title => "Security Advice";
 
     private void OnLoaded(CodeTextEditor editor)

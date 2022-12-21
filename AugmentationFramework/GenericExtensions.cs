@@ -18,7 +18,8 @@ internal static class GenericExtensions
     ///     <paramref name="obj" /> if <paramref name="val" /> is null, <paramref name="obj" /> with the value of
     ///     <paramref name="val" /> otherwise.
     /// </returns>
-    public static T IfNotNull<T>(this T obj, T? val) where T : struct
+    public static T IfNotNull<T>(this T obj, T? val)
+        where T : struct
     {
         if (val.HasValue)
         {
@@ -38,7 +39,8 @@ internal static class GenericExtensions
     ///     <paramref name="obj" /> if <paramref name="val" /> is null, <paramref name="obj" /> with the value of
     ///     <paramref name="val" /> otherwise.
     /// </returns>
-    public static T IfNotNull<T>(this T obj, T? val) where T : class
+    public static T IfNotNull<T>(this T obj, T? val)
+        where T : class
     {
         if (val != null)
         {
@@ -54,7 +56,8 @@ internal static class GenericExtensions
     /// <typeparam name="T">The type of the object to clone.</typeparam>
     /// <param name="obj">The object to clone.</param>
     /// <returns> The cloned object.</returns>
-    public static T Clone<T>(this T obj) where T : class
+    public static T Clone<T>(this T obj)
+        where T : class
     {
         using var ms = new MemoryStream();
         var serializer = new XmlSerializer(obj.GetType());

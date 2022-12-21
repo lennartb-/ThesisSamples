@@ -17,7 +17,7 @@ public static class FieldAugmentation
         }
     }
 
-    private static IEnumerable<(string, string)> GetFieldMapping()
+    private static IEnumerable<(string FieldID, string FieldName)> GetFieldMapping()
     {
         return new List<(string, string)>
         {
