@@ -1,5 +1,5 @@
 ﻿using System.Windows.Controls.Primitives;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.Input;
 
 namespace AugmentationFramework.Generators;
 
@@ -7,10 +7,10 @@ public class ClosablePopup : Popup
 {
     public ClosablePopup()
     {
-        CloseCommand = ReactiveCommand.Create(() => IsOpen = false);
+        CloseCommand = new RelayCommand(() => IsOpen = false);
         StaysOpen = true;
         MouseDown += (s, e) => e.Handled = true;
     }
 
-    public IReactiveCommand CloseCommand { get; }
+    public IRelayCommand CloseCommand { get; }
 }

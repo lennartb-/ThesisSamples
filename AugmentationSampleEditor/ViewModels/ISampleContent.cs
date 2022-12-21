@@ -1,6 +1,6 @@
 ﻿using System.Reactive;
+using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
-using ReactiveUI;
 using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
@@ -13,5 +13,5 @@ public interface ISampleContent
 
     string Title { get; }
 
-    ReactiveCommand<CodeTextEditor, Unit> EditorLoadedCommand { get; }
+    IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
 }

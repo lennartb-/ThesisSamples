@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="reactiveui" Version="18.4.1" />
-    <PackageReference Include="reactiveui.wpf" Version="18.4.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="RoslynPad.Editor.Windows" Version="4.4.0" />
     <PackageReference Include="RoslynPad.Roslyn" Version="4.4.0" />
     <PackageReference Include="RoslynPad.Roslyn.Windows" Version="4.4.0" />

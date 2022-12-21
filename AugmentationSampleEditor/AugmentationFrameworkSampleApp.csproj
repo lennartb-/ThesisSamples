@@ -1,37 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<OutputType>WinExe</OutputType>
-		<TargetFramework>net7.0-windows</TargetFramework>
-		<Nullable>enable</Nullable>
-		<UseWPF>true</UseWPF>
-	</PropertyGroup>
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
 
-	<ItemGroup>
-	  <None Remove="Resources\ic_menu_save.png" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\ic_menu_save.png" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-		<PackageReference Include="RoslynPad.Editor.Windows" Version="4.4.0" />
-		<PackageReference Include="RoslynPad.Roslyn" Version="4.4.0" />
-		<PackageReference Include="RoslynPad.Roslyn.Windows" Version="4.4.0" />
-		<PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.435">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="RoslynPad.Editor.Windows" Version="4.4.0" />
+    <PackageReference Include="RoslynPad.Roslyn" Version="4.4.0" />
+    <PackageReference Include="RoslynPad.Roslyn.Windows" Version="4.4.0" />
+    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.435">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\AugmentationFramework\AugmentationFramework.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AugmentationFramework\AugmentationFramework.csproj" />
+  </ItemGroup>
 
-	<ItemGroup>
-	  <Resource Include="Resources\ic_menu_save.png" />
-	</ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ic_menu_save.png" />
+  </ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Controls\" />
-	</ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\" />
+  </ItemGroup>
 
 </Project>

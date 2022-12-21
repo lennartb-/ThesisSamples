@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Reactive;
 using AugmentationFramework.Augmentations;
 using AugmentationFramework.Augmentations.Premade;
+using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
-using ReactiveUI;
 using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
@@ -18,10 +17,10 @@ public class SynonymDisplayVm : ISampleContent
     {
         var stringTextSource = new StringTextSource(Text);
         Document = new TextDocument(stringTextSource);
-        EditorLoadedCommand = ReactiveCommand.Create<CodeTextEditor>(OnLoaded);
+        EditorLoadedCommand = new RelayCommand<CodeTextEditor>(OnLoaded);
     }
 
-    public ReactiveCommand<CodeTextEditor, Unit> EditorLoadedCommand { get; }
+    public IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
 
     public TextDocument Document { get; }
 
