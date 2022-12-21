@@ -29,7 +29,7 @@ public class TypedFieldAugmentation
             new(DataType.String, "F2000"),
             new(DataType.String, "F2001"),
             new(DataType.Double, "F3000"),
-            new(DataType.Double, "F3001")
+            new(DataType.Double, "F3001"),
         };
     }
 
@@ -60,6 +60,6 @@ public class TypedFieldAugmentation
     {
         Int,
         Double,
-        String
+        String,
     }
 }
