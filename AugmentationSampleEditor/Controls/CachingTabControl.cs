@@ -21,20 +21,6 @@ public class CachingTabControl : TabControl
     }
 
     /// <summary>
-    ///     If containers are done, generate the selected item.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void ItemContainerGenerator_StatusChanged(object? sender, EventArgs e)
-    {
-        if (ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
-        {
-            ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
-            UpdateSelectedItem();
-        }
-    }
-
-    /// <summary>
     ///     Get the ItemsHolder and generate any children.
     /// </summary>
     public override void OnApplyTemplate()
@@ -42,6 +28,22 @@ public class CachingTabControl : TabControl
         base.OnApplyTemplate();
         itemsHolderPanel = GetTemplateChild("PART_ItemsHolder") as Panel;
         UpdateSelectedItem();
+    }
+
+    protected TabItem? GetSelectedTabItem()
+    {
+        var selectedItem = SelectedItem;
+        if (selectedItem == null)
+        {
+            return null;
+        }
+
+        if (selectedItem is not TabItem item)
+        {
+            return ItemContainerGenerator.ContainerFromIndex(SelectedIndex) as TabItem;
+        }
+
+        return item;
     }
 
     /// <summary>
@@ -94,30 +96,6 @@ public class CachingTabControl : TabControl
         UpdateSelectedItem();
     }
 
-    private void UpdateSelectedItem()
-    {
-        if (itemsHolderPanel == null)
-        {
-            return;
-        }
-
-        // Generate a ContentPresenter if necessary
-        var item = GetSelectedTabItem();
-        if (item != null)
-        {
-            CreateChildContentPresenter(item);
-        }
-
-        // show the right child
-        foreach (ContentPresenter child in itemsHolderPanel.Children)
-        {
-            if (child.Tag is TabItem tabItem)
-            {
-                child.Visibility = tabItem.IsSelected ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
-    }
-
     private void CreateChildContentPresenter(object? item)
     {
         if (item == null)
@@ -140,7 +118,7 @@ public class CachingTabControl : TabControl
             ContentTemplateSelector = SelectedContentTemplateSelector,
             ContentStringFormat = SelectedContentStringFormat,
             Visibility = Visibility.Collapsed,
-            Tag = item is TabItem ? item : ItemContainerGenerator.ContainerFromItem(item),
+            Tag = item is TabItem ? item : ItemContainerGenerator.ContainerFromItem(item)
         };
         itemsHolderPanel?.Children.Add(contentPresenter);
     }
@@ -173,19 +151,41 @@ public class CachingTabControl : TabControl
         return null;
     }
 
-    protected TabItem? GetSelectedTabItem()
+    /// <summary>
+    ///     If containers are done, generate the selected item.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ItemContainerGenerator_StatusChanged(object? sender, EventArgs e)
     {
-        var selectedItem = SelectedItem;
-        if (selectedItem == null)
+        if (ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)
         {
-            return null;
+            ItemContainerGenerator.StatusChanged -= ItemContainerGenerator_StatusChanged;
+            UpdateSelectedItem();
+        }
+    }
+
+    private void UpdateSelectedItem()
+    {
+        if (itemsHolderPanel == null)
+        {
+            return;
         }
 
-        if (selectedItem is not TabItem item)
+        // Generate a ContentPresenter if necessary
+        var item = GetSelectedTabItem();
+        if (item != null)
         {
-            return ItemContainerGenerator.ContainerFromIndex(SelectedIndex) as TabItem;
+            CreateChildContentPresenter(item);
         }
 
-        return item;
+        // show the right child
+        foreach (ContentPresenter child in itemsHolderPanel.Children)
+        {
+            if (child.Tag is TabItem tabItem)
+            {
+                child.Visibility = tabItem.IsSelected ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
     }
 }

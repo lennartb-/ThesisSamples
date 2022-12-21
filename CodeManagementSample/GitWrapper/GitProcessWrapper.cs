@@ -13,14 +13,14 @@ public class GitProcessWrapper
         this.workingDirectory = workingDirectory;
     }
 
-    public void Push()
-    {
-        RunGitCommand("push");
-    }
-
     public void Pull()
     {
         RunGitCommand("pull");
+    }
+
+    public void Push()
+    {
+        RunGitCommand("push");
     }
 
     private void RunGitCommand(params string[] args)
@@ -36,7 +36,7 @@ public class GitProcessWrapper
             RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true,
-            WorkingDirectory = workingDirectory,
+            WorkingDirectory = workingDirectory
         };
         process.StartInfo = processStartInfo;
 

@@ -21,19 +21,9 @@ public class Augmentation
     }
 
     /// <summary>
-    ///     Gets the <see cref="TextArea" /> this augmentation is rendered on.
+    ///     Gets a list of the <see cref="VisualLineElementGenerator" />s of this augmentation.
     /// </summary>
-    private TextArea TextArea { get; }
-
-    /// <summary>
-    ///     Gets a list of the <see cref="IBackgroundRenderer" />s of this augmentation.
-    /// </summary>
-    public IList<IBackgroundRenderer> Renderers { get; } = new List<IBackgroundRenderer>();
-
-    /// <summary>
-    ///     Gets a list of the <see cref="IVisualLineTransformer" />s of this augmentation.
-    /// </summary>
-    public IList<IVisualLineTransformer> Transformers { get; } = new List<IVisualLineTransformer>();
+    public IList<VisualLineElementGenerator> Generators { get; } = new List<VisualLineElementGenerator>();
 
     /// <summary>
     ///     Gets a list of the <see cref="AbstractMargin" />s of this augmentation.
@@ -41,19 +31,15 @@ public class Augmentation
     public IList<AbstractMargin> LeftMargins { get; } = new List<AbstractMargin>();
 
     /// <summary>
-    ///     Gets a list of the <see cref="VisualLineElementGenerator" />s of this augmentation.
+    ///     Gets or sets a delegate that takes a regex <see cref="Match" /> and returns a value whether this augmentation
+    ///     should be applied.
     /// </summary>
-    public IList<VisualLineElementGenerator> Generators { get; } = new List<VisualLineElementGenerator>();
+    public Func<Match, bool>? MatchingDelegate { get; set; }
 
     /// <summary>
-    ///     Gets or sets the <see cref="Regex" /> this augmentation matches.
+    ///     Gets a list of the <see cref="IBackgroundRenderer" />s of this augmentation.
     /// </summary>
-    public Regex? TextMatchRegex { get; set; }
-
-    /// <summary>
-    ///     Gets or sets a list of <see cref="Regex" />es this augmentation matches.
-    /// </summary>
-    public IEnumerable<Regex>? TextMatchesRegex { get; set; }
+    public IList<IBackgroundRenderer> Renderers { get; } = new List<IBackgroundRenderer>();
 
     /// <summary>
     ///     Gets or sets a string this augmentation matches.
@@ -66,19 +52,54 @@ public class Augmentation
     public IEnumerable<string>? TextMatches { get; set; }
 
     /// <summary>
-    ///     Gets or sets a delegate that takes a regex <see cref="Match" /> and returns a value whether this augmentation
-    ///     should be applied.
+    ///     Gets or sets a list of <see cref="Regex" />es this augmentation matches.
     /// </summary>
-    public Func<Match, bool>? MatchingDelegate { get; set; }
+    public IEnumerable<Regex>? TextMatchesRegex { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the <see cref="Regex" /> this augmentation matches.
+    /// </summary>
+    public Regex? TextMatchRegex { get; set; }
 
     /// <summary>
     ///     Gets the <see cref="TextView" /> this augmentation is rendered on.
     /// </summary>
     public TextView TextView { get; }
 
-    internal void AddLineTransformer(IVisualLineTransformer transformer)
+    /// <summary>
+    ///     Gets a list of the <see cref="IVisualLineTransformer" />s of this augmentation.
+    /// </summary>
+    public IList<IVisualLineTransformer> Transformers { get; } = new List<IVisualLineTransformer>();
+
+    /// <summary>
+    ///     Gets the <see cref="TextArea" /> this augmentation is rendered on.
+    /// </summary>
+    private TextArea TextArea { get; }
+
+    /// <summary>
+    ///     Disables the effects of this augmentation.
+    /// </summary>
+    public void Disable()
     {
-        Transformers.Add(transformer);
+        foreach (var visualLineTransformer in Transformers)
+        {
+            TextView.LineTransformers.Remove(visualLineTransformer);
+        }
+
+        foreach (var renderer in Renderers)
+        {
+            TextView.BackgroundRenderers.Remove(renderer);
+        }
+
+        foreach (var generator in Generators)
+        {
+            TextView.ElementGenerators.Remove(generator);
+        }
+
+        foreach (var leftMargin in LeftMargins)
+        {
+            TextArea.LeftMargins.Remove(leftMargin);
+        }
     }
 
     /// <summary>
@@ -107,32 +128,6 @@ public class Augmentation
         }
     }
 
-    /// <summary>
-    ///     Disables the effects of this augmentation.
-    /// </summary>
-    public void Disable()
-    {
-        foreach (var visualLineTransformer in Transformers)
-        {
-            TextView.LineTransformers.Remove(visualLineTransformer);
-        }
-
-        foreach (var renderer in Renderers)
-        {
-            TextView.BackgroundRenderers.Remove(renderer);
-        }
-
-        foreach (var generator in Generators)
-        {
-            TextView.ElementGenerators.Remove(generator);
-        }
-
-        foreach (var leftMargin in LeftMargins)
-        {
-            TextArea.LeftMargins.Remove(leftMargin);
-        }
-    }
-
     internal void AddBackgroundRenderer(DecorationRenderer renderer)
     {
         Renderers.Add(renderer);
@@ -146,5 +141,10 @@ public class Augmentation
     internal void AddLeftMargin(AbstractMargin leftMargin)
     {
         LeftMargins.Add(leftMargin);
+    }
+
+    internal void AddLineTransformer(IVisualLineTransformer transformer)
+    {
+        Transformers.Add(transformer);
     }
 }

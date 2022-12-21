@@ -29,15 +29,7 @@ public class CodeVm : INotifyPropertyChanged
         this.host = host;
     }
 
-    public string? Text { get; set; }
-
-    public Script<object>? Script { get; private set; }
-
-    public string? Result
-    {
-        get => result;
-        private set => SetProperty(ref result, value);
-    }
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     public string? ConsoleOutput
     {
@@ -47,21 +39,17 @@ public class CodeVm : INotifyPropertyChanged
 
     public bool HasError { get; private set; }
 
-    private static PrintOptions PrintOptions { get; } = new() { MemberDisplayFormat = MemberDisplayFormat.Hidden };
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    public async Task<bool> TryRunScript()
+    public string? Result
     {
-        if (!Compile())
-        {
-            return false;
-        }
-
-        await Run();
-
-        return true;
+        get => result;
+        private set => SetProperty(ref result, value);
     }
+
+    public Script<object>? Script { get; private set; }
+
+    public string? Text { get; set; }
+
+    private static PrintOptions PrintOptions { get; } = new() { MemberDisplayFormat = MemberDisplayFormat.Hidden };
 
     public bool Compile()
     {
@@ -90,6 +78,35 @@ public class CodeVm : INotifyPropertyChanged
         }
 
         Result = resultBuilder.ToString();
+        return true;
+    }
+
+    public async Task<bool> TryRunScript()
+    {
+        if (!Compile())
+        {
+            return false;
+        }
+
+        await Run();
+
+        return true;
+    }
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value) && (value != null))
+        {
+            return false;
+        }
+
+        field = value;
+        OnPropertyChanged(propertyName);
         return true;
     }
 
@@ -148,22 +165,5 @@ public class CodeVm : INotifyPropertyChanged
         {
             Result = resultBuilder.ToString();
         }
-    }
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value) && (value != null))
-        {
-            return false;
-        }
-
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
     }
 }

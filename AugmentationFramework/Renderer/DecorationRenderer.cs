@@ -16,9 +16,9 @@ public class DecorationRenderer : IBackgroundRenderer
     private readonly RoiFinder roiFinder;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="DecorationRenderer"/> class.
+    ///     Initializes a new instance of the <see cref="DecorationRenderer" /> class.
     /// </summary>
-    /// <param name="augmentation">The <see cref="Augmentation"/> this instance is based on.</param>
+    /// <param name="augmentation">The <see cref="Augmentation" /> this instance is based on.</param>
     public DecorationRenderer(Augmentation augmentation)
     {
         this.augmentation = augmentation;
@@ -26,25 +26,25 @@ public class DecorationRenderer : IBackgroundRenderer
     }
 
     /// <summary>
-    ///     Gets or sets the <see cref="Brush" /> used to draw <see cref="GeometryDelegate" />.
-    /// </summary>
-    public Brush GeometryBrush { get; set; } = Brushes.Transparent;
-
-    /// <summary>
-    ///     Gets or sets an <see cref="ImageSource" /> that is rendered.
-    /// </summary>
-    public ImageSource? Image { get; set; }
-
-    /// <summary>
     ///     Gets or sets a value indicating whether <see cref="Image" /> is drawn or not.
     /// </summary>
     public bool DrawInCodeArea { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the <see cref="Brush" /> used to draw <see cref="GeometryDelegate" />.
+    /// </summary>
+    public Brush GeometryBrush { get; set; } = Brushes.Transparent;
 
     /// <summary>
     ///     Gets or sets a delegate that takes a <see cref="Rect" /> as input and returns a <see cref="Geometry" /> based on
     ///     it.
     /// </summary>
     public Func<Rect, Geometry> GeometryDelegate { get; set; } = UnderlineBracket.Geometry;
+
+    /// <summary>
+    ///     Gets or sets an <see cref="ImageSource" /> that is rendered.
+    /// </summary>
+    public ImageSource? Image { get; set; }
 
     /// <inheritdoc />
     public void Draw(TextView textView, DrawingContext drawingContext)

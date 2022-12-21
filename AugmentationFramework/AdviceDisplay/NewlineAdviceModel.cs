@@ -1,7 +1,7 @@
 ﻿namespace AugmentationFramework.AdviceDisplay;
 
 /// <summary>
-/// Provides a <see cref="IAdviceModel"/> implementation to warn about wrong usage of newline characters.
+///     Provides a <see cref="IAdviceModel" /> implementation to warn about wrong usage of newline characters.
 /// </summary>
 public class NewlineAdviceModel : IAdviceModel
 {

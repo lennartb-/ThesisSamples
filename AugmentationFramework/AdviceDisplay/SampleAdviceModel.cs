@@ -1,7 +1,7 @@
 ﻿namespace AugmentationFramework.AdviceDisplay;
 
 /// <summary>
-/// Provides a sample implementation of <see cref="IAdviceModel"/>.
+///     Provides a sample implementation of <see cref="IAdviceModel" />.
 /// </summary>
 public class SampleAdviceModel : IAdviceModel
 {

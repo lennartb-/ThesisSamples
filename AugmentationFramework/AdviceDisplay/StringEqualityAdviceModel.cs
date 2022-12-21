@@ -1,7 +1,7 @@
 ﻿namespace AugmentationFramework.AdviceDisplay;
 
 /// <summary>
-/// Provides an advice for incorrect string comparisons.
+///     Provides an advice for incorrect string comparisons.
 /// </summary>
 public class StringEqualityAdviceModel : IAdviceModel
 {

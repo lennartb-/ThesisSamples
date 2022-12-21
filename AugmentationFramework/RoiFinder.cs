@@ -42,17 +42,6 @@ public class RoiFinder
         return Enumerable.Empty<(int, int)>();
     }
 
-    private static IEnumerable<(int StartOffset, int EndOffset)> DetermineTextMatches(string searchText, string textRegion)
-    {
-        var offsetAtMatch = FindTextMatch(searchText, 0, textRegion);
-        while (offsetAtMatch >= 0)
-        {
-            var matchLength = offsetAtMatch + searchText.Length;
-            yield return (offsetAtMatch, matchLength);
-            offsetAtMatch = FindTextMatch(searchText, matchLength, textRegion);
-        }
-    }
-
     private static IEnumerable<(int StartOffset, int EndOffset)> DetermineDelegateMatches(Func<Match, bool> matchingDelegate, Regex regex, string textRegion)
     {
         var match = FindTextRegexMatch(regex, textRegion);
@@ -67,17 +56,6 @@ public class RoiFinder
 
             match = match.NextMatch();
         }
-    }
-
-    private static IEnumerable<(int StartOffset, int EndOffset)> DetermineTextMatches(IEnumerable<string> searchTexts, string textRegion)
-    {
-        var offsets = new List<(int StartOffset, int EndOffset)>();
-        foreach (var searchText in searchTexts)
-        {
-            offsets.AddRange(DetermineTextMatches(searchText, textRegion));
-        }
-
-        return offsets;
     }
 
     private static IEnumerable<(int StartOffset, int EndOffset)> DetermineRegexTextMatches(IEnumerable<Regex> regexes, string textRegion)
@@ -104,13 +82,35 @@ public class RoiFinder
         }
     }
 
-    private static Match FindTextRegexMatch(Regex regex, string relevantText)
+    private static IEnumerable<(int StartOffset, int EndOffset)> DetermineTextMatches(string searchText, string textRegion)
     {
-        return regex.Match(relevantText);
+        var offsetAtMatch = FindTextMatch(searchText, 0, textRegion);
+        while (offsetAtMatch >= 0)
+        {
+            var matchLength = offsetAtMatch + searchText.Length;
+            yield return (offsetAtMatch, matchLength);
+            offsetAtMatch = FindTextMatch(searchText, matchLength, textRegion);
+        }
+    }
+
+    private static IEnumerable<(int StartOffset, int EndOffset)> DetermineTextMatches(IEnumerable<string> searchTexts, string textRegion)
+    {
+        var offsets = new List<(int StartOffset, int EndOffset)>();
+        foreach (var searchText in searchTexts)
+        {
+            offsets.AddRange(DetermineTextMatches(searchText, textRegion));
+        }
+
+        return offsets;
     }
 
     private static int FindTextMatch(string text, int startIndex, string relevantText)
     {
         return relevantText.IndexOf(text, startIndex, StringComparison.CurrentCulture);
+    }
+
+    private static Match FindTextRegexMatch(Regex regex, string relevantText)
+    {
+        return regex.Match(relevantText);
     }
 }

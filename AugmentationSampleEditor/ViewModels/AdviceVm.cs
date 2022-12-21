@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Reactive;
 using System.Text.RegularExpressions;
 using System.Windows.Media;
 using AugmentationFramework.AdviceDisplay;

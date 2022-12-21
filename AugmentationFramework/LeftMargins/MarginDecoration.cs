@@ -8,7 +8,7 @@ using ICSharpCode.AvalonEdit.Rendering;
 namespace AugmentationFramework.LeftMargins;
 
 /// <summary>
-/// Places images in an additional margin on the left side.
+///     Places images in an additional margin on the left side.
 /// </summary>
 public class MarginDecoration : AbstractMargin
 {
@@ -16,9 +16,9 @@ public class MarginDecoration : AbstractMargin
     private readonly RoiFinder roiFinder;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MarginDecoration"/> class.
+    ///     Initializes a new instance of the <see cref="MarginDecoration" /> class.
     /// </summary>
-    /// <param name="parent">The <see cref="Augmentation"/> this instance is based on.</param>
+    /// <param name="parent">The <see cref="Augmentation" /> this instance is based on.</param>
     public MarginDecoration(Augmentation parent)
     {
         this.parent = parent;
@@ -26,28 +26,9 @@ public class MarginDecoration : AbstractMargin
     }
 
     /// <summary>
-    /// Gets or sets an <see cref="ImageSource"/> to display.
+    ///     Gets or sets an <see cref="ImageSource" /> to display.
     /// </summary>
     public ImageSource? Image { get; set; }
-
-    /// <inheritdoc />
-    protected override void OnRender(DrawingContext drawingContext)
-    {
-        if (Image == null)
-        {
-            return;
-        }
-
-        if (TextView is { VisualLinesValid: true })
-        {
-            var area = roiFinder.DetermineRangesOfInterest(TextView.Document.Text);
-
-            foreach (var (startOffset, endOffset) in area)
-            {
-                DrawImage(drawingContext, startOffset, endOffset);
-            }
-        }
-    }
 
     /// <inheritdoc />
     protected override Size MeasureOverride(Size availableSize)
@@ -77,6 +58,25 @@ public class MarginDecoration : AbstractMargin
         }
 
         return availableSize;
+    }
+
+    /// <inheritdoc />
+    protected override void OnRender(DrawingContext drawingContext)
+    {
+        if (Image == null)
+        {
+            return;
+        }
+
+        if (TextView is { VisualLinesValid: true })
+        {
+            var area = roiFinder.DetermineRangesOfInterest(TextView.Document.Text);
+
+            foreach (var (startOffset, endOffset) in area)
+            {
+                DrawImage(drawingContext, startOffset, endOffset);
+            }
+        }
     }
 
     private void DrawImage(DrawingContext drawingContext, int startOffset, int endOffset)

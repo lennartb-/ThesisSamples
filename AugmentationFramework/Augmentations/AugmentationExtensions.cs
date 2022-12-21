@@ -12,179 +12,19 @@ using AugmentationFramework.Transformers;
 namespace AugmentationFramework.Augmentations;
 
 /// <summary>
-/// Provides extension methods to build <see cref="Augmentation"/>s.
+///     Provides extension methods to build <see cref="Augmentation" />s.
 /// </summary>
 public static class AugmentationExtensions
 {
     /// <summary>
-    /// Adds a color background to the augmentation.
-    /// </summary>
-    /// <param name="augmentation">The augmentation to add the background color to.</param>
-    /// <param name="background">A brush for the background.</param>
-    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
-    public static Augmentation WithBackground(this Augmentation augmentation, Brush background)
-    {
-        if (augmentation.Transformers.OfType<TextTransformer>().Any())
-        {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
-            {
-                existingGenerator.Background = background;
-            }
-
-            return augmentation;
-        }
-
-        var foregroundTransformer = new TextTransformer(augmentation) { Background = background };
-
-        augmentation.AddLineTransformer(foregroundTransformer);
-
-        return augmentation;
-    }
-
-    /// <summary>
-    /// Adds a color foreground to the augmentation.
-    /// </summary>
-    /// <param name="augmentation">The augmentation to add the foreground color to.</param>
-    /// <param name="foreground">A brush for the foreground.</param>
-    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
-    public static Augmentation WithForeground(this Augmentation augmentation, Brush foreground)
-    {
-        if (augmentation.Transformers.OfType<TextTransformer>().Any())
-        {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
-            {
-                existingGenerator.Foreground = foreground;
-            }
-
-            return augmentation;
-        }
-
-        var foregroundTransformer = new TextTransformer(augmentation) { Foreground = foreground };
-
-        augmentation.AddLineTransformer(foregroundTransformer);
-
-        return augmentation;
-    }
-
-    /// <summary>
-    /// Sets the font size for the augmentation.
-    /// </summary>
-    /// <param name="augmentation">The augmentation to apply the font size to.</param>
-    /// <param name="fontSize">The font size in device independent units.</param>
-    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
-    public static Augmentation WithFontSize(this Augmentation augmentation, double fontSize)
-    {
-        if (augmentation.Transformers.OfType<TextTransformer>().Any())
-        {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
-            {
-                existingGenerator.FontSize = fontSize;
-            }
-
-            return augmentation;
-        }
-
-        var foregroundTransformer = new TextTransformer(augmentation) { FontSize = fontSize };
-
-        augmentation.AddLineTransformer(foregroundTransformer);
-
-        return augmentation;
-    }
-
-    /// <summary>
-    /// Sets the font weight for the augmentation.
-    /// </summary>
-    /// <param name="augmentation">The augmentation to apply the font weight to.</param>
-    /// <param name="fontWeight">The font weight.</param>
-    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
-    public static Augmentation WithFontWeight(this Augmentation augmentation, FontWeight fontWeight)
-    {
-        if (augmentation.Transformers.OfType<TextTransformer>().Any())
-        {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
-            {
-                existingGenerator.FontWeight = fontWeight;
-            }
-
-            return augmentation;
-        }
-
-        var foregroundTransformer = new TextTransformer(augmentation) { FontWeight = fontWeight };
-
-        augmentation.AddLineTransformer(foregroundTransformer);
-
-        return augmentation;
-    }
-
-    /// <summary>
-    /// Sets the font family for the augmentation.
-    /// </summary>
-    /// <param name="augmentation">The augmentation to apply the font family to.</param>
-    /// <param name="fontFamily">The font family.</param>
-    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
-    public static Augmentation WithFontFamily(this Augmentation augmentation, FontFamily fontFamily)
-    {
-        if (augmentation.Transformers.OfType<TextTransformer>().Any())
-        {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
-            {
-                existingGenerator.FontFamily = fontFamily;
-            }
-
-            return augmentation;
-        }
-
-        var foregroundTransformer = new TextTransformer(augmentation) { FontFamily = fontFamily };
-
-        augmentation.AddLineTransformer(foregroundTransformer);
-
-        return augmentation;
-    }
-
-    /// <summary>
-    /// Sets the font style for the augmentation.
-    /// </summary>
-    /// <param name="augmentation">The augmentation to apply the font style to.</param>
-    /// <param name="fontStyle">The font style.</param>
-    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
-    public static Augmentation WithFontStyle(this Augmentation augmentation, FontStyle fontStyle)
-    {
-        if (augmentation.Transformers.OfType<TextTransformer>().Any())
-        {
-            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
-            {
-                existingGenerator.FontStyle = fontStyle;
-            }
-
-            return augmentation;
-        }
-
-        var foregroundTransformer = new TextTransformer(augmentation) { FontStyle = fontStyle };
-
-        augmentation.AddLineTransformer(foregroundTransformer);
-
-        return augmentation;
-    }
-
-    /// <summary>
-    /// Sets the regular expressions the augmentation applies to.
-    /// </summary>
-    /// <param name="augmentation">The augmentation that applies to the matches found by <paramref name="textMatch"/>.</param>
-    /// <param name="textMatch">One or more regular expressions that the augmentation will match to.</param>
-    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
-    public static Augmentation ForText(this Augmentation augmentation, params Regex[] textMatch)
-    {
-        augmentation.TextMatchesRegex = textMatch;
-
-        return augmentation;
-    }
-
-    /// <summary>
-    /// Sets the text the augmentation applies to.
+    ///     Sets the text the augmentation applies to.
     /// </summary>
     /// <param name="augmentation">The augmentation that applies to the text.</param>
-    /// <param name="regexMatcher">A delegate taking a <see cref="Match"/> and returning a value indicating whether the result should apply to the augmentation.</param>
-    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
+    /// <param name="regexMatcher">
+    ///     A delegate taking a <see cref="Match" /> and returning a value indicating whether the result
+    ///     should apply to the augmentation.
+    /// </param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
     public static Augmentation ForDelegate(this Augmentation augmentation, Func<Match, bool> regexMatcher)
     {
         augmentation.MatchingDelegate = regexMatcher;
@@ -193,74 +33,27 @@ public static class AugmentationExtensions
     }
 
     /// <summary>
-    /// Sets the text the augmentation applies to.
+    ///     Sets the regular expressions the augmentation applies to.
     /// </summary>
-    /// <param name="augmentation">The augmentation that applies to the text.</param>
-    /// <param name="textMatches">One or more strings with text.</param>
-    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
-    public static Augmentation ForText(this Augmentation augmentation, params string[] textMatches)
+    /// <param name="augmentation">The augmentation that applies to the matches found by <paramref name="textMatch" />.</param>
+    /// <param name="textMatch">One or more regular expressions that the augmentation will match to.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation ForText(this Augmentation augmentation, params Regex[] textMatch)
     {
-        augmentation.TextMatches = textMatches;
+        augmentation.TextMatchesRegex = textMatch;
 
         return augmentation;
     }
 
     /// <summary>
-    /// Sets the brush of the decoration added with <see cref="WithDecoration"/>.
+    ///     Sets the text the augmentation applies to.
     /// </summary>
     /// <param name="augmentation">The augmentation that applies to the text.</param>
-    /// <param name="decorationColor">A brush for the decoration.</param>
-    /// <returns>The same instance of <paramref name="augmentation"/>.</returns>
-    public static Augmentation WithDecorationColor(this Augmentation augmentation, Brush decorationColor)
+    /// <param name="textMatches">One or more strings with text.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation ForText(this Augmentation augmentation, params string[] textMatches)
     {
-        if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
-        {
-            foreach (var existingGenerator in augmentation.Renderers.OfType<DecorationRenderer>())
-            {
-                existingGenerator.GeometryBrush = decorationColor;
-            }
-
-            return augmentation;
-        }
-
-        var toolTipGenerator = new DecorationRenderer(augmentation) { GeometryBrush = decorationColor };
-        augmentation.AddBackgroundRenderer(toolTipGenerator);
-
-        return augmentation;
-    }
-
-    public static Augmentation WithTooltip(this Augmentation augmentation, string tooltipText)
-    {
-        if (augmentation.Generators.OfType<OverlayGenerator>().Any())
-        {
-            foreach (var existingGenerator in augmentation.Generators.OfType<OverlayGenerator>())
-            {
-                existingGenerator.TooltipText = tooltipText;
-            }
-
-            return augmentation;
-        }
-
-        var toolTipGenerator = new OverlayGenerator(augmentation) { TooltipText = tooltipText };
-        augmentation.AddElementGenerator(toolTipGenerator);
-
-        return augmentation;
-    }
-
-    public static Augmentation WithImage(this Augmentation augmentation, ImageSource image)
-    {
-        if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
-        {
-            foreach (var existingRenderer in augmentation.Renderers.OfType<DecorationRenderer>())
-            {
-                existingRenderer.Image = image;
-            }
-
-            return augmentation;
-        }
-
-        var imageRenderer = new DecorationRenderer(augmentation) { Image = image };
-        augmentation.AddBackgroundRenderer(imageRenderer);
+        augmentation.TextMatches = textMatches;
 
         return augmentation;
     }
@@ -314,6 +107,49 @@ public static class AugmentationExtensions
         return augmentation.InLeftMargin(bitmap);
     }
 
+    public static Augmentation WithAdviceOverlay(this Augmentation augmentation, IAdviceModel model)
+    {
+        if (augmentation.Generators.OfType<OverlayGenerator>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Generators.OfType<OverlayGenerator>())
+            {
+                existingGenerator.AdviceModel = model;
+            }
+
+            return augmentation;
+        }
+
+        var toolTipGenerator = new OverlayGenerator(augmentation) { AdviceModel = model };
+        augmentation.AddElementGenerator(toolTipGenerator);
+
+        return augmentation;
+    }
+
+    /// <summary>
+    ///     Adds a color background to the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to add the background color to.</param>
+    /// <param name="background">A brush for the background.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation WithBackground(this Augmentation augmentation, Brush background)
+    {
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
+            {
+                existingGenerator.Background = background;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new TextTransformer(augmentation) { Background = background };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
     public static Augmentation WithDecoration(this Augmentation augmentation, Func<Rect, Geometry> geometry)
     {
         if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
@@ -332,20 +168,169 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation WithTooltip(this Augmentation augmentation, Func<UIElement> customTooltip)
+    /// <summary>
+    ///     Sets the brush of the decoration added with <see cref="WithDecoration" />.
+    /// </summary>
+    /// <param name="augmentation">The augmentation that applies to the text.</param>
+    /// <param name="decorationColor">A brush for the decoration.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation WithDecorationColor(this Augmentation augmentation, Brush decorationColor)
     {
-        if (augmentation.Generators.OfType<OverlayGenerator>().Any())
+        if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
         {
-            foreach (var existingGenerator in augmentation.Generators.OfType<OverlayGenerator>())
+            foreach (var existingGenerator in augmentation.Renderers.OfType<DecorationRenderer>())
             {
-                existingGenerator.CustomTooltip = customTooltip;
+                existingGenerator.GeometryBrush = decorationColor;
             }
 
             return augmentation;
         }
 
-        var toolTipGenerator = new OverlayGenerator(augmentation) { CustomTooltip = customTooltip };
-        augmentation.AddElementGenerator(toolTipGenerator);
+        var toolTipGenerator = new DecorationRenderer(augmentation) { GeometryBrush = decorationColor };
+        augmentation.AddBackgroundRenderer(toolTipGenerator);
+
+        return augmentation;
+    }
+
+    /// <summary>
+    ///     Sets the font family for the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to apply the font family to.</param>
+    /// <param name="fontFamily">The font family.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation WithFontFamily(this Augmentation augmentation, FontFamily fontFamily)
+    {
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
+            {
+                existingGenerator.FontFamily = fontFamily;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new TextTransformer(augmentation) { FontFamily = fontFamily };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
+    /// <summary>
+    ///     Sets the font size for the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to apply the font size to.</param>
+    /// <param name="fontSize">The font size in device independent units.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation WithFontSize(this Augmentation augmentation, double fontSize)
+    {
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
+            {
+                existingGenerator.FontSize = fontSize;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new TextTransformer(augmentation) { FontSize = fontSize };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
+    /// <summary>
+    ///     Sets the font style for the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to apply the font style to.</param>
+    /// <param name="fontStyle">The font style.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation WithFontStyle(this Augmentation augmentation, FontStyle fontStyle)
+    {
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
+            {
+                existingGenerator.FontStyle = fontStyle;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new TextTransformer(augmentation) { FontStyle = fontStyle };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
+    /// <summary>
+    ///     Sets the font weight for the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to apply the font weight to.</param>
+    /// <param name="fontWeight">The font weight.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation WithFontWeight(this Augmentation augmentation, FontWeight fontWeight)
+    {
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
+            {
+                existingGenerator.FontWeight = fontWeight;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new TextTransformer(augmentation) { FontWeight = fontWeight };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
+    /// <summary>
+    ///     Adds a color foreground to the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to add the foreground color to.</param>
+    /// <param name="foreground">A brush for the foreground.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation WithForeground(this Augmentation augmentation, Brush foreground)
+    {
+        if (augmentation.Transformers.OfType<TextTransformer>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Transformers.OfType<TextTransformer>())
+            {
+                existingGenerator.Foreground = foreground;
+            }
+
+            return augmentation;
+        }
+
+        var foregroundTransformer = new TextTransformer(augmentation) { Foreground = foreground };
+
+        augmentation.AddLineTransformer(foregroundTransformer);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithImage(this Augmentation augmentation, ImageSource image)
+    {
+        if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
+        {
+            foreach (var existingRenderer in augmentation.Renderers.OfType<DecorationRenderer>())
+            {
+                existingRenderer.Image = image;
+            }
+
+            return augmentation;
+        }
+
+        var imageRenderer = new DecorationRenderer(augmentation) { Image = image };
+        augmentation.AddBackgroundRenderer(imageRenderer);
 
         return augmentation;
     }
@@ -386,19 +371,37 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation WithAdviceOverlay(this Augmentation augmentation, IAdviceModel model)
+    public static Augmentation WithTooltip(this Augmentation augmentation, string tooltipText)
     {
         if (augmentation.Generators.OfType<OverlayGenerator>().Any())
         {
             foreach (var existingGenerator in augmentation.Generators.OfType<OverlayGenerator>())
             {
-                existingGenerator.AdviceModel = model;
+                existingGenerator.TooltipText = tooltipText;
             }
 
             return augmentation;
         }
 
-        var toolTipGenerator = new OverlayGenerator(augmentation) { AdviceModel = model };
+        var toolTipGenerator = new OverlayGenerator(augmentation) { TooltipText = tooltipText };
+        augmentation.AddElementGenerator(toolTipGenerator);
+
+        return augmentation;
+    }
+
+    public static Augmentation WithTooltip(this Augmentation augmentation, Func<UIElement> customTooltip)
+    {
+        if (augmentation.Generators.OfType<OverlayGenerator>().Any())
+        {
+            foreach (var existingGenerator in augmentation.Generators.OfType<OverlayGenerator>())
+            {
+                existingGenerator.CustomTooltip = customTooltip;
+            }
+
+            return augmentation;
+        }
+
+        var toolTipGenerator = new OverlayGenerator(augmentation) { CustomTooltip = customTooltip };
         augmentation.AddElementGenerator(toolTipGenerator);
 
         return augmentation;

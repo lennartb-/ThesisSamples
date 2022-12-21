@@ -9,6 +9,22 @@ namespace AugmentationFramework;
 internal static class GenericExtensions
 {
     /// <summary>
+    ///     Clones an object via XML serialization.
+    /// </summary>
+    /// <typeparam name="T">The type of the object to clone.</typeparam>
+    /// <param name="obj">The object to clone.</param>
+    /// <returns> The cloned object.</returns>
+    public static T Clone<T>(this T obj)
+        where T : class
+    {
+        using var ms = new MemoryStream();
+        var serializer = new XmlSerializer(obj.GetType());
+        serializer.Serialize(ms, obj);
+        ms.Seek(0, SeekOrigin.Begin);
+        return (T)serializer.Deserialize(ms)!;
+    }
+
+    /// <summary>
     ///     Replaces the value of a struct with a new non-null value.
     /// </summary>
     /// <typeparam name="T">The type of the struct.</typeparam>
@@ -48,21 +64,5 @@ internal static class GenericExtensions
         }
 
         return obj;
-    }
-
-    /// <summary>
-    ///     Clones an object via XML serialization.
-    /// </summary>
-    /// <typeparam name="T">The type of the object to clone.</typeparam>
-    /// <param name="obj">The object to clone.</param>
-    /// <returns> The cloned object.</returns>
-    public static T Clone<T>(this T obj)
-        where T : class
-    {
-        using var ms = new MemoryStream();
-        var serializer = new XmlSerializer(obj.GetType());
-        serializer.Serialize(ms, obj);
-        ms.Seek(0, SeekOrigin.Begin);
-        return (T)serializer.Deserialize(ms)!;
     }
 }

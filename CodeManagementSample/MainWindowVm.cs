@@ -34,18 +34,6 @@ public class MainWindowVm : ObservableObject
         Document = new TextDocument("Console.WriteLine(\"Hello World\");");
     }
 
-    public bool IsCompilationRunning
-    {
-        get => isCompilationRunning;
-        set => SetProperty(ref isCompilationRunning, value);
-    }
-
-    public bool IsApplicationExecuting
-    {
-        get => isApplicationExecuting;
-        set => SetProperty(ref isApplicationExecuting, value);
-    }
-
     public CodeVm? Code
     {
         get => code;
@@ -58,19 +46,7 @@ public class MainWindowVm : ObservableObject
         }
     }
 
-    public RelayCommand OnLoadedCommand { get; }
-
-    public AsyncRelayCommand ExecuteCommand { get; }
-
     public RelayCommand CompileCommand { get; }
-
-    public RelayCommand VersioningCommand { get; }
-
-    public TextDocument Document
-    {
-        get => document;
-        private init => SetProperty(ref document, value);
-    }
 
     public string? CompilerOutput
     {
@@ -82,6 +58,45 @@ public class MainWindowVm : ObservableObject
     {
         get => consoleOutput;
         private set => SetProperty(ref consoleOutput, value);
+    }
+
+    public TextDocument Document
+    {
+        get => document;
+        private init => SetProperty(ref document, value);
+    }
+
+    public AsyncRelayCommand ExecuteCommand { get; }
+
+    public bool IsApplicationExecuting
+    {
+        get => isApplicationExecuting;
+        set => SetProperty(ref isApplicationExecuting, value);
+    }
+
+    public bool IsCompilationRunning
+    {
+        get => isCompilationRunning;
+        set => SetProperty(ref isCompilationRunning, value);
+    }
+
+    public RelayCommand OnLoadedCommand { get; }
+
+    public RelayCommand VersioningCommand { get; }
+
+    private void OnCompile()
+    {
+        if (Code == null)
+        {
+            return;
+        }
+
+        Code.Text = Document.Text;
+        IsCompilationRunning = true;
+        Code.Compile();
+        IsCompilationRunning = false;
+        CompilerOutput = Code.Result ?? "✅";
+        ConsoleOutput = Code.ConsoleOutput;
     }
 
     private async Task OnExecute()
@@ -99,19 +114,13 @@ public class MainWindowVm : ObservableObject
         ConsoleOutput = Code.ConsoleOutput ?? string.Empty;
     }
 
-    private void OnCompile()
+    private void OnLoaded()
     {
-        if (Code == null)
-        {
-            return;
-        }
+        host = new RoslynHost(
+            new[] { Assembly.Load("RoslynPad.Roslyn.Windows"), Assembly.Load("RoslynPad.Editor.Windows") },
+            RoslynHostReferences.NamespaceDefault.With(assemblyReferences: new[] { typeof(object).Assembly, typeof(Regex).Assembly, typeof(Enumerable).Assembly }));
 
-        Code.Text = Document.Text;
-        IsCompilationRunning = true;
-        Code.Compile();
-        IsCompilationRunning = false;
-        CompilerOutput = Code.Result ?? "✅";
-        ConsoleOutput = Code.ConsoleOutput;
+        Code = new CodeVm(host);
     }
 
     private void OnVersioning()
@@ -127,14 +136,5 @@ public class MainWindowVm : ObservableObject
         {
             Document.Text = versioningVm.CheckedOutText;
         }
-    }
-
-    private void OnLoaded()
-    {
-        host = new RoslynHost(
-            new[] { Assembly.Load("RoslynPad.Roslyn.Windows"), Assembly.Load("RoslynPad.Editor.Windows") },
-            RoslynHostReferences.NamespaceDefault.With(assemblyReferences: new[] { typeof(object).Assembly, typeof(Regex).Assembly, typeof(Enumerable).Assembly }));
-
-        Code = new CodeVm(host);
     }
 }

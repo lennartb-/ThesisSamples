@@ -9,69 +9,50 @@ using ICSharpCode.AvalonEdit.Rendering;
 namespace AugmentationFramework.Generators;
 
 /// <summary>
-/// Builds overlays over matching elements.
+///     Builds overlays over matching elements.
 /// </summary>
 public class OverlayGenerator : VisualLineElementGenerator
 {
     private readonly RoiFinder roiFinder;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OverlayGenerator"/> class.
+    ///     Initializes a new instance of the <see cref="OverlayGenerator" /> class.
     /// </summary>
-    /// <param name="parent">The <see cref="Augmentation"/> this instance is based on.</param>
+    /// <param name="parent">The <see cref="Augmentation" /> this instance is based on.</param>
     public OverlayGenerator(Augmentation parent)
     {
         roiFinder = new RoiFinder(parent);
     }
 
     /// <summary>
-    /// Gets or sets a delegate to build an overlay.
-    /// </summary>
-    public Func<UIElement>? CustomOverlay { get; set; }
-
-    /// <summary>
-    /// Gets or sets a delegate to build a tooltip.
-    /// </summary>
-    public Func<UIElement>? CustomTooltip { get; set; }
-
-    /// <summary>
-    /// Gets or sets an <see cref="IAdviceModel"/> to display.
+    ///     Gets or sets an <see cref="IAdviceModel" /> to display.
     /// </summary>
     public IAdviceModel? AdviceModel { get; set; }
 
     /// <summary>
-    /// Gets or sets the background brush of <see cref="CustomTooltip"/>.
+    ///     Gets or sets a delegate to build an overlay.
+    /// </summary>
+    public Func<UIElement>? CustomOverlay { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a delegate to build a tooltip.
+    /// </summary>
+    public Func<UIElement>? CustomTooltip { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a text to display as overlay.
+    /// </summary>
+    public string? OverlayText { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the background brush of <see cref="CustomTooltip" />.
     /// </summary>
     public Brush? TooltipBackground { get; set; }
 
     /// <summary>
-    /// Gets or sets a text to display as tooltip.
+    ///     Gets or sets a text to display as tooltip.
     /// </summary>
     public string? TooltipText { get; set; }
-
-    /// <summary>
-    /// Gets or sets a text to display as overlay.
-    /// </summary>
-    public string? OverlayText { get; set; }
-
-    /// <inheritdoc />
-    public override int GetFirstInterestedOffset(int startOffset)
-    {
-        var area = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.Text[startOffset..]).FirstOrDefault();
-
-        if (area.StartOffset + startOffset < startOffset)
-        {
-            return -1;
-        }
-
-        // TODO: Possible issue if match is at (0,0)
-        if (area == default)
-        {
-            return -1;
-        }
-
-        return area.StartOffset + startOffset;
-    }
 
     /// <inheritdoc />
     public override VisualLineElement ConstructElement(int offset)
@@ -99,7 +80,7 @@ public class OverlayGenerator : VisualLineElementGenerator
                 Text = OverlayText ?? CurrentContext.Document.GetText(offset, length),
                 FontSize = new VisualLineElementTextRunProperties(CurrentContext.GlobalTextRunProperties).FontHintingEmSize,
                 ToolTip = customTooltip,
-                Background = TooltipBackground ?? Brushes.Transparent,
+                Background = TooltipBackground ?? Brushes.Transparent
             };
 
             if (AdviceModel is not null)
@@ -126,5 +107,24 @@ public class OverlayGenerator : VisualLineElementGenerator
         var overlay = new OverlayElement(length, element);
 
         return overlay;
+    }
+
+    /// <inheritdoc />
+    public override int GetFirstInterestedOffset(int startOffset)
+    {
+        var area = roiFinder.DetermineRangesOfInterest(CurrentContext.Document.Text[startOffset..]).FirstOrDefault();
+
+        if (area.StartOffset + startOffset < startOffset)
+        {
+            return -1;
+        }
+
+        // TODO: Possible issue if match is at (0,0)
+        if (area == default)
+        {
+            return -1;
+        }
+
+        return area.StartOffset + startOffset;
     }
 }

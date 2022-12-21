@@ -9,50 +9,50 @@ using ICSharpCode.AvalonEdit.Rendering;
 namespace AugmentationFramework.Transformers;
 
 /// <summary>
-/// Formats text elements.
+///     Formats text elements.
 /// </summary>
 public class TextTransformer : DocumentColorizingTransformer
 {
     private readonly RoiFinder roiFinder;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TextTransformer"/> class.
+    ///     Initializes a new instance of the <see cref="TextTransformer" /> class.
     /// </summary>
-    /// <param name="parent">The <see cref="Augmentation"/> this instance is based on.</param>
+    /// <param name="parent">The <see cref="Augmentation" /> this instance is based on.</param>
     public TextTransformer(Augmentation parent)
     {
         roiFinder = new RoiFinder(parent);
     }
 
     /// <summary>
-    /// Gets or sets the foreground brush to apply.
-    /// </summary>
-    public Brush? Foreground { get; set; }
-
-    /// <summary>
-    /// Gets or sets the background brush to apply.
+    ///     Gets or sets the background brush to apply.
     /// </summary>
     public Brush? Background { get; set; }
 
     /// <summary>
-    /// Gets or sets the font family to apply.
+    ///     Gets or sets the font family to apply.
     /// </summary>
     public FontFamily? FontFamily { get; set; }
 
     /// <summary>
-    /// Gets or sets the font size to apply.
+    ///     Gets or sets the font size to apply.
     /// </summary>
     public double? FontSize { get; set; }
 
     /// <summary>
-    /// Gets or sets the font weight to apply.
+    ///     Gets or sets the font style to apply.
+    /// </summary>
+    public FontStyle? FontStyle { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the font weight to apply.
     /// </summary>
     public FontWeight? FontWeight { get; set; }
 
     /// <summary>
-    /// Gets or sets the font style to apply.
+    ///     Gets or sets the foreground brush to apply.
     /// </summary>
-    public FontStyle? FontStyle { get; set; }
+    public Brush? Foreground { get; set; }
 
     /// <inheritdoc />
     protected override void ColorizeLine(DocumentLine line)
@@ -88,32 +88,6 @@ public class TextTransformer : DocumentColorizingTransformer
         }
     }
 
-    private void SetProperties(VisualLineElement element)
-    {
-        if (Foreground is not null)
-        {
-            element.TextRunProperties.SetForegroundBrush(Foreground);
-        }
-
-        if (Background is not null)
-        {
-            element.TextRunProperties.SetBackgroundBrush(Background);
-        }
-
-        if (FontSize.HasValue)
-        {
-            element.TextRunProperties.SetFontRenderingEmSize(FontSize.Value);
-        }
-
-        var tf = element.TextRunProperties.Typeface;
-        element.TextRunProperties.SetTypeface(
-            new Typeface(
-                tf.FontFamily.IfNotNull(FontFamily),
-                tf.Style.IfNotNull(FontStyle),
-                tf.Weight.IfNotNull(FontWeight),
-                tf.Stretch));
-    }
-
     private void SetOverlayElementProperties(TextBlock textBlock)
     {
         if (Background != null)
@@ -145,5 +119,31 @@ public class TextTransformer : DocumentColorizingTransformer
         {
             textBlock.FontStyle = FontStyle.Value;
         }
+    }
+
+    private void SetProperties(VisualLineElement element)
+    {
+        if (Foreground is not null)
+        {
+            element.TextRunProperties.SetForegroundBrush(Foreground);
+        }
+
+        if (Background is not null)
+        {
+            element.TextRunProperties.SetBackgroundBrush(Background);
+        }
+
+        if (FontSize.HasValue)
+        {
+            element.TextRunProperties.SetFontRenderingEmSize(FontSize.Value);
+        }
+
+        var tf = element.TextRunProperties.Typeface;
+        element.TextRunProperties.SetTypeface(
+            new Typeface(
+                tf.FontFamily.IfNotNull(FontFamily),
+                tf.Style.IfNotNull(FontStyle),
+                tf.Weight.IfNotNull(FontWeight),
+                tf.Stretch));
     }
 }

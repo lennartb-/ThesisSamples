@@ -40,21 +40,11 @@ internal class VersioningVm : ObservableObject
         RefreshCommand.Execute(null);
     }
 
-    public string? CheckedOutText { get; private set; }
-
-    public RelayCommand OkCommand { get; }
+    public event Action RequestClose = () => { };
 
     public RelayCommand CancelCommand { get; }
 
-    public RelayCommand PushCommand { get; }
-
-    public RelayCommand RefreshCommand { get; }
-
-    public bool IsExternalGitAuthenticationEnabled
-    {
-        get => isExternalGitAuthenticationEnabled;
-        set => SetProperty(ref isExternalGitAuthenticationEnabled, value);
-    }
+    public string? CheckedOutText { get; private set; }
 
     public string? CommitMessage
     {
@@ -62,11 +52,25 @@ internal class VersioningVm : ObservableObject
         set => SetProperty(ref commitMessage, value);
     }
 
+    public ObservableCollection<CommitModel> History { get; } = new();
+
+    public bool IsExternalGitAuthenticationEnabled
+    {
+        get => isExternalGitAuthenticationEnabled;
+        set => SetProperty(ref isExternalGitAuthenticationEnabled, value);
+    }
+
+    public RelayCommand OkCommand { get; }
+
     public TextDocument PreviewDocument
     {
         get => previewDocument;
         set => SetProperty(ref previewDocument, value);
     }
+
+    public RelayCommand PushCommand { get; }
+
+    public RelayCommand RefreshCommand { get; }
 
     public CommitModel? SelectedItem
     {
@@ -87,52 +91,9 @@ internal class VersioningVm : ObservableObject
         }
     }
 
-    public ObservableCollection<CommitModel> History { get; } = new();
-
-    public event Action RequestClose = delegate { };
-
-    private void CancelCheckout()
+    public void CheckoutVersion()
     {
-        CheckedOutText = null;
-        RequestClose();
-    }
-
-    private void ApplyCheckout()
-    {
-        CheckoutVersion();
-        RequestClose();
-    }
-
-    private void GetHistory()
-    {
-        History.Clear();
-        using var repo = new Repository(model.RepositoryPath);
-
-        if (IsExternalGitAuthenticationEnabled)
-        {
-            gitProcessWrapper.Pull();
-        }
-        else
-        {
-            var merger = new Signature(model.Author, "test@example.com", DateTime.Now);
-            var credentials = GetOrAskCredentials();
-            Pull(credentials, repo, merger);
-        }
-
-        foreach (var c in repo.Commits.Take(15))
-        {
-            History.Add(new CommitModel(c.Id.Sha[..7], c.Author.Name, c.Message, c.Author.When.DateTime));
-        }
-
-        PushCommand.NotifyCanExecuteChanged();
-    }
-
-    private static string? DeserializeBlob(Blob blob)
-    {
-        var contentStream = blob.GetContentStream();
-
-        using var tr = new StreamReader(contentStream, Encoding.UTF8);
-        return JsonSerializer.Deserialize<string>(tr.ReadToEnd());
+        CheckedOutText = GetStringOfSelectedCommit(SelectedItem?.Id);
     }
 
     public void CommitCode()
@@ -176,6 +137,14 @@ internal class VersioningVm : ObservableObject
         SelectedItem = History.First();
     }
 
+    private static string? DeserializeBlob(Blob blob)
+    {
+        var contentStream = blob.GetContentStream();
+
+        using var tr = new StreamReader(contentStream, Encoding.UTF8);
+        return JsonSerializer.Deserialize<string>(tr.ReadToEnd());
+    }
+
     private static NetworkCredential GetOrAskCredentials()
     {
         Log.Logger.Information("Getting credentials via credential manager.");
@@ -191,17 +160,6 @@ internal class VersioningVm : ObservableObject
         return existingCredentials;
     }
 
-    private static void Push(NetworkCredential cred, Repository repo)
-    {
-        Log.Logger.Information("Pushing via libgit2sharp.");
-        var options = new PushOptions
-        {
-            CredentialsProvider = (_, _, _) =>
-                new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword },
-        };
-        repo.Network.Push(repo.Head, options);
-    }
-
     private static void Pull(NetworkCredential cred, Repository repo, Signature merger)
     {
         Log.Logger.Information("Pulling via libgit2sharp.");
@@ -211,22 +169,56 @@ internal class VersioningVm : ObservableObject
             {
                 CredentialsProvider = (_, _, _) =>
                     new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword }
-            },
+            }
         };
         Commands.Pull(repo, merger, options);
     }
 
-    private Blob SerializeBlob(string blobContents)
+    private static void Push(NetworkCredential cred, Repository repo)
     {
-        using var repo = new Repository(model.RepositoryPath);
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(blobContents);
-        var ms = new MemoryStream(bytes);
-        return repo.ObjectDatabase.CreateBlob(ms);
+        Log.Logger.Information("Pushing via libgit2sharp.");
+        var options = new PushOptions
+        {
+            CredentialsProvider = (_, _, _) =>
+                new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword }
+        };
+        repo.Network.Push(repo.Head, options);
     }
 
-    public void CheckoutVersion()
+    private void ApplyCheckout()
     {
-        CheckedOutText = GetStringOfSelectedCommit(SelectedItem?.Id);
+        CheckoutVersion();
+        RequestClose();
+    }
+
+    private void CancelCheckout()
+    {
+        CheckedOutText = null;
+        RequestClose();
+    }
+
+    private void GetHistory()
+    {
+        History.Clear();
+        using var repo = new Repository(model.RepositoryPath);
+
+        if (IsExternalGitAuthenticationEnabled)
+        {
+            gitProcessWrapper.Pull();
+        }
+        else
+        {
+            var merger = new Signature(model.Author, "test@example.com", DateTime.Now);
+            var credentials = GetOrAskCredentials();
+            Pull(credentials, repo, merger);
+        }
+
+        foreach (var c in repo.Commits.Take(15))
+        {
+            History.Add(new CommitModel(c.Id.Sha[..7], c.Author.Name, c.Message, c.Author.When.DateTime));
+        }
+
+        PushCommand.NotifyCanExecuteChanged();
     }
 
     private string? GetStringOfSelectedCommit(string? id)
@@ -248,5 +240,13 @@ internal class VersioningVm : ObservableObject
 
         Log.Logger.Warning("{Id} is not a blob.", id);
         return null;
+    }
+
+    private Blob SerializeBlob(string blobContents)
+    {
+        using var repo = new Repository(model.RepositoryPath);
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(blobContents);
+        var ms = new MemoryStream(bytes);
+        return repo.ObjectDatabase.CreateBlob(ms);
     }
 }

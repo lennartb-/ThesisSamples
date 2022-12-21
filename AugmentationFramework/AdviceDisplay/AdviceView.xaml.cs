@@ -9,7 +9,7 @@ namespace AugmentationFramework.AdviceDisplay;
 public partial class AdviceView
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="AdviceView"/> class.
+    ///     Initializes a new instance of the <see cref="AdviceView" /> class.
     /// </summary>
     public AdviceView()
     {

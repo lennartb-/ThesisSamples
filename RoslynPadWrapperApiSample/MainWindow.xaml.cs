@@ -22,6 +22,12 @@ public partial class MainWindow
         Editor.Loaded += (s, _) => joinableTaskFactory.RunAsync(() => InitializeEditorAsync(s));
     }
 
+    private static AnalyzerReference GetAnalyzerReference(IRoslynHost host, string analyzerPath)
+    {
+        var loader = host.GetService<IAnalyzerAssemblyLoader>();
+        return new AnalyzerFileReference(analyzerPath, loader);
+    }
+
     private static async Task InitializeEditorAsync(object sender)
     {
         var editor = (RoslynCodeEditor)sender;
@@ -59,11 +65,5 @@ public partial class MainWindow
         }
 
         host.UpdateDocument(document);
-    }
-
-    private static AnalyzerReference GetAnalyzerReference(IRoslynHost host, string analyzerPath)
-    {
-        var loader = host.GetService<IAnalyzerAssemblyLoader>();
-        return new AnalyzerFileReference(analyzerPath, loader);
     }
 }
