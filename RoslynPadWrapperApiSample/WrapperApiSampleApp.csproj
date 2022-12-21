@@ -14,6 +14,10 @@
     <PackageReference Include="roslynpad.editor.windows" Version="4.4.0" />
     <PackageReference Include="roslynpad.roslyn" Version="4.4.0" />
     <PackageReference Include="roslynpad.roslyn.windows" Version="4.4.0" />
+    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.435">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
