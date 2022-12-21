@@ -11,6 +11,7 @@ public class SampleAdviceModel : IAdviceModel
     public string WarningRisk => "Potential leak of user data.";
 
     public string Information => "www.google.de";
+
     public Uri InformationLink => new("http://www.google.de");
 
     public string SecureAdvice => "Use this:";
@@ -21,4 +22,3 @@ public class SampleAdviceModel : IAdviceModel
 
     public string InsecureSample => "public static void Main (string[] args){}";
 }
-

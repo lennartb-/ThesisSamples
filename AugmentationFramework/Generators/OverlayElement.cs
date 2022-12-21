@@ -22,4 +22,3 @@ public class OverlayElement : VisualLineElement
         return new InlineObjectRun(1, textRunProperties, Element);
     }
 }
-

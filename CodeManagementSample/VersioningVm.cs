@@ -43,8 +43,11 @@ internal class VersioningVm : ObservableObject
     public string? CheckedOutText { get; private set; }
 
     public RelayCommand OkCommand { get; }
+
     public RelayCommand CancelCommand { get; }
+
     public RelayCommand PushCommand { get; }
+
     public RelayCommand RefreshCommand { get; }
 
     public bool IsExternalGitAuthenticationEnabled
@@ -85,6 +88,7 @@ internal class VersioningVm : ObservableObject
     }
 
     public ObservableCollection<CommitModel> History { get; } = new();
+
     public event Action RequestClose = delegate { };
 
     private void CancelCheckout()
@@ -193,7 +197,7 @@ internal class VersioningVm : ObservableObject
         var options = new PushOptions
         {
             CredentialsProvider = (_, _, _) =>
-                new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword }
+                new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword },
         };
         repo.Network.Push(repo.Head, options);
     }
@@ -207,7 +211,7 @@ internal class VersioningVm : ObservableObject
             {
                 CredentialsProvider = (_, _, _) =>
                     new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword }
-            }
+            },
         };
         Commands.Pull(repo, merger, options);
     }
@@ -246,4 +250,3 @@ internal class VersioningVm : ObservableObject
         return null;
     }
 }
-

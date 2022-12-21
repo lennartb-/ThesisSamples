@@ -36,7 +36,7 @@ public class GitProcessWrapper
             RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true,
-            WorkingDirectory = workingDirectory
+            WorkingDirectory = workingDirectory,
         };
         process.StartInfo = processStartInfo;
 
@@ -54,4 +54,3 @@ public class GitProcessWrapper
         Log.Logger.Information("git returned: {Status}", stringBuilder.ToString());
     }
 }
-

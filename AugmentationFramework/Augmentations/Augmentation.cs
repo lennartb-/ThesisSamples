@@ -56,7 +56,7 @@ public class Augmentation
     public IEnumerable<Regex>? TextMatchesRegex { get; set; }
 
     /// <summary>
-    ///     Gets or sets a string this augmentation matches
+    ///     Gets or sets a string this augmentation matches.
     /// </summary>
     public string? TextMatch { get; set; }
 
@@ -148,4 +148,3 @@ public class Augmentation
         LeftMargins.Add(leftMargin);
     }
 }
-

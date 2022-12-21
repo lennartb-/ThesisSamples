@@ -104,4 +104,3 @@ public class MarginDecoration : AbstractMargin
         drawingContext.DrawImage(Image, r);
     }
 }
-

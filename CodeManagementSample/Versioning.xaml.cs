@@ -3,7 +3,7 @@
 namespace CodeManagementSample;
 
 /// <summary>
-///     Interaction logic for Versioning.xaml
+///     Interaction logic for Versioning.xaml.
 /// </summary>
 public partial class Versioning
 {
@@ -13,4 +13,3 @@ public partial class Versioning
         Preview.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("C#");
     }
 }
-

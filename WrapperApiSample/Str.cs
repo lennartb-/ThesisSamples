@@ -10,4 +10,3 @@ public static class Str
     /// </summary>
     public static string NewLine => Environment.NewLine;
 }
-

@@ -25,6 +25,7 @@ public class AdviceVm : ISampleContent
     }
 
     public ReactiveCommand<CodeTextEditor, Unit> EditorLoadedCommand { get; }
+
     public TextDocument Document { get; }
 
     public bool IsEnabled
@@ -63,4 +64,3 @@ public class AdviceVm : ISampleContent
         augmentations.Add(underlineAugmentation);
     }
 }
-

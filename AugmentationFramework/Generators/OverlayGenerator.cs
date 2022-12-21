@@ -24,10 +24,15 @@ public class OverlayGenerator : VisualLineElementGenerator
     }
 
     public Func<UIElement>? CustomOverlay { get; internal set; }
+
     public Func<UIElement>? CustomTooltip { get; internal set; }
+
     public IAdviceModel? AdviceModel { get; internal set; }
+
     public Brush? TooltipBackground { get; internal set; }
+
     public string? TooltipText { get; internal set; }
+
     public string? OverlayText { get; internal set; }
 
     public override int GetFirstInterestedOffset(int startOffset)
@@ -73,7 +78,7 @@ public class OverlayGenerator : VisualLineElementGenerator
                 Text = OverlayText ?? CurrentContext.Document.GetText(offset, length),
                 FontSize = new VisualLineElementTextRunProperties(CurrentContext.GlobalTextRunProperties).FontHintingEmSize,
                 ToolTip = customTooltip,
-                Background = TooltipBackground ?? Brushes.Transparent
+                Background = TooltipBackground ?? Brushes.Transparent,
             };
 
             if (AdviceModel is not null)
@@ -102,4 +107,3 @@ public class OverlayGenerator : VisualLineElementGenerator
         return overlay;
     }
 }
-

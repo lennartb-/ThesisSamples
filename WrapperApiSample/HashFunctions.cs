@@ -72,4 +72,3 @@ public static class HashFunctions
         return Convert.ToHexString(hashedBytes);
     }
 }
-

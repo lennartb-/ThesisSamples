@@ -11,7 +11,7 @@ using WrapperApi;
 namespace WrapperApiSampleApp;
 
 /// <summary>
-///     Interaction logic for MainWindow.xaml
+///     Interaction logic for MainWindow.xaml.
 /// </summary>
 public partial class MainWindow
 {
@@ -67,4 +67,3 @@ public partial class MainWindow
         return new AnalyzerFileReference(analyzerPath, loader);
     }
 }
-

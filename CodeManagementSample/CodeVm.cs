@@ -167,4 +167,3 @@ public class CodeVm : INotifyPropertyChanged
         return true;
     }
 }
-

@@ -59,8 +59,11 @@ public class MainWindowVm : ObservableObject
     }
 
     public RelayCommand OnLoadedCommand { get; }
+
     public AsyncRelayCommand ExecuteCommand { get; }
+
     public RelayCommand CompileCommand { get; }
+
     public RelayCommand VersioningCommand { get; }
 
     public TextDocument Document
@@ -135,4 +138,3 @@ public class MainWindowVm : ObservableObject
         Code = new CodeVm(host);
     }
 }
-

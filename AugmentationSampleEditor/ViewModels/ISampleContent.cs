@@ -8,7 +8,10 @@ namespace AugmentationFrameworkSampleApp.ViewModels;
 public interface ISampleContent
 {
     TextDocument Document { get; }
+
     bool IsEnabled { get; set; }
+
     string Title { get; }
+
     ReactiveCommand<CodeTextEditor, Unit> EditorLoadedCommand { get; }
 }

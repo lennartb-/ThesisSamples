@@ -5,17 +5,17 @@ using ICSharpCode.AvalonEdit.Editing;
 
 namespace AugmentationFramework.Augmentations.Premade;
 
-public class SmalltalkHighlighting
+public partial class SmalltalkHighlighting
 {
     public static Augmentation[] GetAugmentation(TextArea textArea)
     {
-        var parameterRegex = new Regex(@":\w+");
-        var symbolRegex = new Regex(@"[$#]\w+");
-        var numberRegex = new Regex(@"\b\d+(\.\d+)?\b");
-        var messagesRegex = new Regex(@"\w+:");
-        var commentRegex = new Regex("\"(.|\r|\n)*?\"");
-        var stringRegex = new Regex(@"\'((.|\r|\n)*?)\'");
-        var keywordsRegex = new Regex(@"\b(self|super|true|false|nil)\b");
+        var parameterRegex = ParameterRegex();
+        var symbolRegex = SymbolRegex();
+        var numberRegex = NumberRegex();
+        var messagesRegex = MessagesRegex();
+        var commentRegex = CommentRegex();
+        var stringRegex = StringRegex();
+        var keywordsRegex = KeywordRegex();
 
         var comments = new Augmentation(textArea)
             .ForText(commentRegex)
@@ -46,5 +46,25 @@ public class SmalltalkHighlighting
 
         return new[] { keywords, messages, numbersAndStrings, symbols, parameters, comments };
     }
-}
 
+    [GeneratedRegex(":\\w+")]
+    private static partial Regex ParameterRegex();
+
+    [GeneratedRegex("[$#]\\w+")]
+    private static partial Regex SymbolRegex();
+
+    [GeneratedRegex("\\b\\d+(\\.\\d+)?\\b")]
+    private static partial Regex NumberRegex();
+
+    [GeneratedRegex("\\w+:")]
+    private static partial Regex MessagesRegex();
+
+    [GeneratedRegex("\"(.|\r|\n)*?\"")]
+    private static partial Regex CommentRegex();
+
+    [GeneratedRegex("\\'((.|\\r|\\n)*?)\\'")]
+    private static partial Regex StringRegex();
+
+    [GeneratedRegex("\\b(self|super|true|false|nil)\\b")]
+    private static partial Regex KeywordRegex();
+}

@@ -14,4 +14,3 @@ public class ClosablePopup : Popup
 
     public IReactiveCommand CloseCommand { get; }
 }
-

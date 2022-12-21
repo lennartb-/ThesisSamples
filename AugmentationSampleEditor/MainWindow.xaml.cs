@@ -5,7 +5,7 @@ using AugmentationFrameworkSampleApp.ViewModels;
 namespace AugmentationFrameworkSampleApp;
 
 /// <summary>
-///     Interaction logic for MainWindow.xaml
+///     Interaction logic for MainWindow.xaml.
 /// </summary>
 public partial class MainWindow : Window
 {
@@ -21,17 +21,7 @@ public partial class MainWindow : Window
         ViewModels.Add(new NewlineVm());
         ViewModels.Add(new ImageVm());
         DataContext = this;
-
-        //var image = new BitmapImage(
-        //    new Uri("pack://application:,,,/Resources/ic_menu_save.png"));
-
-        //var underlineAugmentation = new Augmentation(Editor.TextArea.TextView)
-        //.WithImage(image)
-        //.WithImagePosition(ImagePosition.Left)
-        //.ForText(new Regex(@"\btristique\b"));
-        //plugins.Add(underlineAugmentation);
     }
 
     public IList<ISampleContent> ViewModels { get; } = new List<ISampleContent>();
 }
-

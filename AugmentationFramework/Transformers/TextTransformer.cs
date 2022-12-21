@@ -25,13 +25,18 @@ public class TextTransformer : DocumentColorizingTransformer
     }
 
     /// <summary>
-    /// Gets or sets
+    /// Gets or sets.
     /// </summary>
     public Brush? Foreground { get; set; }
+
     public Brush? Background { get; set; }
+
     public FontFamily? FontFamily { get; set; }
+
     public double? FontSize { get; set; }
+
     public FontWeight? FontWeight { get; set; }
+
     public FontStyle? FontStyle { get; set; }
 
     /// <inheritdoc />
@@ -91,8 +96,7 @@ public class TextTransformer : DocumentColorizingTransformer
                 tf.FontFamily.IfNotNull(FontFamily),
                 tf.Style.IfNotNull(FontStyle),
                 tf.Weight.IfNotNull(FontWeight),
-                tf.Stretch
-            ));
+                tf.Stretch));
     }
 
     private void SetOverlayElementProperties(TextBlock textBlock)

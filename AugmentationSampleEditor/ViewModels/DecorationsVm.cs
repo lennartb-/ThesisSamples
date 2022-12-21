@@ -30,6 +30,7 @@ public class DecorationsVm : ISampleContent
     }
 
     public ReactiveCommand<CodeTextEditor, Unit> EditorLoadedCommand { get; }
+
     public TextDocument Document { get; }
 
     public bool IsEnabled
@@ -66,12 +67,6 @@ public class DecorationsVm : ISampleContent
             .ForText(new Regex(@"\bsit\b"));
         augmentations.Add(backgroundAugmentation);
 
-        //var underlineAugmentation = new Augmentation(editor.TextArea)
-        //.WithImage(image)
-        //.WithImagePosition(ImagePosition.Left)
-        //.ForText(new Regex(@"\btristique\b"));
-        //plugins.Add(underlineAugmentation);
-
         var tooltipAugmentation = new Augmentation(editor.TextArea)
             .WithTooltip(() => new Calendar())
             .WithOverlay(
@@ -81,4 +76,3 @@ public class DecorationsVm : ISampleContent
         augmentations.Add(tooltipAugmentation);
     }
 }
-

@@ -30,4 +30,3 @@ internal sealed class CodeActionsConverter : MarkupExtension, IValueConverter
         return this;
     }
 }
-

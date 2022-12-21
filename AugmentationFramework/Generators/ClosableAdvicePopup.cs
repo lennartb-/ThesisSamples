@@ -12,4 +12,3 @@ public class ClosableAdvicePopup : ClosablePopup
 
     public IAdviceModel AdviceModel { get; }
 }
-

@@ -7,7 +7,7 @@ using System.Windows.Controls.Primitives;
 namespace AugmentationFrameworkSampleApp.Controls;
 
 /// <summary>
-///     https://stackoverflow.com/a/9802346/368354
+///     https://stackoverflow.com/a/9802346/368354.
 /// </summary>
 [TemplatePart(Name = "PART_ItemsHolder", Type = typeof(Panel))]
 public class CachingTabControl : TabControl
@@ -21,7 +21,7 @@ public class CachingTabControl : TabControl
     }
 
     /// <summary>
-    ///     If containers are done, generate the selected item
+    ///     If containers are done, generate the selected item.
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
@@ -35,7 +35,7 @@ public class CachingTabControl : TabControl
     }
 
     /// <summary>
-    ///     Get the ItemsHolder and generate any children
+    ///     Get the ItemsHolder and generate any children.
     /// </summary>
     public override void OnApplyTemplate()
     {
@@ -45,7 +45,7 @@ public class CachingTabControl : TabControl
     }
 
     /// <summary>
-    ///     When the items change we remove any generated panel children and add any new ones as necessary
+    ///     When the items change we remove any generated panel children and add any new ones as necessary.
     /// </summary>
     /// <param name="e"></param>
     protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
@@ -140,7 +140,7 @@ public class CachingTabControl : TabControl
             ContentTemplateSelector = SelectedContentTemplateSelector,
             ContentStringFormat = SelectedContentStringFormat,
             Visibility = Visibility.Collapsed,
-            Tag = item is TabItem ? item : ItemContainerGenerator.ContainerFromItem(item)
+            Tag = item is TabItem ? item : ItemContainerGenerator.ContainerFromItem(item),
         };
         itemsHolderPanel?.Children.Add(contentPresenter);
     }
@@ -189,4 +189,3 @@ public class CachingTabControl : TabControl
         return item;
     }
 }
-

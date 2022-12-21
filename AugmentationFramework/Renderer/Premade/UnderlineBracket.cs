@@ -21,4 +21,3 @@ public static class UnderlineBracket
         return underlineGeometry;
     }
 }
-

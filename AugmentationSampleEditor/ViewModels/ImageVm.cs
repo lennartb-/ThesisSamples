@@ -26,6 +26,7 @@ public class ImageVm : ISampleContent
     }
 
     public ReactiveCommand<CodeTextEditor, Unit> EditorLoadedCommand { get; }
+
     public TextDocument Document { get; }
 
     public bool IsEnabled
@@ -69,4 +70,3 @@ public class ImageVm : ISampleContent
         augmentations.Add(imageAugmentation2);
     }
 }
-

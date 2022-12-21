@@ -4,7 +4,7 @@ using System.Windows.Navigation;
 namespace AugmentationFramework.AdviceDisplay;
 
 /// <summary>
-///     Interaction logic for AdviceView.xaml
+///     Interaction logic for AdviceView.xaml.
 /// </summary>
 public partial class AdviceView
 {
@@ -19,4 +19,3 @@ public partial class AdviceView
         e.Handled = true;
     }
 }
-

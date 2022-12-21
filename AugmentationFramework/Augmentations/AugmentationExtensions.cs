@@ -355,4 +355,3 @@ public static class AugmentationExtensions
         return augmentation;
     }
 }
-
