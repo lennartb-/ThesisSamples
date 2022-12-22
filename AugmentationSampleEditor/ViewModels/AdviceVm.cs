@@ -59,8 +59,7 @@ public class AdviceVm : ISampleContent
     private void OnLoaded(CodeTextEditor editor)
     {
         var underlineAugmentation = new Augmentation(editor.TextArea)
-            .WithDecorationColor(Brushes.Red)
-            .WithDecoration(UnderlineBracket.Geometry)
+            .WithDecoration(UnderlineBracket.Geometry, Brushes.Red)
             .WithAdviceOverlay(new SampleAdviceModel())
             .ForText(new Regex(@"\.HashWithSha1(.*)?\)"));
 

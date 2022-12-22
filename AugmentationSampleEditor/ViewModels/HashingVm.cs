@@ -58,8 +58,7 @@ public class HashingVm : ISampleContent
     private void OnLoaded(CodeTextEditor editor)
     {
         var underlineAugmentation = new Augmentation(editor.TextArea)
-            .WithDecorationColor(Brushes.Red)
-            .WithDecoration(UnderlineBracket.Geometry)
+            .WithDecoration(UnderlineBracket.Geometry, Brushes.Red)
             .WithTooltip("SHA1 is cryptographically broken, please use a currently secure function like SHA-512.")
             .ForText(new Regex(@"\.HashWithSha1(.*)?\)"));
         augmentations.Add(underlineAugmentation);

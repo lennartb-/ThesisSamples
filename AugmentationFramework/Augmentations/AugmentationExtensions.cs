@@ -58,7 +58,13 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation InCodeArea(this Augmentation augmentation)
+    /// <summary>
+    /// Places an augmentation with an image directly in the code editor.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to place in the code editor.</param>
+    /// <param name="image">The image to display.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation InCodeArea(this Augmentation augmentation, ImageSource image)
     {
         if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
         {
@@ -67,23 +73,49 @@ public static class AugmentationExtensions
                 existingRenderer.DrawInCodeArea = true;
             }
 
-            return augmentation;
+            return augmentation.WithImage(image);
         }
 
         var imageRenderer = new DecorationRenderer(augmentation) { DrawInCodeArea = true };
-        augmentation.AddBackgroundRenderer(imageRenderer);
+        augmentation.AddDecorationRenderer(imageRenderer);
 
-        return augmentation;
+        return augmentation.WithImage(image);
     }
 
+    /// <summary>
+    /// Places an augmentation with an image directly in a left margin.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to place in a left margin.</param>
+    /// <param name="image">The image to display.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
     public static Augmentation InLeftMargin(this Augmentation augmentation, ImageSource image)
     {
+        if (augmentation.LeftMargins.OfType<MarginDecoration>().Any())
+        {
+            foreach (var existingRenderer in augmentation.LeftMargins.OfType<MarginDecoration>())
+            {
+                existingRenderer.Image = image;
+            }
+
+            return augmentation;
+        }
+
         var marginDecoration = new MarginDecoration(augmentation) { Image = image };
         augmentation.AddLeftMargin(marginDecoration);
 
         return augmentation;
     }
 
+    /// <summary>
+    /// Places an augmentation with text directly in a left margin.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to place in the code editor.</param>
+    /// <param name="text">The text to display.</param>
+    /// <param name="foreground">The text brush.</param>
+    /// <param name="outline">The text outline brush.</param>
+    /// <param name="fontName">The name of the font for the text.</param>
+    /// <param name="fontSize">The size of the font for the text.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
     public static Augmentation InLeftMargin(this Augmentation augmentation, string text, Brush foreground, Brush outline, string fontName, int fontSize)
     {
         var textRun = new FormattedText(text, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface(fontName), fontSize, foreground, 96);
@@ -107,6 +139,12 @@ public static class AugmentationExtensions
         return augmentation.InLeftMargin(bitmap);
     }
 
+    /// <summary>
+    /// Adds an advice overlay to the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to add the advice overlay to.</param>
+    /// <param name="model">The advice model containing information for the advice display.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
     public static Augmentation WithAdviceOverlay(this Augmentation augmentation, IAdviceModel model)
     {
         if (augmentation.Generators.OfType<OverlayGenerator>().Any())
@@ -150,44 +188,28 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation WithDecoration(this Augmentation augmentation, Func<Rect, Geometry> geometry)
+    /// <summary>
+    ///     Adds a color decoration to the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation that applies to the text.</param>
+    /// <param name="geometry">A delegate taking a <see cref="Rect"/> and returning a <see cref="Geometry"/> that represents the decoration.</param>
+    /// <param name="decorationColor">A brush for the decoration.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
+    public static Augmentation WithDecoration(this Augmentation augmentation, Func<Rect, Geometry> geometry, Brush decorationColor)
     {
         if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
         {
             foreach (var existingGenerator in augmentation.Renderers.OfType<DecorationRenderer>())
             {
                 existingGenerator.GeometryDelegate = geometry;
-            }
-
-            return augmentation;
-        }
-
-        var toolTipGenerator = new DecorationRenderer(augmentation) { GeometryDelegate = geometry };
-        augmentation.AddBackgroundRenderer(toolTipGenerator);
-
-        return augmentation;
-    }
-
-    /// <summary>
-    ///     Sets the brush of the decoration added with <see cref="WithDecoration" />.
-    /// </summary>
-    /// <param name="augmentation">The augmentation that applies to the text.</param>
-    /// <param name="decorationColor">A brush for the decoration.</param>
-    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
-    public static Augmentation WithDecorationColor(this Augmentation augmentation, Brush decorationColor)
-    {
-        if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
-        {
-            foreach (var existingGenerator in augmentation.Renderers.OfType<DecorationRenderer>())
-            {
                 existingGenerator.GeometryBrush = decorationColor;
             }
 
             return augmentation;
         }
 
-        var toolTipGenerator = new DecorationRenderer(augmentation) { GeometryBrush = decorationColor };
-        augmentation.AddBackgroundRenderer(toolTipGenerator);
+        var toolTipGenerator = new DecorationRenderer(augmentation) { GeometryDelegate = geometry, GeometryBrush = decorationColor};
+        augmentation.AddDecorationRenderer(toolTipGenerator);
 
         return augmentation;
     }
@@ -330,7 +352,7 @@ public static class AugmentationExtensions
         }
 
         var imageRenderer = new DecorationRenderer(augmentation) { Image = image };
-        augmentation.AddBackgroundRenderer(imageRenderer);
+        augmentation.AddDecorationRenderer(imageRenderer);
 
         return augmentation;
     }

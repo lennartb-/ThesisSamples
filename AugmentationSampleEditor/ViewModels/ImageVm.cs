@@ -62,8 +62,7 @@ public class ImageVm : ISampleContent
         var image = new BitmapImage(
             new Uri("pack://application:,,,/Resources/ic_menu_save.png"));
         var imageAugmentation = new Augmentation(editor.TextArea)
-            .WithImage(image)
-            .InCodeArea()
+            .InCodeArea(image)
             .ForText(TextForRightAugmentation);
         augmentations.Add(imageAugmentation);
 
