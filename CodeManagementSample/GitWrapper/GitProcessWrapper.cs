@@ -36,7 +36,7 @@ public class GitProcessWrapper
             RedirectStandardOutput = true,
             UseShellExecute = false,
             CreateNoWindow = true,
-            WorkingDirectory = workingDirectory
+            WorkingDirectory = workingDirectory,
         };
         process.StartInfo = processStartInfo;
 

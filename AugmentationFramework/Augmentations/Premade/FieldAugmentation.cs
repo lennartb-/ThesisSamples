@@ -28,7 +28,7 @@ public static class FieldAugmentation
             ("T2000.F2001", "Categories"),
             ("T2000.F2002", "Name"),
             ("T3000.F3000", "Category ID"),
-            ("T3000.F3001", "Name")
+            ("T3000.F3001", "Name"),
         };
     }
 }

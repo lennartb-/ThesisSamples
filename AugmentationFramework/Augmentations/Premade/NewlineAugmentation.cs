@@ -12,8 +12,7 @@ public class NewlineAugmentation
     {
         return new Augmentation(textArea)
             .ForText(new Regex(@"(?<=\"").*(\\n).*(?=\"")"))
-            .WithDecoration(UnderlineBracket.Geometry)
-            .WithDecorationColor(Brushes.Orange)
+            .WithDecoration(UnderlineBracket.Geometry, Brushes.Orange)
             .WithAdviceOverlay(new NewlineAdviceModel());
     }
 }

@@ -128,21 +128,37 @@ public class Augmentation
         }
     }
 
-    internal void AddBackgroundRenderer(DecorationRenderer renderer)
+    /// <summary>
+    /// Adds a <see cref="DecorationRenderer"/> to the augmentation.
+    /// </summary>
+    /// <param name="renderer">The <see cref="DecorationRenderer"/> to add.</param>
+    internal void AddDecorationRenderer(DecorationRenderer renderer)
     {
         Renderers.Add(renderer);
     }
 
+    /// <summary>
+    /// Adds a <see cref="VisualLineElementGenerator"/> to the augmentation.
+    /// </summary>
+    /// <param name="generator">The <see cref="VisualLineElementGenerator"/> to add.</param>
     internal void AddElementGenerator(VisualLineElementGenerator generator)
     {
         Generators.Add(generator);
     }
 
+    /// <summary>
+    /// Adds an <see cref="AbstractMargin"/> to the augmentation.
+    /// </summary>
+    /// <param name="leftMargin">The <see cref="AbstractMargin"/> to add.</param>
     internal void AddLeftMargin(AbstractMargin leftMargin)
     {
         LeftMargins.Add(leftMargin);
     }
 
+    /// <summary>
+    /// Adds an <see cref="IVisualLineTransformer"/> to the augmentation.
+    /// </summary>
+    /// <param name="transformer">The <see cref="IVisualLineTransformer"/> to add.</param>
     internal void AddLineTransformer(IVisualLineTransformer transformer)
     {
         Transformers.Add(transformer);

@@ -15,8 +15,7 @@ public class TypedFieldAugmentation
         return new Augmentation(textArea)
             .ForDelegate(MatchingDelegate)
             .ForText(new Regex(@"\b(F\d+)[ ]*(?<!=)==(?!=)[ ]*(F\d+)\b"))
-            .WithDecoration(UnderlineBracket.Geometry)
-            .WithDecorationColor(Brushes.Red)
+            .WithDecoration(UnderlineBracket.Geometry, Brushes.Red)
             .WithAdviceOverlay(new StringEqualityAdviceModel());
     }
 
@@ -29,7 +28,7 @@ public class TypedFieldAugmentation
             new(DataType.String, "F2000"),
             new(DataType.String, "F2001"),
             new(DataType.Double, "F3000"),
-            new(DataType.Double, "F3001")
+            new(DataType.Double, "F3001"),
         };
     }
 
@@ -60,6 +59,6 @@ public class TypedFieldAugmentation
     {
         Int,
         Double,
-        String
+        String,
     }
 }

@@ -80,7 +80,7 @@ public class OverlayGenerator : VisualLineElementGenerator
                 Text = OverlayText ?? CurrentContext.Document.GetText(offset, length),
                 FontSize = new VisualLineElementTextRunProperties(CurrentContext.GlobalTextRunProperties).FontHintingEmSize,
                 ToolTip = customTooltip,
-                Background = TooltipBackground ?? Brushes.Transparent
+                Background = TooltipBackground ?? Brushes.Transparent,
             };
 
             if (AdviceModel is not null)
@@ -104,9 +104,7 @@ public class OverlayGenerator : VisualLineElementGenerator
             }
         }
 
-        var overlay = new OverlayElement(length, element);
-
-        return overlay;
+        return new OverlayElement(length, element);
     }
 
     /// <inheritdoc />
