@@ -118,7 +118,7 @@ public class CachingTabControl : TabControl
             ContentTemplateSelector = SelectedContentTemplateSelector,
             ContentStringFormat = SelectedContentStringFormat,
             Visibility = Visibility.Collapsed,
-            Tag = item is TabItem ? item : ItemContainerGenerator.ContainerFromItem(item),
+            Tag = item is TabItem ? item : ItemContainerGenerator.ContainerFromItem(item)
         };
         itemsHolderPanel?.Children.Add(contentPresenter);
     }

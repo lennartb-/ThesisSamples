@@ -47,6 +47,9 @@ public class DecorationRenderer : IBackgroundRenderer
     public ImageSource? Image { get; set; }
 
     /// <inheritdoc />
+    public KnownLayer Layer => KnownLayer.Selection;
+
+    /// <inheritdoc />
     public void Draw(TextView textView, DrawingContext drawingContext)
     {
         var area = roiFinder.DetermineRangesOfInterest(textView.Document.Text);
@@ -67,9 +70,6 @@ public class DecorationRenderer : IBackgroundRenderer
             DrawImage(drawingContext, startOffset, endOffset);
         }
     }
-
-    /// <inheritdoc />
-    public KnownLayer Layer => KnownLayer.Selection;
 
     private void DrawImage(DrawingContext drawingContext, int startOffset, int endOffset)
     {

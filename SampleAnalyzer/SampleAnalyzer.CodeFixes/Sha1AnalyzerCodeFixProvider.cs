@@ -56,4 +56,3 @@ public class Sha1AnalyzerCodeFixProvider : CodeFixProvider
         return document.WithSyntaxRoot((await document.GetSyntaxRootAsync(cancellationToken)).ReplaceNode(invokedExpression, updatedExpression));
     }
 }
-

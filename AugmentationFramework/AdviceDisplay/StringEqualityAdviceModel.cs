@@ -6,22 +6,16 @@
 public class StringEqualityAdviceModel : IAdviceModel
 {
     /// <inheritdoc />
-    public string WarningTitle => "Warning!";
-
-    /// <inheritdoc />
-    public string WarningText => "Use Str.IsEqual(string1, string2) method to compare two strings";
-
-    /// <inheritdoc />
-    public string WarningSource { get; set; } = string.Empty;
-
-    /// <inheritdoc />
-    public string WarningRisk => "Comparing two strings with \"==\" may have undesired behavior";
-
-    /// <inheritdoc />
     public string Information => "http://example.com/comparing-two-strings";
 
     /// <inheritdoc />
     public Uri InformationLink => new("http://example.com/comparing-two-strings");
+
+    /// <inheritdoc />
+    public string InsecureAdvice => "To really compare two strings by reference, you can continue to use \"==\"";
+
+    /// <inheritdoc />
+    public string InsecureSample => "F1000 == F1002";
 
     /// <inheritdoc />
     public string SecureAdvice => "To compare the content of two strings, use the Str.IsEqual(string1, string2) method";
@@ -30,8 +24,14 @@ public class StringEqualityAdviceModel : IAdviceModel
     public string SecureSample => "Str.IsEqual(F1000,F1001)";
 
     /// <inheritdoc />
-    public string InsecureAdvice => "To really compare two strings by reference, you can continue to use \"==\"";
+    public string WarningRisk => "Comparing two strings with \"==\" may have undesired behavior";
 
     /// <inheritdoc />
-    public string InsecureSample => "F1000 == F1002";
+    public string WarningSource { get; set; } = string.Empty;
+
+    /// <inheritdoc />
+    public string WarningText => "Use Str.IsEqual(string1, string2) method to compare two strings";
+
+    /// <inheritdoc />
+    public string WarningTitle => "Warning!";
 }

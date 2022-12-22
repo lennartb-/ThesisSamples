@@ -21,10 +21,10 @@ public class SynonymDisplayVm : ISampleContent
     }
 
     /// <inheritdoc />
-    public IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
+    public TextDocument Document { get; }
 
     /// <inheritdoc />
-    public TextDocument Document { get; }
+    public IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
 
     /// <inheritdoc />
     public bool IsEnabled
