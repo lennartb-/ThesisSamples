@@ -3,15 +3,30 @@ using AugmentationFramework.Augmentations;
 
 namespace AugmentationFramework;
 
+/// <summary>
+///     Finds text offsets based on the texts or regular expressions an augmentation should be applied to.
+/// </summary>
 public class RoiFinder
 {
     private readonly Augmentation parent;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="RoiFinder" /> class.
+    /// </summary>
+    /// <param name="parent">
+    ///     The augmentation that contains the texts or regular expressions whose offsets should be
+    ///     determined.
+    /// </param>
     public RoiFinder(Augmentation parent)
     {
         this.parent = parent;
     }
 
+    /// <summary>
+    ///     Calculates a list of offsets the augmentation will be applied to.
+    /// </summary>
+    /// <param name="textRegion">The text that will be searched for text and regular expression matches.</param>
+    /// <returns>A list of offsets containing the starts and ends of the found matches.</returns>
     public IEnumerable<(int StartOffset, int EndOffset)> DetermineRangesOfInterest(string textRegion)
     {
         if (parent is { MatchingDelegate: { } matchingDelegate, TextMatchRegex: { } matchingRegex })

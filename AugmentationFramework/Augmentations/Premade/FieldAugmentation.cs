@@ -3,8 +3,16 @@ using ICSharpCode.AvalonEdit.Editing;
 
 namespace AugmentationFramework.Augmentations.Premade;
 
+/// <summary>
+/// Provides pre-made demo augmentations that replace certain identifiers with more readable strings.
+/// </summary>
 public static class FieldAugmentation
 {
+    /// <summary>
+    /// Gets a list of completely build augmentations that replaces identifiers with readable strings.
+    /// </summary>
+    /// <param name="textArea">The text area the augmentations apply to.</param>
+    /// <returns>A list of pre-built augmentations.</returns>
     public static IEnumerable<Augmentation> GetAugmentations(TextArea textArea)
     {
         foreach (var (field, name) in GetFieldMapping())

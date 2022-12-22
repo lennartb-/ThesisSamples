@@ -6,10 +6,26 @@ using ICSharpCode.AvalonEdit.Editing;
 
 namespace AugmentationFramework.Augmentations.Premade;
 
-public class TypedFieldAugmentation
+/// <summary>
+///     Provides a pre-made demo augmentation that displays an advice over incorrect string comparisons based on the data
+///     type of a database field.
+/// </summary>
+public static class TypedFieldAugmentation
 {
     private static readonly IEnumerable<DemoField> Fields = GetFieldMapping();
 
+    private enum DataType
+    {
+        Int,
+        Double,
+        String,
+    }
+
+    /// <summary>
+    ///     Gets a completely built augmentation that advises of incorrect string comparisons.
+    /// </summary>
+    /// <param name="textArea">The text area the augmentation applies to.</param>
+    /// <returns>A pre-built augmentation.</returns>
     public static Augmentation GetAugmentation(TextArea textArea)
     {
         return new Augmentation(textArea)
@@ -54,11 +70,4 @@ public class TypedFieldAugmentation
     }
 
     private record DemoField(DataType DataType, string Id);
-
-    private enum DataType
-    {
-        Int,
-        Double,
-        String,
-    }
 }

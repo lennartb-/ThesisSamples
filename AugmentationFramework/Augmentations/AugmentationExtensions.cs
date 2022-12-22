@@ -59,7 +59,7 @@ public static class AugmentationExtensions
     }
 
     /// <summary>
-    /// Places an augmentation with an image directly in the code editor.
+    ///     Places an augmentation with an image directly in the code editor.
     /// </summary>
     /// <param name="augmentation">The augmentation to place in the code editor.</param>
     /// <param name="image">The image to display.</param>
@@ -71,19 +71,20 @@ public static class AugmentationExtensions
             foreach (var existingRenderer in augmentation.Renderers.OfType<DecorationRenderer>())
             {
                 existingRenderer.DrawInCodeArea = true;
+                existingRenderer.Image = image;
             }
 
-            return augmentation.WithImage(image);
+            return augmentation;
         }
 
-        var imageRenderer = new DecorationRenderer(augmentation) { DrawInCodeArea = true };
+        var imageRenderer = new DecorationRenderer(augmentation) { DrawInCodeArea = true, Image = image };
         augmentation.AddDecorationRenderer(imageRenderer);
 
-        return augmentation.WithImage(image);
+        return augmentation;
     }
 
     /// <summary>
-    /// Places an augmentation with an image directly in a left margin.
+    ///     Places an augmentation with an image directly in a left margin.
     /// </summary>
     /// <param name="augmentation">The augmentation to place in a left margin.</param>
     /// <param name="image">The image to display.</param>
@@ -107,7 +108,7 @@ public static class AugmentationExtensions
     }
 
     /// <summary>
-    /// Places an augmentation with text directly in a left margin.
+    ///     Places an augmentation with text directly in a left margin.
     /// </summary>
     /// <param name="augmentation">The augmentation to place in the code editor.</param>
     /// <param name="text">The text to display.</param>
@@ -140,7 +141,7 @@ public static class AugmentationExtensions
     }
 
     /// <summary>
-    /// Adds an advice overlay to the augmentation.
+    ///     Adds an advice overlay to the augmentation.
     /// </summary>
     /// <param name="augmentation">The augmentation to add the advice overlay to.</param>
     /// <param name="model">The advice model containing information for the advice display.</param>
@@ -192,7 +193,10 @@ public static class AugmentationExtensions
     ///     Adds a color decoration to the augmentation.
     /// </summary>
     /// <param name="augmentation">The augmentation that applies to the text.</param>
-    /// <param name="geometry">A delegate taking a <see cref="Rect"/> and returning a <see cref="Geometry"/> that represents the decoration.</param>
+    /// <param name="geometry">
+    ///     A delegate taking a <see cref="Rect" /> and returning a <see cref="Geometry" /> that represents
+    ///     the decoration.
+    /// </param>
     /// <param name="decorationColor">A brush for the decoration.</param>
     /// <returns>The same instance of <paramref name="augmentation" />.</returns>
     public static Augmentation WithDecoration(this Augmentation augmentation, Func<Rect, Geometry> geometry, Brush decorationColor)
@@ -208,7 +212,7 @@ public static class AugmentationExtensions
             return augmentation;
         }
 
-        var toolTipGenerator = new DecorationRenderer(augmentation) { GeometryDelegate = geometry, GeometryBrush = decorationColor};
+        var toolTipGenerator = new DecorationRenderer(augmentation) { GeometryDelegate = geometry, GeometryBrush = decorationColor };
         augmentation.AddDecorationRenderer(toolTipGenerator);
 
         return augmentation;
@@ -339,24 +343,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
-    public static Augmentation WithImage(this Augmentation augmentation, ImageSource image)
-    {
-        if (augmentation.Renderers.OfType<DecorationRenderer>().Any())
-        {
-            foreach (var existingRenderer in augmentation.Renderers.OfType<DecorationRenderer>())
-            {
-                existingRenderer.Image = image;
-            }
-
-            return augmentation;
-        }
-
-        var imageRenderer = new DecorationRenderer(augmentation) { Image = image };
-        augmentation.AddDecorationRenderer(imageRenderer);
-
-        return augmentation;
-    }
-
+    /// <summary>
+    ///     Adds an overlay to the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to add the overlay to.</param>
+    /// <param name="overlayText">The text that is overlaid over the text the augmentation applies to.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
     public static Augmentation WithOverlay(this Augmentation augmentation, string overlayText)
     {
         if (augmentation.Generators.OfType<OverlayGenerator>().Any())
@@ -375,6 +367,15 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    ///     Adds an overlay to the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to add the overlay to.</param>
+    /// <param name="overlay">
+    ///     A delegate returning an <see cref="UIElement" /> that gets overlaid over the text the
+    ///     augmentation applies to.
+    /// </param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
     public static Augmentation WithOverlay(this Augmentation augmentation, Func<UIElement> overlay)
     {
         if (augmentation.Generators.OfType<OverlayGenerator>().Any())
@@ -393,6 +394,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    ///     Adds a tooltip to the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to add the tooltip to.</param>
+    /// <param name="tooltipText">The text of the tooltip.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
     public static Augmentation WithTooltip(this Augmentation augmentation, string tooltipText)
     {
         if (augmentation.Generators.OfType<OverlayGenerator>().Any())
@@ -411,6 +418,12 @@ public static class AugmentationExtensions
         return augmentation;
     }
 
+    /// <summary>
+    ///     Adds a <see cref="UIElement" /> representing a tooltip to the augmentation.
+    /// </summary>
+    /// <param name="augmentation">The augmentation to add the tooltip to.</param>
+    /// <param name="customTooltip">A delegate returning an <see cref="UIElement" /> that gets displayed as tooltip.</param>
+    /// <returns>The same instance of <paramref name="augmentation" />.</returns>
     public static Augmentation WithTooltip(this Augmentation augmentation, Func<UIElement> customTooltip)
     {
         if (augmentation.Generators.OfType<OverlayGenerator>().Any())

@@ -5,9 +5,17 @@ using ICSharpCode.AvalonEdit.Editing;
 
 namespace AugmentationFramework.Augmentations.Premade;
 
-public partial class SmalltalkHighlighting
+/// <summary>
+/// Provides pre-made demo augmentations that represent syntax highlighting for the Smalltalk language.
+/// </summary>
+public static partial class SmalltalkHighlighting
 {
-    public static Augmentation[] GetAugmentation(TextArea textArea)
+    /// <summary>
+    /// Gets a list of augmentations representing Smalltalk syntax highlighting.
+    /// </summary>
+    /// <param name="textArea">The text area the augmentations apply to.</param>
+    /// <returns>A list of pre-built augmentations.</returns>
+    public static IEnumerable<Augmentation> GetAugmentation(TextArea textArea)
     {
         var parameterRegex = ParameterRegex();
         var symbolRegex = SymbolRegex();
