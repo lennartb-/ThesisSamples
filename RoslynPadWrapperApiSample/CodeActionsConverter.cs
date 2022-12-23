@@ -15,16 +15,19 @@ namespace WrapperApiSampleApp;
 /// </summary>
 internal sealed class CodeActionsConverter : MarkupExtension, IValueConverter
 {
+    /// <inheritdoc />
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         return ((CodeAction)value).GetCodeActions();
     }
 
+    /// <inheritdoc />
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         throw new NotSupportedException();
     }
 
+    /// <inheritdoc />
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
         return this;

@@ -9,12 +9,18 @@ using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
 
+/// <summary>
+/// View model for the underline sample.
+/// </summary>
 public class HashingVm : ISampleContent
 {
     private const string Text = @"var hashedString = HashingAlgorithms.HashWithSha1(""Lorem ipsum dolor sit amet"")";
     private readonly IList<Augmentation> augmentations = new List<Augmentation>();
     private bool isEnabled;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HashingVm"/> class.
+    /// </summary>
     public HashingVm()
     {
         var stringTextSource = new StringTextSource(Text);

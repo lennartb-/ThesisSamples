@@ -15,6 +15,9 @@ using Serilog;
 
 namespace CodeManagementSample;
 
+/// <summary>
+/// Viewmodel for the versioning sample.
+/// </summary>
 internal class VersioningVm : ObservableObject
 {
     private const string GithubCredentialAddress = "git:https://github.com";
@@ -25,53 +28,90 @@ internal class VersioningVm : ObservableObject
     private TextDocument previewDocument = null!;
     private CommitModel? selectedItem;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="VersioningVm" /> class.
+    /// </summary>
+    /// <param name="model">A model containing information about a commit.</param>
     public VersioningVm(VersioningModel model)
     {
         this.model = model;
         OkCommand = new RelayCommand(ApplyCheckout, () => SelectedItem != null);
         CancelCommand = new RelayCommand(CancelCheckout);
-        RefreshCommand = new RelayCommand(GetHistory);
+        RefreshHistoryCommand = new RelayCommand(GetHistory);
         PushCommand = new RelayCommand(CommitCode, () => GetStringOfSelectedCommit(History.First().Id) != model.BlobContent);
         PreviewDocument = new TextDocument();
 
         using var repo = new Repository(model.RepositoryPath);
         gitProcessWrapper = new GitProcessWrapper(repo.Info.WorkingDirectory);
 
-        RefreshCommand.Execute(null);
+        RefreshHistoryCommand.Execute(null);
     }
 
+    /// <summary>
+    /// Invoked when a request to close the connected window is run.
+    /// </summary>
     public event Action RequestClose = () => { };
 
+    /// <summary>
+    /// Gets the command that is executed when the Cancel button is clicked.
+    /// </summary>
     public RelayCommand CancelCommand { get; }
 
+    /// <summary>
+    /// Gets the contents of the currently checked out commit.
+    /// </summary>
     public string? CheckedOutText { get; private set; }
 
+    /// <summary>
+    /// Gets or sets the commit message for the current changes.
+    /// </summary>
     public string? CommitMessage
     {
         get => commitMessage;
         set => SetProperty(ref commitMessage, value);
     }
 
+    /// <summary>
+    /// Gets the list of commits from the repository.
+    /// </summary>
     public ObservableCollection<CommitModel> History { get; } = new();
 
+    /// <summary>
+    ///     Gets or sets a value indicating whether the Windows-integrated Git authentication should be used.
+    /// </summary>
     public bool IsExternalGitAuthenticationEnabled
     {
         get => isExternalGitAuthenticationEnabled;
         set => SetProperty(ref isExternalGitAuthenticationEnabled, value);
     }
 
+    /// <summary>
+    ///     Gets the command that is executed when the OK button is clicked.
+    /// </summary>
     public RelayCommand OkCommand { get; }
 
+    /// <summary>
+    ///     Gets or sets the preview contents of a commit.
+    /// </summary>
     public TextDocument PreviewDocument
     {
         get => previewDocument;
         set => SetProperty(ref previewDocument, value);
     }
 
+    /// <summary>
+    ///     Gets the command that is executed when a commit should be pushed to git.
+    /// </summary>
     public RelayCommand PushCommand { get; }
 
-    public RelayCommand RefreshCommand { get; }
+    /// <summary>
+    ///     Gets the command that is executed when the history should be refreshed..
+    /// </summary>
+    public RelayCommand RefreshHistoryCommand { get; }
 
+    /// <summary>
+    ///     Gets or sets the selected commit.
+    /// </summary>
     public CommitModel? SelectedItem
     {
         get => selectedItem;
@@ -91,11 +131,17 @@ internal class VersioningVm : ObservableObject
         }
     }
 
+    /// <summary>
+    ///     Sets the contents of the commit selected by <see cref="SelectedItem" /> to <see cref="CheckedOutText" />.
+    /// </summary>
     public void CheckoutVersion()
     {
         CheckedOutText = GetStringOfSelectedCommit(SelectedItem?.Id);
     }
 
+    /// <summary>
+    ///     Creates a commit and pushes code to the repository.
+    /// </summary>
     public void CommitCode()
     {
         if (GetStringOfSelectedCommit(History.First().Id) == model.BlobContent)
@@ -168,7 +214,7 @@ internal class VersioningVm : ObservableObject
             FetchOptions = new FetchOptions
             {
                 CredentialsProvider = (_, _, _) =>
-                    new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword }
+                    new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword },
             },
         };
         Commands.Pull(repo, merger, options);

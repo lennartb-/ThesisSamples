@@ -7,6 +7,9 @@ using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
 
+/// <summary>
+/// View model for the string comparison sample.
+/// </summary>
 public class FieldComparisonVm : ISampleContent
 {
     private const string Text = "var intCompare = F1000==F1001);\n" +
@@ -18,6 +21,9 @@ public class FieldComparisonVm : ISampleContent
     private readonly IList<Augmentation> augmentations = new List<Augmentation>();
     private bool isEnabled;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FieldComparisonVm"/> class.
+    /// </summary>
     public FieldComparisonVm()
     {
         var stringTextSource = new StringTextSource(Text);

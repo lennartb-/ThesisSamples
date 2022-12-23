@@ -7,6 +7,9 @@ using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
 
+/// <summary>
+/// View model for the newline warning sample.
+/// </summary>
 public class NewlineVm : ISampleContent
 {
     private const string Text = "\"This is a newline \\n in a string\"\n" +
@@ -17,6 +20,9 @@ public class NewlineVm : ISampleContent
     private readonly IList<Augmentation> augmentations = new List<Augmentation>();
     private bool isEnabled;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NewlineVm"/> class.
+    /// </summary>
     public NewlineVm()
     {
         var stringTextSource = new StringTextSource(Text);

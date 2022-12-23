@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
@@ -10,6 +11,9 @@ using RoslynPad.Roslyn;
 
 namespace CodeManagementSample;
 
+/// <summary>
+/// Viewmodel for the main window.
+/// </summary>
 public class MainWindowVm : ObservableObject
 {
     private const string Author = "J Doe";
@@ -25,6 +29,9 @@ public class MainWindowVm : ObservableObject
     private bool isApplicationExecuting;
     private bool isCompilationRunning;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MainWindowVm"/> class.
+    /// </summary>
     public MainWindowVm()
     {
         OnLoadedCommand = new RelayCommand(OnLoaded);
@@ -34,6 +41,9 @@ public class MainWindowVm : ObservableObject
         Document = new TextDocument("Console.WriteLine(\"Hello World\");");
     }
 
+    /// <summary>
+    /// Gets the viewmodel that manages the code compilation.
+    /// </summary>
     public CodeVm? Code
     {
         get => code;
@@ -46,42 +56,69 @@ public class MainWindowVm : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Gets a command that is executed when code should be compiled.
+    /// </summary>
     public RelayCommand CompileCommand { get; }
 
+    /// <summary>
+    /// Gets the output of the compiler.
+    /// </summary>
     public string? CompilerOutput
     {
         get => compilerOutput;
         private set => SetProperty(ref compilerOutput, value);
     }
 
+    /// <summary>
+    /// Gets the output from the console.
+    /// </summary>
     public string? ConsoleOutput
     {
         get => consoleOutput;
         private set => SetProperty(ref consoleOutput, value);
     }
 
+    /// <summary>
+    /// Gets the document that contains the code to compile.
+    /// </summary>
     public TextDocument Document
     {
         get => document;
         private init => SetProperty(ref document, value);
     }
 
+    /// <summary>
+    /// Gets a command that is executed when code should be executed.
+    /// </summary>
     public AsyncRelayCommand ExecuteCommand { get; }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the code is currently executing.
+    /// </summary>
     public bool IsApplicationExecuting
     {
         get => isApplicationExecuting;
         set => SetProperty(ref isApplicationExecuting, value);
     }
 
+    /// <summary>
+    /// Gets or sets a value indicating whether the compilation is currently running.
+    /// </summary>
     public bool IsCompilationRunning
     {
         get => isCompilationRunning;
         set => SetProperty(ref isCompilationRunning, value);
     }
 
+    /// <summary>
+    /// Gets the command that is executed when the <see cref="FrameworkElement.LoadedEvent"/> is fired.
+    /// </summary>
     public RelayCommand OnLoadedCommand { get; }
 
+    /// <summary>
+    /// Gets a command that is executed when the versioning window should open.
+    /// </summary>
     public RelayCommand VersioningCommand { get; }
 
     private void OnCompile()
@@ -91,11 +128,11 @@ public class MainWindowVm : ObservableObject
             return;
         }
 
-        Code.Text = Document.Text;
+        Code.Code = Document.Text;
         IsCompilationRunning = true;
         Code.Compile();
         IsCompilationRunning = false;
-        CompilerOutput = Code.Result ?? "✅";
+        CompilerOutput = Code.CompilationResult ?? "✅";
         ConsoleOutput = Code.ConsoleOutput;
     }
 
@@ -106,11 +143,11 @@ public class MainWindowVm : ObservableObject
             return;
         }
 
-        Code.Text = Document.Text;
+        Code.Code = Document.Text;
         IsApplicationExecuting = true;
         await Code.TryRunScript();
         IsApplicationExecuting = false;
-        CompilerOutput = Code.Result ?? "✅";
+        CompilerOutput = Code.CompilationResult ?? "✅";
         ConsoleOutput = Code.ConsoleOutput ?? string.Empty;
     }
 

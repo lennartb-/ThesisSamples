@@ -7,13 +7,16 @@ using System.Windows.Controls.Primitives;
 namespace AugmentationFrameworkSampleApp.Controls;
 
 /// <summary>
-///     https://stackoverflow.com/a/9802346/368354.
+///     Source: <see href="https://stackoverflow.com/a/9802346/368354"/>.
 /// </summary>
 [TemplatePart(Name = "PART_ItemsHolder", Type = typeof(Panel))]
 public class CachingTabControl : TabControl
 {
     private Panel? itemsHolderPanel;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CachingTabControl" /> class.
+    /// </summary>
     public CachingTabControl()
     {
         // This is necessary so that we get the initial data-bound selected item
@@ -30,26 +33,7 @@ public class CachingTabControl : TabControl
         UpdateSelectedItem();
     }
 
-    protected TabItem? GetSelectedTabItem()
-    {
-        var selectedItem = SelectedItem;
-        if (selectedItem == null)
-        {
-            return null;
-        }
-
-        if (selectedItem is not TabItem item)
-        {
-            return ItemContainerGenerator.ContainerFromIndex(SelectedIndex) as TabItem;
-        }
-
-        return item;
-    }
-
-    /// <summary>
-    ///     When the items change we remove any generated panel children and add any new ones as necessary.
-    /// </summary>
-    /// <param name="e"></param>
+    /// <inheritdoc />
     protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
     {
         base.OnItemsChanged(e);
@@ -90,6 +74,7 @@ public class CachingTabControl : TabControl
         UpdateSelectedItem();
     }
 
+    /// <inheritdoc />
     protected override void OnSelectionChanged(SelectionChangedEventArgs e)
     {
         base.OnSelectionChanged(e);
@@ -151,11 +136,22 @@ public class CachingTabControl : TabControl
         return null;
     }
 
-    /// <summary>
-    ///     If containers are done, generate the selected item.
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+    private TabItem? GetSelectedTabItem()
+    {
+        var selectedItem = SelectedItem;
+        if (selectedItem == null)
+        {
+            return null;
+        }
+
+        if (selectedItem is not TabItem item)
+        {
+            return ItemContainerGenerator.ContainerFromIndex(SelectedIndex) as TabItem;
+        }
+
+        return item;
+    }
+
     private void ItemContainerGenerator_StatusChanged(object? sender, EventArgs e)
     {
         if (ItemContainerGenerator.Status == GeneratorStatus.ContainersGenerated)

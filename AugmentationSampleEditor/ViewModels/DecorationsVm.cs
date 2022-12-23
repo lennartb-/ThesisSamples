@@ -10,6 +10,9 @@ using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
 
+/// <summary>
+/// View model for the decoration sample.
+/// </summary>
 public class DecorationsVm : ISampleContent
 {
     private const string Text =
@@ -21,6 +24,9 @@ public class DecorationsVm : ISampleContent
     private readonly IList<Augmentation> augmentations = new List<Augmentation>();
     private bool isEnabled;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DecorationsVm"/> class.
+    /// </summary>
     public DecorationsVm()
     {
         var stringTextSource = new StringTextSource(Text);

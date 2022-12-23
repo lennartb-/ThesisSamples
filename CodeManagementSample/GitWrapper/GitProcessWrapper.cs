@@ -4,20 +4,33 @@ using Serilog;
 
 namespace CodeManagementSample.GitWrapper;
 
+/// <summary>
+///     Executes Git commands via process invocation.
+/// </summary>
 public class GitProcessWrapper
 {
     private readonly string workingDirectory;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="GitProcessWrapper" /> class.
+    /// </summary>
+    /// <param name="workingDirectory">The working directory of the Git repository.</param>
     public GitProcessWrapper(string workingDirectory)
     {
         this.workingDirectory = workingDirectory;
     }
 
+    /// <summary>
+    ///     Executes git pull.
+    /// </summary>
     public void Pull()
     {
         RunGitCommand("pull");
     }
 
+    /// <summary>
+    ///     Executes git push.
+    /// </summary>
     public void Push()
     {
         RunGitCommand("push");

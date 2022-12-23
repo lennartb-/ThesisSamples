@@ -16,48 +16,67 @@ using RoslynPad.Roslyn;
 
 namespace CodeManagementSample;
 
+/// <summary>
+/// Viewmodel for code compilation.
+/// </summary>
 public class CodeVm : INotifyPropertyChanged
 {
     private readonly RoslynHost host;
 
     private readonly StringBuilder resultBuilder = new();
     private string? consoleOutput;
-    private string? result;
+    private string? compilationResult;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CodeVm" /> class.
+    /// </summary>
+    /// <param name="host">The <see cref="RoslynHost" /> environment used to execute code.</param>
     public CodeVm(RoslynHost host)
     {
         this.host = host;
     }
 
+    /// <inheritdoc />
     public event PropertyChangedEventHandler? PropertyChanged;
 
+    /// <summary>
+    ///     Gets the output from the console.
+    /// </summary>
     public string? ConsoleOutput
     {
         get => consoleOutput;
         private set => SetProperty(ref consoleOutput, value);
     }
 
-    public bool HasError { get; private set; }
-
-    public string? Result
+    /// <summary>
+    ///     Gets the diagnostic results from the compilation. Null if no diagnostics were emitted.
+    /// </summary>
+    public string? CompilationResult
     {
-        get => result;
-        private set => SetProperty(ref result, value);
+        get => compilationResult;
+        private set => SetProperty(ref compilationResult, value);
     }
 
-    public Script<object>? Script { get; private set; }
-
-    public string? Text { get; set; }
+    /// <summary>
+    ///     Gets or sets the code to compile.
+    /// </summary>
+    public string? Code { get; set; }
 
     private static PrintOptions PrintOptions { get; } = new() { MemberDisplayFormat = MemberDisplayFormat.Hidden };
 
+    private Script<object>? Script { get; set; }
+
+    /// <summary>
+    ///     Compiles the code in <see cref="Code" />.
+    /// </summary>
+    /// <returns>True if compilation was successful, false if not.</returns>
     public bool Compile()
     {
-        Result = null;
+        CompilationResult = null;
         ConsoleOutput = null;
         resultBuilder.Clear();
         Script = CSharpScript.Create(
-            Text,
+            Code,
             ScriptOptions.Default
                 .WithReferences(host.DefaultReferences)
                 .AddReferences(Assembly.GetAssembly(typeof(Console)))
@@ -68,7 +87,7 @@ public class CodeVm : INotifyPropertyChanged
         var allDiagnostics = Script.GetCompilation().GetDiagnostics();
         if (compileDiagnostics.Any(t => t.Severity == DiagnosticSeverity.Error))
         {
-            Result = string.Join(Environment.NewLine, compileDiagnostics.Select(FormatReturnValue));
+            CompilationResult = string.Join(Environment.NewLine, compileDiagnostics.Select(FormatReturnValue));
             return false;
         }
 
@@ -77,37 +96,22 @@ public class CodeVm : INotifyPropertyChanged
             resultBuilder.AppendLine(string.Join(Environment.NewLine, allDiagnostics.Select(FormatReturnValue)));
         }
 
-        Result = resultBuilder.ToString();
+        CompilationResult = resultBuilder.ToString();
         return true;
     }
 
-    public async Task<bool> TryRunScript()
+    /// <summary>
+    ///     Compiles the script and runs it if compilation was successful.
+    /// </summary>
+    /// <returns>A <see cref="Task{TResult}" /> representing the result of the asynchronous operation.</returns>
+    public async Task TryRunScript()
     {
         if (!Compile())
         {
-            return false;
+            return;
         }
 
         await Run();
-
-        return true;
-    }
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value) && (value != null))
-        {
-            return false;
-        }
-
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
     }
 
     private static string FormatException(Exception ex)
@@ -140,7 +144,6 @@ public class CodeVm : INotifyPropertyChanged
 
                 if (scriptResult.Exception != null)
                 {
-                    HasError = true;
                     resultBuilder.AppendLine(FormatException(scriptResult.Exception));
                 }
                 else
@@ -158,12 +161,23 @@ public class CodeVm : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            HasError = true;
             resultBuilder.AppendLine(FormatException(ex));
         }
         finally
         {
-            Result = resultBuilder.ToString();
+            CompilationResult = resultBuilder.ToString();
         }
+    }
+
+    private bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value) && (value != null))
+        {
+            return false;
+        }
+
+        field = value;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        return true;
     }
 }

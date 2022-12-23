@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using AugmentationFrameworkSampleApp.ViewModels;
 
 namespace AugmentationFrameworkSampleApp;
@@ -7,8 +6,11 @@ namespace AugmentationFrameworkSampleApp;
 /// <summary>
 ///     Interaction logic for MainWindow.xaml.
 /// </summary>
-public partial class MainWindow : Window
+public partial class MainWindow
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="MainWindow" /> class.
+    /// </summary>
     public MainWindow()
     {
         InitializeComponent();
@@ -23,5 +25,8 @@ public partial class MainWindow : Window
         DataContext = this;
     }
 
+    /// <summary>
+    /// Gets a list of the available sample view models.
+    /// </summary>
     public IList<ISampleContent> ViewModels { get; } = new List<ISampleContent>();
 }

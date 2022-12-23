@@ -7,6 +7,9 @@ using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
 
+/// <summary>
+/// View model for the smalltalk highlighting sample.
+/// </summary>
 public class SmalltalkHighlightingVm : ISampleContent
 {
     private const string Text = "exampleWithNumber: x\n" +
@@ -29,6 +32,9 @@ public class SmalltalkHighlightingVm : ISampleContent
     private readonly IList<Augmentation> augmentations = new List<Augmentation>();
     private bool isEnabled;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SmalltalkHighlightingVm"/> class.
+    /// </summary>
     public SmalltalkHighlightingVm()
     {
         var stringTextSource = new StringTextSource(Text);

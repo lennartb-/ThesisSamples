@@ -9,6 +9,9 @@ using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
 
+/// <summary>
+/// View model for the image display sample.
+/// </summary>
 public class ImageVm : ISampleContent
 {
     private const string TextForRightAugmentation = @"public bool IsSaved {get; set;}";
@@ -17,6 +20,9 @@ public class ImageVm : ISampleContent
     private readonly IList<Augmentation> augmentations = new List<Augmentation>();
     private bool isEnabled;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ImageVm"/> class.
+    /// </summary>
     public ImageVm()
     {
         var stringTextSource = new StringTextSource(TextForLeftAugmentation + Environment.NewLine + TextForRightAugmentation);

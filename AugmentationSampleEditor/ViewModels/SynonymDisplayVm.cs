@@ -7,12 +7,18 @@ using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
 
+/// <summary>
+/// View model for the synonym display sample.
+/// </summary>
 public class SynonymDisplayVm : ISampleContent
 {
     private const string Text = "foreach(var name in T1000.F1001.T2000.F2001.T3000.F3001)\n{\n\tConsole.WriteLine($\"Name of the category of the product is {name}\");\n}";
     private readonly IList<Augmentation> augmentations = new List<Augmentation>();
     private bool isEnabled;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SynonymDisplayVm"/> class.
+    /// </summary>
     public SynonymDisplayVm()
     {
         var stringTextSource = new StringTextSource(Text);
