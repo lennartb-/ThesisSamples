@@ -58,8 +58,13 @@ public class FieldComparisonVm : ISampleContent
     /// <inheritdoc />
     public string Title => "Field Comparison";
 
-    private void OnLoaded(CodeTextEditor editor)
+    private void OnLoaded(CodeTextEditor? editor)
     {
+        if (editor == null)
+        {
+            return;
+        }
+
         augmentations.Add(TypedFieldAugmentation.GetAugmentation(editor.TextArea));
     }
 }

@@ -53,8 +53,13 @@ public class SynonymDisplayVm : ISampleContent
     /// <inheritdoc />
     public string Title => "Synonym Display";
 
-    private void OnLoaded(CodeTextEditor editor)
+    private void OnLoaded(CodeTextEditor? editor)
     {
+        if (editor == null)
+        {
+            return;
+        }
+
         foreach (var augmentation in FieldAugmentation.GetAugmentations(editor.TextArea))
         {
             augmentations.Add(augmentation);

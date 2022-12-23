@@ -55,8 +55,13 @@ public class HashingVm : ISampleContent
     /// <inheritdoc />
     public string Title => "Underline Tooltip";
 
-    private void OnLoaded(CodeTextEditor editor)
+    private void OnLoaded(CodeTextEditor? editor)
     {
+        if (editor == null)
+        {
+            return;
+        }
+
         var underlineAugmentation = new Augmentation(editor.TextArea)
             .WithDecoration(UnderlineBracket.Geometry, Brushes.Red)
             .WithTooltip("SHA1 is cryptographically broken, please use a currently secure function like SHA-512.")

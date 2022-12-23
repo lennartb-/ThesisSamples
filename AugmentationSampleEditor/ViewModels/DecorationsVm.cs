@@ -61,8 +61,13 @@ public class DecorationsVm : ISampleContent
     /// <inheritdoc />
     public string Title => "Decorations Demo";
 
-    private void OnLoaded(CodeTextEditor editor)
+    private void OnLoaded(CodeTextEditor? editor)
     {
+        if (editor == null)
+        {
+            return;
+        }
+
         var backgroundAugmentation = new Augmentation(editor.TextArea)
             .WithForeground(Brushes.RoyalBlue)
             .WithFontWeight(FontWeights.Bold)

@@ -57,8 +57,13 @@ public class NewlineVm : ISampleContent
     /// <inheritdoc />
     public string Title => "Newlines";
 
-    private void OnLoaded(CodeTextEditor editor)
+    private void OnLoaded(CodeTextEditor? editor)
     {
+        if (editor == null)
+        {
+            return;
+        }
+
         augmentations.Add(NewlineAugmentation.GetAugmentation(editor.TextArea));
     }
 }

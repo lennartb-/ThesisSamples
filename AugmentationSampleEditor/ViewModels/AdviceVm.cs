@@ -16,6 +16,9 @@ public class AdviceVm : ISampleContent
     private readonly IList<Augmentation> augmentations = new List<Augmentation>();
     private bool isEnabled;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AdviceVm"/> class.
+    /// </summary>
     public AdviceVm()
     {
         var stringTextSource = new StringTextSource(Text);
@@ -56,8 +59,13 @@ public class AdviceVm : ISampleContent
     /// <inheritdoc />
     public string Title => "Security Advice";
 
-    private void OnLoaded(CodeTextEditor editor)
+    private void OnLoaded(CodeTextEditor? editor)
     {
+        if (editor == null)
+        {
+            return;
+        }
+
         var underlineAugmentation = new Augmentation(editor.TextArea)
             .WithDecoration(UnderlineBracket.Geometry, Brushes.Red)
             .WithAdviceOverlay(new SampleAdviceModel())

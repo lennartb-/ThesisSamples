@@ -57,8 +57,13 @@ public class ImageVm : ISampleContent
     /// <inheritdoc />
     public string Title => "Image Decoration Demo";
 
-    private void OnLoaded(CodeTextEditor editor)
+    private void OnLoaded(CodeTextEditor? editor)
     {
+        if (editor == null)
+        {
+            return;
+        }
+
         var image = new BitmapImage(
             new Uri("pack://application:,,,/Resources/ic_menu_save.png"));
         var imageAugmentation = new Augmentation(editor.TextArea)

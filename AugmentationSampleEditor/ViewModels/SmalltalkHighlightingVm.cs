@@ -69,8 +69,13 @@ public class SmalltalkHighlightingVm : ISampleContent
     /// <inheritdoc />
     public string Title => "Smalltalk Syntax Highlighting";
 
-    private void OnLoaded(CodeTextEditor editor)
+    private void OnLoaded(CodeTextEditor? editor)
     {
+        if (editor == null)
+        {
+            return;
+        }
+
         foreach (var augmentation in SmalltalkHighlighting.GetAugmentation(editor.TextArea))
         {
             augmentations.Add(augmentation);
