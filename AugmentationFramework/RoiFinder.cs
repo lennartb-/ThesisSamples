@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using AugmentationFramework.Augmentations;
+using Serilog;
 
 namespace AugmentationFramework;
 
@@ -56,6 +57,7 @@ public class RoiFinder
             var localMatch = match;
             while (localMatch.Success)
             {
+                Log.Logger.Information("{Method} found match: {Match}", nameof(DetermineDelegateMatches), localMatch);
                 if (matchingDelegate(localMatch))
                 {
                     var matchLength = localMatch.Index + localMatch.Value.Length;
@@ -84,6 +86,7 @@ public class RoiFinder
 
         while (match.Success)
         {
+            Log.Logger.Information("{Method} found match: {Match}", nameof(DetermineRegexTextMatches), match);
             var matchLength = match.Index + match.Value.Length;
             yield return (match.Index, matchLength);
 
