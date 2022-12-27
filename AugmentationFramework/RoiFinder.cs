@@ -29,7 +29,7 @@ public class RoiFinder
     /// <returns>A list of offsets containing the starts and ends of the found matches.</returns>
     public IEnumerable<(int StartOffset, int EndOffset)> DetermineRangesOfInterest(string textRegion)
     {
-        if (parent is { MatchingDelegate: { } matchingDelegate, TextMatchRegex: { } matchingRegex })
+        if (parent is { MatchingDelegate: { } matchingDelegate, TextMatchesRegex: { } matchingRegex })
         {
             return DetermineDelegateMatches(matchingDelegate, matchingRegex, textRegion);
         }
@@ -39,37 +39,31 @@ public class RoiFinder
             return DetermineRegexTextMatches(regexes, textRegion);
         }
 
-        if (parent.TextMatchRegex is { } regex)
-        {
-            return DetermineRegexTextMatches(regex, textRegion);
-        }
-
         if (parent.TextMatches is { } textMatches)
         {
             return DetermineTextMatches(textMatches, textRegion);
         }
 
-        if (parent.TextMatch is { } text)
-        {
-            return DetermineTextMatches(text, textRegion);
-        }
-
         return Enumerable.Empty<(int, int)>();
     }
 
-    private static IEnumerable<(int StartOffset, int EndOffset)> DetermineDelegateMatches(Func<Match, bool> matchingDelegate, Regex regex, string textRegion)
+    private static IEnumerable<(int StartOffset, int EndOffset)> DetermineDelegateMatches(Func<Match, bool> matchingDelegate, IEnumerable<Regex> regexses, string textRegion)
     {
-        var match = FindTextRegexMatch(regex, textRegion);
+        var matches = regexses.Select(regex => FindTextRegexMatch(regex, textRegion)).ToList();
 
-        while (match.Success)
+        foreach (var match in matches)
         {
-            if (matchingDelegate(match))
+            var localMatch = match;
+            while (localMatch.Success)
             {
-                var matchLength = match.Index + match.Value.Length;
-                yield return (match.Index, matchLength);
-            }
+                if (matchingDelegate(localMatch))
+                {
+                    var matchLength = localMatch.Index + localMatch.Value.Length;
+                    yield return (localMatch.Index, matchLength);
+                }
 
-            match = match.NextMatch();
+                localMatch = localMatch.NextMatch();
+            }
         }
     }
 

@@ -42,11 +42,6 @@ public class Augmentation
     public IList<IBackgroundRenderer> Renderers { get; } = new List<IBackgroundRenderer>();
 
     /// <summary>
-    ///     Gets or sets a string this augmentation matches.
-    /// </summary>
-    public string? TextMatch { get; set; }
-
-    /// <summary>
     ///     Gets or sets a list of strings this augmentation matches.
     /// </summary>
     public IEnumerable<string>? TextMatches { get; set; }
@@ -55,11 +50,6 @@ public class Augmentation
     ///     Gets or sets a list of <see cref="Regex" />es this augmentation matches.
     /// </summary>
     public IEnumerable<Regex>? TextMatchesRegex { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the <see cref="Regex" /> this augmentation matches.
-    /// </summary>
-    public Regex? TextMatchRegex { get; set; }
 
     /// <summary>
     ///     Gets the <see cref="TextView" /> this augmentation is rendered on.
