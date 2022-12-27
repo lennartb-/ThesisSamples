@@ -19,7 +19,7 @@ public static class NewlineAugmentation
     public static Augmentation GetAugmentation(TextArea textArea)
     {
         return new Augmentation(textArea)
-            .ForText(new Regex(@"(?<=\"").*(\\n).*(?=\"")"))
+            .ForText(new Regex(@"(?=\"").*(\\n).*(?<=\"")"))
             .WithDecoration(UnderlineBracket.Geometry, Brushes.Orange)
             .WithAdviceOverlay(new NewlineAdviceModel());
     }
