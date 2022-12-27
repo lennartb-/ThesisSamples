@@ -18,11 +18,12 @@ public partial class MainWindow
         ViewModels.Add(new SmalltalkHighlightingVm());
         ViewModels.Add(new DecorationsVm());
         ViewModels.Add(new HashingVm());
-        ViewModels.Add(new AdviceVm());
         ViewModels.Add(new FieldComparisonVm());
         ViewModels.Add(new NewlineVm());
         ViewModels.Add(new ImageVm());
         DataContext = this;
+
+        // ViewModels.Add(new AdviceVm());
     }
 
     /// <summary>
