@@ -1,68 +1,37 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows.Media;
 using AugmentationFramework.AdviceDisplay;
 using AugmentationFramework.Augmentations;
 using AugmentationFramework.Renderer.Premade;
-using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
 using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
 
 /// <summary>
-/// View model for the advice sample.
+///     View model for the advice sample.
 /// </summary>
-public class AdviceVm : ISampleContent
+public sealed class AdviceVm : SampleContentBase
 {
     private const string Text = @"var hashedString = HashingAlgorithms.HashWithSha1(""Lorem ipsum dolor sit amet"")";
-    private readonly IList<Augmentation> augmentations = new List<Augmentation>();
-    private bool isEnabled;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AdviceVm"/> class.
+    ///     Initializes a new instance of the <see cref="AdviceVm" /> class.
     /// </summary>
     public AdviceVm()
     {
         var stringTextSource = new StringTextSource(Text);
         Document = new TextDocument(stringTextSource);
-        EditorLoadedCommand = new RelayCommand<CodeTextEditor>(OnLoaded);
     }
 
     /// <inheritdoc />
-    public TextDocument Document { get; }
+    public override TextDocument Document { get; }
 
     /// <inheritdoc />
-    public IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
+    public override string Title => "Security Advice";
 
     /// <inheritdoc />
-    public bool IsEnabled
-    {
-        get => isEnabled;
-        set
-        {
-            isEnabled = value;
-            if (isEnabled)
-            {
-                foreach (var augmentation in augmentations)
-                {
-                    augmentation.Enable();
-                }
-            }
-            else
-            {
-                foreach (var augmentation in augmentations)
-                {
-                    augmentation.Disable();
-                }
-            }
-        }
-    }
-
-    /// <inheritdoc />
-    public string Title => "Security Advice";
-
-    private void OnLoaded(CodeTextEditor? editor)
+    protected override void OnLoaded(CodeTextEditor? editor)
     {
         if (editor == null)
         {
@@ -74,6 +43,6 @@ public class AdviceVm : ISampleContent
             .WithAdviceOverlay(new SampleAdviceModel())
             .ForText(new Regex(@"\.HashWithSha1(.*)?\)"));
 
-        augmentations.Add(underlineAugmentation);
+        Augmentations.Add(underlineAugmentation);
     }
 }

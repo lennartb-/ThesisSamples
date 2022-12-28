@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using AugmentationFramework.Augmentations;
-using AugmentationFramework.Augmentations.Premade;
-using CommunityToolkit.Mvvm.Input;
+﻿using AugmentationFramework.Augmentations.Premade;
 using ICSharpCode.AvalonEdit.Document;
 using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
 
 /// <summary>
-/// View model for the smalltalk highlighting sample.
+///     View model for the smalltalk highlighting sample.
 /// </summary>
-public class SmalltalkHighlightingVm : ISampleContent
+public sealed class SmalltalkHighlightingVm : SampleContentBase
 {
     private const string Text = "exampleWithNumber: x\n" +
                                 "\"A method that illustrates every part of Smalltalk method syntax\n" +
@@ -26,56 +23,25 @@ public class SmalltalkHighlightingVm : ISampleContent
                                 "\t#($a #a \"a\" 1 1.0)\n" +
                                 "\t\tdo: [ :each |\n" +
                                 "\t\t\tTranscript show: (each class name);\n" +
-                                "\t\t\t\tshow: ' '].\n" +
-                                "^x < y";
-
-    private readonly IList<Augmentation> augmentations = new List<Augmentation>();
-    private bool isEnabled;
+                                "\t\t\t\tshow: ' '].\n" + "^x < y";
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SmalltalkHighlightingVm"/> class.
+    ///     Initializes a new instance of the <see cref="SmalltalkHighlightingVm" /> class.
     /// </summary>
     public SmalltalkHighlightingVm()
     {
         var stringTextSource = new StringTextSource(Text);
         Document = new TextDocument(stringTextSource);
-        EditorLoadedCommand = new RelayCommand<CodeTextEditor>(OnLoaded);
     }
 
     /// <inheritdoc />
-    public TextDocument Document { get; }
+    public override TextDocument Document { get; }
 
     /// <inheritdoc />
-    public IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
+    public override string Title => "Smalltalk Syntax Highlighting";
 
     /// <inheritdoc />
-    public bool IsEnabled
-    {
-        get => isEnabled;
-        set
-        {
-            isEnabled = value;
-            if (isEnabled)
-            {
-                foreach (var augmentation in augmentations)
-                {
-                    augmentation.Enable();
-                }
-            }
-            else
-            {
-                foreach (var augmentation in augmentations)
-                {
-                    augmentation.Disable();
-                }
-            }
-        }
-    }
-
-    /// <inheritdoc />
-    public string Title => "Smalltalk Syntax Highlighting";
-
-    private void OnLoaded(CodeTextEditor? editor)
+    protected override void OnLoaded(CodeTextEditor? editor)
     {
         if (editor == null)
         {
@@ -84,7 +50,7 @@ public class SmalltalkHighlightingVm : ISampleContent
 
         foreach (var augmentation in SmalltalkHighlighting.GetAugmentation(editor.TextArea))
         {
-            augmentations.Add(augmentation);
+            Augmentations.Add(augmentation);
         }
     }
 }

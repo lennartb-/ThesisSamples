@@ -1,65 +1,33 @@
-﻿using System.Collections.Generic;
-using AugmentationFramework.Augmentations;
-using AugmentationFramework.Augmentations.Premade;
-using CommunityToolkit.Mvvm.Input;
+﻿using AugmentationFramework.Augmentations.Premade;
 using ICSharpCode.AvalonEdit.Document;
 using RoslynPad.Editor;
 
 namespace AugmentationFrameworkSampleApp.ViewModels;
 
 /// <summary>
-/// View model for the synonym display sample.
+///     View model for the synonym display sample.
 /// </summary>
-public class SynonymDisplayVm : ISampleContent
+public sealed class SynonymDisplayVm : SampleContentBase
 {
     private const string Text = "foreach(var name in T1000.F1001.T2000.F2001.T3000.F3001)\n{\n\tConsole.WriteLine($\"Name of the category of the product is {name}\");\n}";
-    private readonly IList<Augmentation> augmentations = new List<Augmentation>();
-    private bool isEnabled;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SynonymDisplayVm"/> class.
+    ///     Initializes a new instance of the <see cref="SynonymDisplayVm" /> class.
     /// </summary>
     public SynonymDisplayVm()
     {
         var stringTextSource = new StringTextSource(Text);
         Document = new TextDocument(stringTextSource);
-        EditorLoadedCommand = new RelayCommand<CodeTextEditor>(OnLoaded);
     }
 
     /// <inheritdoc />
-    public TextDocument Document { get; }
+    public override TextDocument Document { get; }
 
     /// <inheritdoc />
-    public IRelayCommand<CodeTextEditor> EditorLoadedCommand { get; }
+    public override string Title => "Synonym Display";
 
     /// <inheritdoc />
-    public bool IsEnabled
-    {
-        get => isEnabled;
-        set
-        {
-            isEnabled = value;
-            if (isEnabled)
-            {
-                foreach (var augmentation in augmentations)
-                {
-                    augmentation.Enable();
-                }
-            }
-            else
-            {
-                foreach (var augmentation in augmentations)
-                {
-                    augmentation.Disable();
-                }
-            }
-        }
-    }
-
-    /// <inheritdoc />
-    public string Title => "Synonym Display";
-
-    private void OnLoaded(CodeTextEditor? editor)
+    protected override void OnLoaded(CodeTextEditor? editor)
     {
         if (editor == null)
         {
@@ -68,7 +36,7 @@ public class SynonymDisplayVm : ISampleContent
 
         foreach (var augmentation in FieldAugmentation.GetAugmentations(editor.TextArea))
         {
-            augmentations.Add(augmentation);
+            Augmentations.Add(augmentation);
         }
     }
 }
