@@ -2,7 +2,6 @@
 using System.Windows.Media;
 using AugmentationFramework.Augmentations;
 using AugmentationFramework.Renderer.Premade;
-using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Rendering;
 
 namespace AugmentationFramework.Renderer;
@@ -56,17 +55,15 @@ public class DecorationRenderer : IBackgroundRenderer
 
         foreach (var (startOffset, endOffset) in area)
         {
-            var textSegment = new TextSegment { StartOffset = startOffset, EndOffset = endOffset };
-
-            var rects = BackgroundGeometryBuilder.GetRectsForSegment(augmentation.TextView, textSegment).ToList();
-            if (!rects.Any())
+            if (DrawingBoundsCalculator.GetBoundsFromTextOffset(startOffset, endOffset, augmentation.TextView) is { } rect)
+            {
+                drawingContext.DrawGeometry(null, new Pen(GeometryBrush, 2d), GeometryDelegate(rect));
+            }
+            else
             {
                 continue;
             }
 
-            var rect = rects.First();
-
-            drawingContext.DrawGeometry(null, new Pen(GeometryBrush, 2d), GeometryDelegate(rect));
             DrawImage(drawingContext, startOffset, endOffset);
         }
     }
@@ -78,26 +75,9 @@ public class DecorationRenderer : IBackgroundRenderer
             return;
         }
 
-        var textSegment = new TextSegment { StartOffset = startOffset, EndOffset = endOffset };
-
-        var rects = BackgroundGeometryBuilder.GetRectsForSegment(augmentation.TextView, textSegment).ToList();
-
-        if (!rects.Any())
+        if (DrawingBoundsCalculator.GetScaledImageBoundsFromTextOffset(startOffset, endOffset, Image.Width, Image.Height, augmentation.TextView) is { } imageBounds)
         {
-            return;
-        }
-
-        var rect = rects.First();
-
-        var scale = Math.Min(rect.Width / Image.Width, rect.Height / Image.Height);
-
-        var scaleWidth = (int)(Image.Width * scale);
-        var scaleHeight = (int)(Image.Height * scale);
-
-        if (DrawInCodeArea)
-        {
-            var r = new Rect(rect.X + rect.Width, rect.Y + ((rect.Height - scaleHeight) / 2), scaleWidth, scaleHeight);
-            drawingContext.DrawImage(Image, r);
+            drawingContext.DrawImage(Image, imageBounds);
         }
     }
 }

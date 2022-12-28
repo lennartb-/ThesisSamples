@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using AugmentationFramework.Augmentations;
-using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Rendering;
 
@@ -33,31 +32,25 @@ public class MarginDecoration : AbstractMargin
     /// <inheritdoc />
     protected override Size MeasureOverride(Size availableSize)
     {
-        if (Image != null)
+        if (Image == null)
         {
-            if (TextView is { VisualLinesValid: true })
-            {
-                var ranges = roiFinder.DetermineRangesOfInterest(TextView.Document.Text);
-                var (startOffset, endOffset) = ranges.First();
-                var textSegment = new TextSegment { StartOffset = startOffset, EndOffset = endOffset };
-
-                var rects = BackgroundGeometryBuilder.GetRectsForSegment(parent.TextView, textSegment).ToList();
-                if (!rects.Any())
-                {
-                    return availableSize;
-                }
-
-                var rect = rects.First();
-
-                var scale = Math.Min(rect.Width / Image.Width, rect.Height / Image.Height);
-
-                var scaleWidth = (int)(Image.Width * scale);
-                var scaleHeight = (int)(Image.Height * scale);
-                return new Size(scaleWidth, scaleHeight);
-            }
+            return availableSize;
         }
 
-        return availableSize;
+        if (TextView is not { VisualLinesValid: true })
+        {
+            return availableSize;
+        }
+
+        var ranges = roiFinder.DetermineRangesOfInterest(TextView.Document.Text);
+        var (startOffset, endOffset) = ranges.First();
+
+        if (DrawingBoundsCalculator.GetScaledImageBoundsFromTextOffset(startOffset, endOffset, Image.Width, Image.Height, parent.TextView) is not { } imageBounds)
+        {
+            return availableSize;
+        }
+
+        return new Size(imageBounds.Width, imageBounds.Height);
     }
 
     /// <inheritdoc />
@@ -79,6 +72,24 @@ public class MarginDecoration : AbstractMargin
         }
     }
 
+    /// <inheritdoc />
+    protected override void OnTextViewChanged(TextView? oldTextView, TextView? newTextView)
+    {
+        if (oldTextView != null)
+        {
+            oldTextView.VisualLinesChanged -= OnTextViewVisualLinesChanged;
+        }
+
+        base.OnTextViewChanged(oldTextView, newTextView);
+
+        if (newTextView != null)
+        {
+            newTextView.VisualLinesChanged += OnTextViewVisualLinesChanged;
+        }
+
+        InvalidateVisual();
+    }
+
     private void DrawImage(DrawingContext drawingContext, int startOffset, int endOffset)
     {
         if (Image == null)
@@ -86,22 +97,15 @@ public class MarginDecoration : AbstractMargin
             return;
         }
 
-        var textSegment = new TextSegment { StartOffset = startOffset, EndOffset = endOffset };
-
-        var rects = BackgroundGeometryBuilder.GetRectsForSegment(parent.TextView, textSegment).ToList();
-        if (!rects.Any())
+        if (DrawingBoundsCalculator.GetScaledImageBoundsFromTextOffset(startOffset, endOffset, Image.Width, Image.Height, parent.TextView) is { } imageBounds)
         {
-            return;
+            // Clamp X to 0 since it should not be translated inside the margin.
+            drawingContext.DrawImage(Image, imageBounds with { X = 0 });
         }
+    }
 
-        var rect = rects.First();
-
-        var scale = Math.Min(rect.Width / Image.Width, rect.Height / Image.Height);
-
-        var scaleWidth = (int)(Image.Width * scale);
-        var scaleHeight = (int)(Image.Height * scale);
-
-        var r = new Rect(0, rect.Y + ((rect.Height - scaleHeight) / 2), scaleWidth, scaleHeight);
-        drawingContext.DrawImage(Image, r);
+    private void OnTextViewVisualLinesChanged(object? sender, EventArgs e)
+    {
+        InvalidateVisual();
     }
 }
