@@ -67,9 +67,9 @@ public class OverlayGenerator : VisualLineElementGenerator
         if (CustomOverlay is not null)
         {
             element = CustomOverlay();
-            if (element is FrameworkElement fe)
+            if (element is FrameworkElement frameworkElement)
             {
-                fe.ToolTip = customTooltip;
+                frameworkElement.ToolTip = customTooltip;
             }
         }
         else
@@ -83,24 +83,9 @@ public class OverlayGenerator : VisualLineElementGenerator
                 Background = TooltipBackground ?? Brushes.Transparent,
             };
 
-            if (AdviceModel is not null)
+            if (BuildAdvicePopup(offset, startOffset, element) is { } advicePopup)
             {
-                var model = AdviceModel.Clone();
-                var popup = new ClosableAdvicePopup(model);
-                model.WarningSource = CurrentContext.Document.GetText(startOffset, CurrentContext.Document.GetLineByOffset(offset).Length - 1) + "@ Line " +
-                                      CurrentContext.Document.GetLineByOffset(offset).LineNumber;
-                var sp = new StackPanel();
-                sp.Children.Add(element);
-                sp.Children.Add(popup);
-
-                sp.MouseDown += (_, _) =>
-                {
-                    popup.Placement = PlacementMode.Mouse;
-                    popup.PlacementTarget = sp;
-                    popup.IsOpen = true;
-                };
-
-                element = sp;
+                element = advicePopup;
             }
         }
 
@@ -117,12 +102,36 @@ public class OverlayGenerator : VisualLineElementGenerator
             return -1;
         }
 
-        // TODO: Possible issue if match is at (0,0)
         if (area == default)
         {
             return -1;
         }
 
         return area.StartOffset + startOffset;
+    }
+
+    private StackPanel? BuildAdvicePopup(int offset, int startOffset, UIElement element)
+    {
+        if (AdviceModel is null)
+        {
+            return null;
+        }
+
+        var model = AdviceModel.Clone();
+        var popup = new ClosableAdvicePopup(model);
+        model.WarningSource = CurrentContext.Document.GetText(startOffset, CurrentContext.Document.GetLineByOffset(offset).Length - 1) + "@ Line " +
+                              CurrentContext.Document.GetLineByOffset(offset).LineNumber;
+        var stackPanel = new StackPanel();
+        stackPanel.Children.Add(element);
+        stackPanel.Children.Add(popup);
+
+        stackPanel.MouseDown += (_, _) =>
+        {
+            popup.Placement = PlacementMode.Mouse;
+            popup.PlacementTarget = stackPanel;
+            popup.IsOpen = true;
+        };
+
+        return stackPanel;
     }
 }
