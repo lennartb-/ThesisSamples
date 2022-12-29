@@ -7,7 +7,7 @@ using ICSharpCode.AvalonEdit.Rendering;
 namespace AugmentationFramework.Renderer;
 
 /// <summary>
-///     Renders <see cref="Geometry" /> and <see cref="ImageSource" />.
+///     Renders <see cref="Geometry" /> and <see cref="ImageSource" />s in the code area.
 /// </summary>
 public class DecorationRenderer : IBackgroundRenderer
 {

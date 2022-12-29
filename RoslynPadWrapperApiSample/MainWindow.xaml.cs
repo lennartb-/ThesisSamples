@@ -48,25 +48,21 @@ public partial class MainWindow
             string.Empty,
             SourceCodeKind.Script);
 
-        var analyzerRef = GetAnalyzerReference(host, new FileInfo("SampleAnalyzer.dll").FullName);
-        var analyzerRef2 = GetAnalyzerReference(host, new FileInfo("SampleAnalyzer.CodeFixes.dll").FullName);
-
-        var document = host.GetDocument(documentId);
-
-        if (document == null)
+        if (host.GetDocument(documentId) is not { } document)
         {
             return;
         }
 
-        var project = document.Project.AddAnalyzerReferences(new[] { analyzerRef, analyzerRef2 });
+        var analyzerReference = GetAnalyzerReference(host, new FileInfo("SampleAnalyzer.dll").FullName);
+        var codeFixReference = GetAnalyzerReference(host, new FileInfo("SampleAnalyzer.CodeFixes.dll").FullName);
 
-        document = project.GetDocument(documentId);
+        var project = document.Project.AddAnalyzerReferences(new[] { analyzerReference, codeFixReference });
 
-        if (document == null)
+        if (project.GetDocument(documentId) is not { } updatedDocument)
         {
             return;
         }
 
-        host.UpdateDocument(document);
+        host.UpdateDocument(updatedDocument);
     }
 }

@@ -13,7 +13,7 @@
     Height="450"
     mc:Ignorable="d">
     <Window.Resources>
-
+        <!--  Begin source from RoslynPad Sample code https://github.com/roslynpad/roslynpad/blob/73372a15821287161dbaaf4415b81daef44f17eb/samples/RoslynPadReplSample/App.xaml  -->
         <DrawingImage x:Key="Bulb">
             <DrawingImage.Drawing>
                 <GeometryDrawing>
@@ -30,16 +30,13 @@
                     </GeometryDrawing.Pen>
                 </GeometryDrawing>
             </DrawingImage.Drawing>
-
         </DrawingImage>
-        <!--  Begin source from RoslynPad Sample code  -->
-        <HierarchicalDataTemplate DataType="{x:Type codeFixes:CodeFixCollection}"
-                                  ItemsSource="{Binding Fixes, Mode=OneTime}">
+
+        <HierarchicalDataTemplate DataType="{x:Type codeFixes:CodeFixCollection}" ItemsSource="{Binding Fixes, Mode=OneTime}">
             <TextBlock Text="{Binding Provider, Mode=OneTime}" />
         </HierarchicalDataTemplate>
 
-        <HierarchicalDataTemplate DataType="{x:Type codeFixes:CodeFix}"
-                                  ItemsSource="{Binding Action, Mode=OneTime, Converter={local:CodeActionsConverter}}">
+        <HierarchicalDataTemplate DataType="{x:Type codeFixes:CodeFix}" ItemsSource="{Binding Action, Mode=OneTime, Converter={local:CodeActionsConverter}}">
             <ContentPresenter Content="{Binding Action, Mode=OneTime}" />
         </HierarchicalDataTemplate>
 
