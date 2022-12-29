@@ -1,69 +1,58 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.Json;
-using AdysTech.CredentialManager;
 using CodeManagementSample.GitWrapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
-using LibGit2Sharp;
-using Serilog;
 
 namespace CodeManagementSample;
 
 /// <summary>
-/// Viewmodel for the versioning sample.
+///     Viewmodel for the versioning sample.
 /// </summary>
 internal class VersioningVm : ObservableObject
 {
-    private const string GithubCredentialAddress = "git:https://github.com";
-    private readonly GitProcessWrapper gitProcessWrapper;
-    private readonly VersioningModel model;
+    private readonly IGitWrapper wrapper;
+
     private string? commitMessage;
-    private bool isExternalGitAuthenticationEnabled;
     private TextDocument previewDocument = null!;
     private CommitModel? selectedItem;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="VersioningVm" /> class.
     /// </summary>
-    /// <param name="model">A model containing information about a commit.</param>
-    public VersioningVm(VersioningModel model)
+    /// <param name="wrapper">An instance of <see cref="IGitWrapper"/> to provide access to Git.</param>
+    public VersioningVm(IGitWrapper wrapper)
     {
-        this.model = model;
+        this.wrapper = wrapper;
         OkCommand = new RelayCommand(ApplyCheckout, () => SelectedItem != null);
         CancelCommand = new RelayCommand(CancelCheckout);
         RefreshHistoryCommand = new RelayCommand(GetHistory);
-        PushCommand = new RelayCommand(CommitCode, () => GetStringOfSelectedCommit(History.First().Id) != model.BlobContent);
+
         PreviewDocument = new TextDocument();
 
-        using var repo = new Repository(model.RepositoryPath);
-        gitProcessWrapper = new GitProcessWrapper(repo.Info.WorkingDirectory);
-
+        PushCommand = new RelayCommand(CommitCode, () => !wrapper.IsContentEqualToLatestVersion());
         RefreshHistoryCommand.Execute(null);
     }
 
     /// <summary>
-    /// Invoked when a request to close the connected window is run.
+    ///     Invoked when a request to close the connected window is run.
     /// </summary>
     public event Action RequestClose = () => { };
 
     /// <summary>
-    /// Gets the command that is executed when the Cancel button is clicked.
+    ///     Gets the command that is executed when the Cancel button is clicked.
     /// </summary>
     public RelayCommand CancelCommand { get; }
 
     /// <summary>
-    /// Gets the contents of the currently checked out commit.
+    ///     Gets the contents of the currently checked out commit.
     /// </summary>
     public string? CheckedOutText { get; private set; }
 
     /// <summary>
-    /// Gets or sets the commit message for the current changes.
+    ///     Gets or sets the commit message for the current changes.
     /// </summary>
     public string? CommitMessage
     {
@@ -72,7 +61,7 @@ internal class VersioningVm : ObservableObject
     }
 
     /// <summary>
-    /// Gets the list of commits from the repository.
+    ///     Gets the list of commits from the repository.
     /// </summary>
     public ObservableCollection<CommitModel> History { get; } = new();
 
@@ -81,8 +70,8 @@ internal class VersioningVm : ObservableObject
     /// </summary>
     public bool IsExternalGitAuthenticationEnabled
     {
-        get => isExternalGitAuthenticationEnabled;
-        set => SetProperty(ref isExternalGitAuthenticationEnabled, value);
+        get => wrapper.IsExternalGitAuthenticationEnabled;
+        set => wrapper.IsExternalGitAuthenticationEnabled = value;
     }
 
     /// <summary>
@@ -123,7 +112,7 @@ internal class VersioningVm : ObservableObject
                 return;
             }
 
-            var selectedText = GetStringOfSelectedCommit(SelectedItem?.Id);
+            var selectedText = wrapper.GetContentOfCommitWithId(SelectedItem?.Id);
 
             PreviewDocument.Text = selectedText ?? "[No content available]";
 
@@ -136,7 +125,7 @@ internal class VersioningVm : ObservableObject
     /// </summary>
     public void CheckoutVersion()
     {
-        CheckedOutText = GetStringOfSelectedCommit(SelectedItem?.Id);
+        CheckedOutText = wrapper.GetContentOfCommitWithId(SelectedItem?.Id);
     }
 
     /// <summary>
@@ -144,91 +133,11 @@ internal class VersioningVm : ObservableObject
     /// </summary>
     public void CommitCode()
     {
-        if (GetStringOfSelectedCommit(History.First().Id) == model.BlobContent)
+        if (wrapper.Commit(CommitMessage))
         {
-            Log.Logger.Warning("Text to commit is equal to latest commit. Cancelling.");
-            return;
+            GetHistory();
+            SelectedItem = History.First();
         }
-
-        var blob = SerializeBlob(model.BlobContent);
-
-        using var repo = new Repository(model.RepositoryPath);
-
-        var committer = new Signature(model.Author, "test@example.com", DateTime.Now);
-
-        repo.Index.Add(blob, model.BlobId.ToString(), Mode.NonExecutableFile);
-        repo.Index.Write();
-
-        var repositoryStatus = repo.RetrieveStatus(new StatusOptions());
-
-        if (!repositoryStatus.Any())
-        {
-            Log.Logger.Information("No changes to commit. Cancelling.");
-            return;
-        }
-
-        _ = repo.Commit(CommitMessage, committer, committer);
-
-        if (IsExternalGitAuthenticationEnabled)
-        {
-            gitProcessWrapper.Push();
-        }
-        else
-        {
-            var credentials = GetOrAskCredentials();
-            Push(credentials, repo);
-        }
-
-        GetHistory();
-        SelectedItem = History.First();
-    }
-
-    private static string? DeserializeBlob(Blob blob)
-    {
-        var contentStream = blob.GetContentStream();
-
-        using var tr = new StreamReader(contentStream, Encoding.UTF8);
-        return JsonSerializer.Deserialize<string>(tr.ReadToEnd());
-    }
-
-    private static NetworkCredential GetOrAskCredentials()
-    {
-        Log.Logger.Information("Getting credentials via credential manager.");
-        var existingCredentials = CredentialManager.GetCredentials(GithubCredentialAddress);
-
-        if (existingCredentials == null)
-        {
-            Log.Logger.Information("Existing credentials not found, prompting user.");
-            var save = false;
-            return CredentialManager.PromptForCredentials(GithubCredentialAddress, ref save, "Please provide credentials", "Credentials for service");
-        }
-
-        return existingCredentials;
-    }
-
-    private static void Pull(NetworkCredential cred, Repository repo, Signature merger)
-    {
-        Log.Logger.Information("Pulling via libgit2sharp.");
-        var options = new PullOptions
-        {
-            FetchOptions = new FetchOptions
-            {
-                CredentialsProvider = (_, _, _) =>
-                    new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword },
-            },
-        };
-        Commands.Pull(repo, merger, options);
-    }
-
-    private static void Push(NetworkCredential cred, Repository repo)
-    {
-        Log.Logger.Information("Pushing via libgit2sharp.");
-        var options = new PushOptions
-        {
-            CredentialsProvider = (_, _, _) =>
-                new SecureUsernamePasswordCredentials { Username = cred.UserName, Password = cred.SecurePassword },
-        };
-        repo.Network.Push(repo.Head, options);
     }
 
     private void ApplyCheckout()
@@ -246,53 +155,12 @@ internal class VersioningVm : ObservableObject
     private void GetHistory()
     {
         History.Clear();
-        using var repo = new Repository(model.RepositoryPath);
 
-        if (IsExternalGitAuthenticationEnabled)
+        foreach (var c in wrapper.GetHistory())
         {
-            gitProcessWrapper.Pull();
-        }
-        else
-        {
-            var merger = new Signature(model.Author, "test@example.com", DateTime.Now);
-            var credentials = GetOrAskCredentials();
-            Pull(credentials, repo, merger);
-        }
-
-        foreach (var c in repo.Commits.Take(15))
-        {
-            History.Add(new CommitModel(c.Id.Sha[..7], c.Author.Name, c.Message, c.Author.When.DateTime));
+            History.Add(c);
         }
 
         PushCommand.NotifyCanExecuteChanged();
-    }
-
-    private string? GetStringOfSelectedCommit(string? id)
-    {
-        if (id == null)
-        {
-            Log.Logger.Warning("Id is null, can't check for selected commit.");
-            return null;
-        }
-
-        using var repo = new Repository(model.RepositoryPath);
-
-        var selectedCommit = repo.Commits.Single(c => c.Id.Sha[..7] == id);
-        var gitObject = selectedCommit.Tree.SingleOrDefault(t => t.Name == model.BlobId.ToString())?.Target;
-        if (gitObject is Blob blob)
-        {
-            return DeserializeBlob(blob);
-        }
-
-        Log.Logger.Warning("{Id} is not a blob.", id);
-        return null;
-    }
-
-    private Blob SerializeBlob(string blobContents)
-    {
-        using var repo = new Repository(model.RepositoryPath);
-        var bytes = JsonSerializer.SerializeToUtf8Bytes(blobContents);
-        var ms = new MemoryStream(bytes);
-        return repo.ObjectDatabase.CreateBlob(ms);
     }
 }

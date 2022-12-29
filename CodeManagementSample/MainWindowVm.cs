@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using CodeManagementSample.GitWrapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ICSharpCode.AvalonEdit.Document;
@@ -164,7 +165,8 @@ public class MainWindowVm : ObservableObject
     {
         var versioningWindow = new Versioning();
         var model = new VersioningModel(Author, FileGuid, Document.Text, SampleRepoPath);
-        var versioningVm = new VersioningVm(model);
+        var wrapper = new LibGit2SharpWrapper(model);
+        var versioningVm = new VersioningVm(wrapper);
         versioningWindow.DataContext = versioningVm;
         versioningVm.RequestClose += () => versioningWindow.Close();
         versioningWindow.ShowDialog();

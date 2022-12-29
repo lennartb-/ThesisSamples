@@ -66,7 +66,10 @@
                 Command="{Binding PushCommand}"
                 Content="Store current version" />
             <Grid Grid.Row="1" Grid.Column="1">
-                <TextBox x:Name="CommitMessageBox" Text="{Binding CommitMessage}" />
+                <TextBox
+                    x:Name="CommitMessageBox"
+                    VerticalContentAlignment="Center"
+                    Text="{Binding CommitMessage}" />
                 <TextBlock
                     Margin="10,0,0,0"
                     HorizontalAlignment="Left"
@@ -115,8 +118,7 @@
             VerticalAlignment="Center"
             ExpandDirection="Right"
             Header="Advanced Options">
-            <CheckBox Content="Use built-in Git authentication"
-                      IsChecked="{Binding IsExternalGitAuthenticationEnabled}" />
+            <CheckBox Content="Use built-in Git authentication" IsChecked="{Binding IsExternalGitAuthenticationEnabled}" />
         </Expander>
     </Grid>
 </Window>
