@@ -9,7 +9,7 @@ namespace AugmentationFrameworkSampleApp.ViewModels;
 /// </summary>
 public sealed class SynonymDisplayVm : SampleContentBase
 {
-    private const string Text = "foreach(var name in T1000.F1001.T2000.F2001.T3000.F3001)\n{\n\tConsole.WriteLine($\"Name of the category of the product is {name}\");\n}";
+    private const string Text = "foreach(var name in F1001.T2000.F2001)\n{\n\tConsole.WriteLine($\"Name of the category of the product is {name}\");\n}";
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="SynonymDisplayVm" /> class.
